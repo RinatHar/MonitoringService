@@ -1,5 +1,5 @@
 package org.kharisov.enums;
 
-public enum IndicatorEnum {
+public enum IndicatorTypeEnum {
     HOTWATER, COLDWATER, HEATING
 }

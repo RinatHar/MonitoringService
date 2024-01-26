@@ -1,18 +1,20 @@
 package org.kharisov.entities;
 
 import lombok.*;
-import org.kharisov.enums.IndicatorEnum;
+import java.util.*;
 
-import java.util.HashMap;
-
-@Builder
 @Getter
 @Setter
+@Builder
 public class User {
     private String accountNum;
-    private String email;
     private String password;
-    private String phoneNum;
     @Builder.Default
-    private HashMap<IndicatorEnum, Integer> indicators = new HashMap<>();
+    private List<IndicatorRecord> indicators = new ArrayList<>();
+    @Builder.Default
+    private boolean isAdmin = false;
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
 }
