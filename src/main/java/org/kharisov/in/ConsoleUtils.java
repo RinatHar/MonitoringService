@@ -11,13 +11,16 @@ public class ConsoleUtils {
     private final AuthController authController;
     private final IndicatorController indicatorController;
     private final IndicatorTypeController indicatorTypeController;
+    private final AuditController auditController;
 
     public ConsoleUtils(AuthController authController,
                         IndicatorController indicatorController,
-                        IndicatorTypeController indicatorTypeController) {
+                        IndicatorTypeController indicatorTypeController,
+                        AuditController auditController) {
         this.authController = authController;
         this.indicatorController = indicatorController;
         this.indicatorTypeController = indicatorTypeController;
+        this.auditController = auditController;
     }
 
     public User register(Scanner scanner, User currentUser) {
@@ -124,7 +127,7 @@ public class ConsoleUtils {
             month = inputInt(scanner);
             scanner.nextLine();
         } catch (InputMismatchException ex) {
-            System.out.println("Месяц и год должны быть числами");
+            System.out.println("\nМесяц и год должны быть числами");
             scanner.nextLine();
             return;
         }
@@ -149,11 +152,11 @@ public class ConsoleUtils {
         int MIN_YEAR = 2000;
         int MAX_YEAR = LocalDate.now().getYear();
         if (month < 1 || month > 12) {
-            System.out.println("Некорректный месяц. Месяц должен быть числом от 1 до 12");
+            System.out.println("\nНекорректный месяц. Месяц должен быть числом от 1 до 12");
             return false;
         }
         if (year < MIN_YEAR || year > MAX_YEAR) {
-            System.out.println("Некорректный год. Год должен быть от " + MIN_YEAR + " до " + MAX_YEAR);
+            System.out.println("\nНекорректный год. Год должен быть от " + MIN_YEAR + " до " + MAX_YEAR);
             return false;
         }
         return true;
@@ -196,13 +199,37 @@ public class ConsoleUtils {
         if (!allIndicators.isEmpty()) {
             System.out.println("\nИстория показаний:");
             for (Map.Entry<String, List<IndicatorRecord>> entry : allIndicators.entrySet()) {
-                System.out.println("Пользователь: " + entry.getKey());
+                System.out.println("\nПользователь: " + entry.getKey());
                 for (IndicatorRecord record : entry.getValue()) {
                     System.out.printf("Дата: %s, Тип показания: %s, Значение: %s%n", record.getDate(), record.getType().getValue(), record.getValue());
                 }
             }
         } else {
             System.out.println("\nИстория показаний пуста");
+        }
+    }
+
+    public void getUserLogs(User user) {
+        List<String> logs = auditController.getLogs(user);
+        if (!logs.isEmpty()) {
+            System.out.println("\nВаши действия:");
+            for (String log : logs) {
+                System.out.println(" - " + log);
+            }
+        } else {
+            System.out.println("\nДействий не было");
+        }
+
+    }
+
+    public void getAllLogs() {
+        Map<String, List<String>> logs = auditController.getAllLogs();
+        for (Map.Entry<String, List<String>> entry : logs.entrySet()) {
+            System.out.println("\nПользователь: " + entry.getKey());
+            for (String log : entry.getValue()) {
+                System.out.println(log);
+            }
+            System.out.println("--------------------");
         }
     }
 }
