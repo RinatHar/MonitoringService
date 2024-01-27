@@ -1,13 +1,11 @@
 package org.kharisov.in.controllers;
 
-import org.kharisov.entities.IndicatorRecord;
-import org.kharisov.entities.User;
-import org.kharisov.enums.IndicatorTypeEnum;
+import org.kharisov.entities.*;
 import org.kharisov.services.IndicatorService;
+import org.kharisov.storages.IndicatorType;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 public class IndicatorController {
     private final IndicatorService indicatorService;
@@ -16,12 +14,16 @@ public class IndicatorController {
         this.indicatorService = indicatorService;
     }
 
-    public boolean addIndicator(User user, IndicatorTypeEnum indicator, int value) {
-        return indicatorService.addIndicator(user, indicator, value);
+    public void addIndicator(User user, IndicatorType indicator, int value) {
+        indicatorService.addIndicator(user, indicator, value);
     }
 
-    public Optional<IndicatorRecord> getCurrentIndicator(User user, IndicatorTypeEnum type) {
+    public Optional<IndicatorRecord> getCurrentIndicator(User user, IndicatorType type) {
         return indicatorService.getCurrentIndicator(user, type);
+    }
+
+    public List<IndicatorRecord> getIndicatorsByMonth(User user, int month, int year) {
+        return indicatorService.getIndicatorsByMonth(user, month, year);
     }
 
     public List<IndicatorRecord> getHistory(User user) {
@@ -30,6 +32,10 @@ public class IndicatorController {
 
     public Map<String, List<IndicatorRecord>> getAllIndicators() {
         return indicatorService.getAllIndicators();
+    }
+
+    public boolean indicatorExists(User user, IndicatorType indicator, LocalDate now) {
+        return indicatorService.indicatorExists(user, indicator, now);
     }
 
 

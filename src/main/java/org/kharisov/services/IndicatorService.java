@@ -2,11 +2,12 @@ package org.kharisov.services;
 
 import org.kharisov.entities.IndicatorRecord;
 import org.kharisov.entities.User;
-import org.kharisov.enums.IndicatorTypeEnum;
 import org.kharisov.repositories.UserRepo;
+import org.kharisov.storages.IndicatorType;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class IndicatorService {
     private final UserRepo userRepo;
@@ -15,38 +16,32 @@ public class IndicatorService {
         this.userRepo = userRepo;
     }
 
-    public boolean addIndicator(User user, IndicatorTypeEnum indicator, int value) {
+    public void addIndicator(User user, IndicatorType indicator, int value) {
         LocalDate now = LocalDate.now();
-        if (!ifIndicatorExists(user, indicator, now)) {
+        if (!indicatorExists(user, indicator, now)) {
             IndicatorRecord record = IndicatorRecord.builder()
                     .type(indicator)
                     .value(value)
                     .date(now)
                     .build();
             user.getIndicators().add(record);
-            return true;
-        }
-        else {
-            return false;
         }
     }
 
-    private boolean ifIndicatorExists(User user, IndicatorTypeEnum indicator, LocalDate now) {
+    public boolean indicatorExists(User user, IndicatorType indicator, LocalDate now) {
         return user.getIndicators().stream()
                 .anyMatch(record -> record.getType() == indicator
                         && record.getDate().getMonth() == now.getMonth()
                         && record.getDate().getYear() == now.getYear());
     }
-    public IndicatorRecord getIndicatorByType(User user, IndicatorTypeEnum type, int month, int year) {
+    public List<IndicatorRecord> getIndicatorsByMonth(User user, int month, int year) {
         return user.getIndicators().stream()
-                .filter(record -> record.getType() == type
-                        && record.getDate().getMonthValue() == month
+                .filter(record -> record.getDate().getMonthValue() == month
                         && record.getDate().getYear() == year)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Не найдены показания за данный месяц и год"));
+                .collect(Collectors.toList());
     }
 
-    public Optional<IndicatorRecord> getCurrentIndicator(User user, IndicatorTypeEnum type) {
+    public Optional<IndicatorRecord> getCurrentIndicator(User user, IndicatorType type) {
         return user.getIndicators().stream()
                 .filter(record -> record.getType() == type)
                 .max(Comparator.comparing(IndicatorRecord::getDate));

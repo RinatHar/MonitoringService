@@ -21,8 +21,7 @@ public class AuthController {
                     .accountNum(accountNum)
                     .password(pass)
                     .build();
-
-            return Optional.ofNullable(authService.addUser(newUser));
+            return authService.addUser(newUser);
         }
     }
 
@@ -52,7 +51,5 @@ public class AuthController {
                 .build();
         authService.addUser(admin);
     }
-
-
 
 }

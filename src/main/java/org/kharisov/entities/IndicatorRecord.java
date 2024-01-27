@@ -1,7 +1,7 @@
 package org.kharisov.entities;
 
 import lombok.*;
-import org.kharisov.enums.IndicatorTypeEnum;
+import org.kharisov.storages.IndicatorType;
 
 import java.time.LocalDate;
 
@@ -9,16 +9,16 @@ import java.time.LocalDate;
 @Setter
 @Builder
 public class IndicatorRecord {
-    private IndicatorTypeEnum type;
+    private IndicatorType type;
     private int value;
     private LocalDate date;
 
     @Override
     public String toString() {
-        return "IndicatorRecord{" +
-                "type=" + type +
-                ", value=" + value +
-                ", date=" + date +
-                '}';
+        return "IndicatorRecord { " +
+                "type = " + type.getValue() + ", " +
+                "value = " + value + ", " +
+                "date = " + date +
+                " }";
     }
 }
