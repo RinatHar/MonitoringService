@@ -52,4 +52,8 @@ public class AuthController {
         authService.addUser(admin);
     }
 
+    public boolean isAdminByAccountNum(String accountNum) {
+        return authService.isAdminByAccountNum(accountNum);
+    }
+
 }

@@ -50,4 +50,8 @@ public class AuthService {
         }
     }
 
+    public boolean isAdminByAccountNum(String accountNum) {
+        return getUserByAccountNum(accountNum).isAdmin();
+    }
+
 }

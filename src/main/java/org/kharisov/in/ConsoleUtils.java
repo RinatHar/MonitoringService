@@ -225,9 +225,9 @@ public class ConsoleUtils {
     public void getAllLogs() {
         Map<String, List<String>> logs = auditController.getAllLogs();
         for (Map.Entry<String, List<String>> entry : logs.entrySet()) {
-            System.out.println("\nПользователь: " + entry.getKey());
+            System.out.println("\nПользователь: " + entry.getKey() + (authController.isAdminByAccountNum(entry.getKey()) ? " (Администратор)" : ""));
             for (String log : entry.getValue()) {
-                System.out.println(log);
+                System.out.println(" - " + log);
             }
             System.out.println("--------------------");
         }
