@@ -2,31 +2,68 @@ package org.kharisov.in;
 
 import org.kharisov.entities.*;
 import org.kharisov.in.controllers.*;
-import org.kharisov.storages.IndicatorType;
+import org.kharisov.entities.ReadingType;
 
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Класс ConsoleUtils представляет утилиту для взаимодействия с пользователем через консоль.
+ * Этот класс предоставляет методы для регистрации, входа в систему, назначения пользователя администратором,
+ * отправки показаний чтения, добавления нового типа показания, просмотра текущих показаний,
+ * просмотра показателей по месяцам, выбора типа показателя, просмотра истории показателей,
+ * просмотра всех показателей и получения всех журналов аудита.
+ */
 public class ConsoleUtils {
+    /**
+     * Контроллер для работы с аутентификацией.
+     */
     private final AuthController authController;
-    private final IndicatorController indicatorController;
-    private final IndicatorTypeController indicatorTypeController;
+
+    /**
+     * Контроллер для работы с показаниями.
+     */
+    private final ReadingController readingController;
+
+    /**
+     * Контроллер для работы с типами показаний.
+     */
+    private final ReadingTypeController readingTypeController;
+
+    /**
+     * Контроллер для работы с аудитом.
+     */
     private final AuditController auditController;
 
+    /**
+     * Конструктор класса ConsoleUtils.
+     * @param authController Контроллер для работы с аутентификацией.
+     * @param readingController Контроллер для работы с показаниями.
+     * @param readingTypeController Контроллер для работы с типами показаний.
+     * @param auditController Контроллер для работы с аудитом.
+     */
     public ConsoleUtils(AuthController authController,
-                        IndicatorController indicatorController,
-                        IndicatorTypeController indicatorTypeController,
+                        ReadingController readingController,
+                        ReadingTypeController readingTypeController,
                         AuditController auditController) {
         this.authController = authController;
-        this.indicatorController = indicatorController;
-        this.indicatorTypeController = indicatorTypeController;
+        this.readingController = readingController;
+        this.readingTypeController = readingTypeController;
         this.auditController = auditController;
     }
 
+    /**
+     * Регистрирует нового пользователя с указанным номером счета и паролем.
+     * @param scanner Объект Scanner для чтения ввода пользователя.
+     * @param currentUser Текущий пользователь.
+     * @return Объект User, представляющий зарегистрированного пользователя.
+     */
     public User register(Scanner scanner, User currentUser) {
         System.out.println("\nВведите номер счета для регистрации:");
+        System.out.print("> ");
         String accountNum = scanner.nextLine();
         System.out.println("Введите пароль для регистрации:");
+        System.out.print("> ");
         String pass = scanner.nextLine();
         Optional<User> user = authController.register(accountNum, pass);
         if (user.isPresent()) {
@@ -38,10 +75,18 @@ public class ConsoleUtils {
         }
     }
 
+    /**
+     * Проверяет, может ли пользователь войти в систему с указанными номером счета и паролем.
+     * @param scanner Объект Scanner для чтения ввода пользователя.
+     * @param currentUser Текущий пользователь.
+     * @return Объект User, представляющий пользователя, вошедшего в систему.
+     */
     public User login(Scanner scanner, User currentUser) {
         System.out.println("\nВведите номер счета для входа:");
+        System.out.print("> ");
         String accountNum = scanner.nextLine();
         System.out.println("Введите пароль для входа:");
+        System.out.print("> ");
         String pass = scanner.nextLine();
         Optional<User> user = authController.login(accountNum, pass);
         if (user.isPresent()) {
@@ -53,8 +98,13 @@ public class ConsoleUtils {
         }
     }
 
+    /**
+     * Назначает пользователя администратором.
+     * @param scanner Объект Scanner для чтения ввода пользователя.
+     */
     public void makeUserAdmin(Scanner scanner) {
         System.out.println("\nВведите номер счета для нового админа:");
+        System.out.print("> ");
         String accountNum = scanner.nextLine();
         if (authController.makeUserAdmin(accountNum)) {
             System.out.println("\nПользователь стал администратором");
@@ -65,21 +115,26 @@ public class ConsoleUtils {
 
     }
 
-
+    /**
+     * Отправляет показание для указанного пользователя.
+     * @param scanner Объект Scanner для чтения ввода пользователя.
+     * @param currentUser Текущий пользователь.
+     */
     public void submit(Scanner scanner, User currentUser) {
-        Optional<IndicatorType> optionalType = selectIndicatorType(scanner);
+        Optional<ReadingType> optionalType = selectIndicatorType(scanner);
         if (optionalType.isEmpty()) {
             System.out.println("\nНеверный выбор типа показания");
             return;
         }
-        IndicatorType type = optionalType.get();
-        if (indicatorController.indicatorExists(currentUser, type, LocalDate.now())) {
+        ReadingType type = optionalType.get();
+        if (readingController.readingExists(currentUser, type, LocalDate.now())) {
             System.out.println("\nЭто показание уже передано за этот месяц");
             return;
         }
         Integer value = null;
         while (value == null) {
             System.out.println("\nВведите показание:");
+            System.out.print("> ");
             if (scanner.hasNextInt()) {
                 value = scanner.nextInt();
             } else {
@@ -88,42 +143,59 @@ public class ConsoleUtils {
             }
         }
         scanner.nextLine(); // Чтобы очистить буфер ввода
-        indicatorController.addIndicator(currentUser, type, value);
+        readingController.addReading(currentUser, type, value);
         System.out.println("\nДанные отправлены");
 
     }
 
+    /**
+     * Добавляет новый тип показания.
+     * @param scanner Объект Scanner для чтения ввода пользователя.
+     */
     public void addIndicatorType(Scanner scanner) {
         System.out.println("\nВведите новый тип показания:");
+        System.out.print("> ");
         String indicatorType = scanner.nextLine();
-        indicatorTypeController.addIndicatorType(indicatorType);
+        readingTypeController.addReadingType(indicatorType);
         System.out.println("\nНовый тип показания добавлен");
 
     }
 
+    /**
+     * Просматривает текущие показания указанного пользователя.
+     * @param scanner Объект Scanner для чтения ввода пользователя.
+     * @param currentUser Текущий пользователь.
+     */
     public void viewCurrent(Scanner scanner, User currentUser) {
-        Optional<IndicatorType> optionalType = selectIndicatorType(scanner);
+        Optional<ReadingType> optionalType = selectIndicatorType(scanner);
         if (optionalType.isEmpty()) {
             System.out.println("\nНеверный выбор типа показания");
             return;
         }
-        IndicatorType type = optionalType.get();
-        Optional<IndicatorRecord> indicatorRecord = indicatorController.getCurrentIndicator(currentUser, type);
+        ReadingType type = optionalType.get();
+        Optional<ReadingRecord> indicatorRecord = readingController.getCurrentIndicator(currentUser, type);
         if (indicatorRecord.isPresent()) {
-            System.out.println(indicatorRecord);
+            System.out.println(indicatorRecord.get());
         }
         else {
             System.out.println("\nПоказания для данного типа не найдены");
         }
     }
 
+    /**
+     * Просматривает показатели указанного пользователя за указанный месяц и год.
+     * @param scanner Объект Scanner для чтения ввода пользователя.
+     * @param currentUser Текущий пользователь.
+     */
     public void viewIndicatorsByMonth(Scanner scanner, User currentUser) {
         int month;
         int year;
         try {
             System.out.println("Введите год:");
+            System.out.print("> ");
             year = inputInt(scanner);
             System.out.println("Введите месяц:");
+            System.out.print("> ");
             month = inputInt(scanner);
             scanner.nextLine();
         } catch (InputMismatchException ex) {
@@ -133,9 +205,9 @@ public class ConsoleUtils {
         }
         if (!checkMonthAndYear(month, year))
             return;
-        List<IndicatorRecord> indicatorRecords = indicatorController.getIndicatorsByMonth(currentUser, month, year);
-        if (!indicatorRecords.isEmpty()) {
-            for (IndicatorRecord record : indicatorRecords) {
+        List<ReadingRecord> readingRecords = readingController.getIndicatorsByMonth(currentUser, month, year);
+        if (!readingRecords.isEmpty()) {
+            for (ReadingRecord record : readingRecords) {
                 System.out.println(record);
             }
         }
@@ -144,10 +216,22 @@ public class ConsoleUtils {
         }
     }
 
+    /**
+     * Вводит целое число из ввода пользователя.
+     * @param scanner Объект Scanner для чтения ввода пользователя.
+     * @return Введенное пользователем целое число.
+     * @throws InputMismatchException Если введенное значение не является целым числом.
+     */
     private int inputInt(Scanner scanner) throws InputMismatchException {
         return scanner.nextInt();
     }
 
+    /**
+     * Проверяет, являются ли указанный месяц и год допустимыми.
+     * @param month Месяц для проверки.
+     * @param year Год для проверки.
+     * @return true, если месяц и год допустимы, иначе false.
+     */
     private boolean checkMonthAndYear(int month, int year) {
         int MIN_YEAR = 2000;
         int MAX_YEAR = LocalDate.now().getYear();
@@ -162,17 +246,23 @@ public class ConsoleUtils {
         return true;
     }
 
-    public Optional<IndicatorType> selectIndicatorType(Scanner scanner) {
+    /**
+     * Выбирает тип показателя из ввода пользователя.
+     * @param scanner Объект Scanner для чтения ввода пользователя.
+     * @return Optional<ReadingType>, содержащий выбранный тип показателя, если выбор допустим, иначе Optional.empty().
+     */
+    public Optional<ReadingType> selectIndicatorType(Scanner scanner) {
         System.out.println("\nВыберите показание:");
-        List<String> indicatorNames = new ArrayList<>(indicatorTypeController.getIndicatorNames());
-        for (int i = 0; i < indicatorNames.size(); i++) {
-            System.out.println((i + 1) + ". " + indicatorNames.get(i));
+        List<String> readingNames = new ArrayList<>(readingTypeController.getReadingNames());
+        for (int i = 0; i < readingNames.size(); i++) {
+            System.out.println((i + 1) + ". " + readingNames.get(i));
         }
+        System.out.print("> ");
         String input = scanner.nextLine();
         try {
             int index = Integer.parseInt(input) - 1;
-            if (index >= 0 && index < indicatorNames.size()) {
-                return indicatorTypeController.getIndicatorType(indicatorNames.get(index));
+            if (index >= 0 && index < readingNames.size()) {
+                return readingTypeController.getReadingType(readingNames.get(index));
             } else {
                 System.out.println("\nНеизвестный тип показания");
                 return Optional.empty();
@@ -182,11 +272,15 @@ public class ConsoleUtils {
         }
     }
 
+    /**
+     * Просматривает историю показателей указанного пользователя.
+     * @param currentUser Текущий пользователь.
+     */
     public void viewHistory(User currentUser) {
-        List<IndicatorRecord> history = indicatorController.getHistory(currentUser);
+        List<ReadingRecord> history = readingController.getHistory(currentUser);
         if (!history.isEmpty()) {
             System.out.println("\nИстория показаний:");
-            for (IndicatorRecord record : history) {
+            for (ReadingRecord record : history) {
                 System.out.println(record);
             }
         } else {
@@ -194,13 +288,16 @@ public class ConsoleUtils {
         }
     }
 
-    public void viewAllIndicators() {
-        Map<String, List<IndicatorRecord>> allIndicators = indicatorController.getAllIndicators();
-        if (!allIndicators.isEmpty()) {
+    /**
+     * Просматривает все показатели всех пользователей.
+     */
+    public void viewAllReadings() {
+        Map<String, List<ReadingRecord>> allReadings = readingController.getAllReadings();
+        if (!allReadings.isEmpty()) {
             System.out.println("\nИстория показаний:");
-            for (Map.Entry<String, List<IndicatorRecord>> entry : allIndicators.entrySet()) {
+            for (Map.Entry<String, List<ReadingRecord>> entry : allReadings.entrySet()) {
                 System.out.println("\nПользователь: " + entry.getKey());
-                for (IndicatorRecord record : entry.getValue()) {
+                for (ReadingRecord record : entry.getValue()) {
                     System.out.printf("Дата: %s, Тип показания: %s, Значение: %s%n", record.getDate(), record.getType().getValue(), record.getValue());
                 }
             }
@@ -209,19 +306,9 @@ public class ConsoleUtils {
         }
     }
 
-    public void getUserLogs(User user) {
-        List<String> logs = auditController.getLogs(user);
-        if (!logs.isEmpty()) {
-            System.out.println("\nВаши действия:");
-            for (String log : logs) {
-                System.out.println(" - " + log);
-            }
-        } else {
-            System.out.println("\nДействий не было");
-        }
-
-    }
-
+    /**
+     * Получает все журналы аудита.
+     */
     public void getAllLogs() {
         Map<String, List<String>> logs = auditController.getAllLogs();
         for (Map.Entry<String, List<String>> entry : logs.entrySet()) {
