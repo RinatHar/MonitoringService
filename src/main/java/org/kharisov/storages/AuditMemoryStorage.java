@@ -1,8 +1,6 @@
 package org.kharisov.storages;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Класс представляет реализацию хранилища аудита.

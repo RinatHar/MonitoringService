@@ -2,7 +2,6 @@ package org.kharisov.in;
 
 import org.kharisov.entities.*;
 import org.kharisov.in.controllers.*;
-import org.kharisov.entities.ReadingType;
 
 import java.time.LocalDate;
 import java.util.*;

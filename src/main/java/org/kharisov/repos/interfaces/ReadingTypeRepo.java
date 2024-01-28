@@ -2,8 +2,7 @@ package org.kharisov.repos.interfaces;
 
 import org.kharisov.entities.ReadingType;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Интерфейс IndicatorTypeRepo представляет контракт для репозитория типов показаний.

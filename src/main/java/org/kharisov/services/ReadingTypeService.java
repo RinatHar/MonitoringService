@@ -3,8 +3,7 @@ package org.kharisov.services;
 import org.kharisov.repos.interfaces.ReadingTypeRepo;
 import org.kharisov.entities.ReadingType;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Класс ReadingTypeService представляет сервис для работы с типами показаний.

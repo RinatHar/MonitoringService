@@ -3,8 +3,7 @@ package org.kharisov.services;
 import org.kharisov.entities.User;
 import org.kharisov.repos.interfaces.AuditRepo;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Класс AuditService представляет сервис для аудита.

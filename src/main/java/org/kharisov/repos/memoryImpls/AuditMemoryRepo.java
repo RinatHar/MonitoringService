@@ -3,9 +3,7 @@ package org.kharisov.repos.memoryImpls;
 import org.kharisov.repos.interfaces.AuditRepo;
 import org.kharisov.storages.AuditMemoryStorage;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Класс AuditMemoryRepo реализует интерфейс AuditRepo.

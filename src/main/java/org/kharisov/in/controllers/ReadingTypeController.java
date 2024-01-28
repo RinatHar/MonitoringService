@@ -3,8 +3,7 @@ package org.kharisov.in.controllers;
 import org.kharisov.services.ReadingTypeService;
 import org.kharisov.entities.ReadingType;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Класс ReadingTypeController представляет контроллер для работы с типами показаний.

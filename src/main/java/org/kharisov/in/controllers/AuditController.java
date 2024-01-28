@@ -3,8 +3,7 @@ package org.kharisov.in.controllers;
 import org.kharisov.entities.User;
 import org.kharisov.services.AuditService;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Класс AuditController представляет контроллер для аудита.

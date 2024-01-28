@@ -2,8 +2,7 @@ package org.kharisov.storages;
 
 import org.kharisov.entities.User;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Класс UserMemoryStorage представляет реализацию хранилища пользователей в памяти.

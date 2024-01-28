@@ -1,7 +1,6 @@
 package org.kharisov.services;
 
-import org.kharisov.entities.ReadingRecord;
-import org.kharisov.entities.User;
+import org.kharisov.entities.*;
 import org.kharisov.repos.interfaces.UserRepo;
 import org.kharisov.entities.ReadingType;
 

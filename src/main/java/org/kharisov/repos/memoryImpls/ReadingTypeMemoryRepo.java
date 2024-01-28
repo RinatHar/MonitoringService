@@ -4,8 +4,7 @@ import org.kharisov.entities.ReadingType;
 import org.kharisov.repos.interfaces.ReadingTypeRepo;
 import org.kharisov.storages.ReadingTypeMemoryStorage;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Класс IndicatorTypeMemoryRepo реализует интерфейс IndicatorTypeRepo.

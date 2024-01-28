@@ -2,8 +2,7 @@ package org.kharisov.storages;
 
 import org.kharisov.entities.ReadingType;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Класс представляет реализацию хранилища типов показаний (например: Холодная вода).

@@ -1,7 +1,6 @@
 package org.kharisov.repos.interfaces;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Интерфейс AuditRepo представляет контракт для репозитория аудита.
