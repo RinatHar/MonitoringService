@@ -135,7 +135,12 @@ public class ConsoleUtils {
             System.out.println("\nВведите показание:");
             System.out.print("> ");
             if (scanner.hasNextInt()) {
-                value = scanner.nextInt();
+                int inputValue = scanner.nextInt();
+                if (inputValue < 0) {
+                    System.out.println("\nВведено отрицательное число. Пожалуйста, введите положительное целое число.");
+                } else {
+                    value = inputValue;
+                }
             } else {
                 System.out.println("\nВведено неверное значение. Пожалуйста, введите целое число.");
                 scanner.next(); // Пропустить неверный ввод
