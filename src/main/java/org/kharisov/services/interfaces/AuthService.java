@@ -14,21 +14,21 @@ public interface AuthService {
      * @param accountNum Номер счета пользователя.
      * @return true, если пользователь существует, иначе false.
      */
-    public boolean userExists(String accountNum);
+    boolean userExists(String accountNum);
 
     /**
      * Получает пользователя по номеру счета.
      * @param accountNum Номер счета пользователя.
      * @return Объект User, если пользователь существует, иначе null.
      */
-    public User getUserByAccountNum(String accountNum);
+    User getUserByAccountNum(String accountNum);
 
     /**
      * Добавляет нового пользователя, если выполнены условия валидации.
      * @param user Объект User, представляющий нового пользователя.
      * @return Optional<User>, содержащий нового пользователя, если он был успешно добавлен, иначе Optional.empty().
      */
-    public Optional<User> addUser(User user);
+    Optional<User> addUser(User user);
 
     /**
      * Проверяет, может ли пользователь войти в систему с указанными номером счета и паролем.
@@ -36,14 +36,14 @@ public interface AuthService {
      * @param password Пароль пользователя.
      * @return true, если пользователь может войти в систему, иначе false.
      */
-    public boolean logIn(String accountNum, String password);
+    boolean logIn(String accountNum, String password);
 
     /**
      * Метод для хеширования пароля с использованием соли.
      * @param password Пароль, который нужно захешировать.
      * @return Хеш пароля, сгенерированный с использованием соли. Если произошла ошибка, возвращает исходный пароль.
      */
-    public String hashPassword(String password);
+    String hashPassword(String password);
 
     /**
      * Метод для проверки пароля пользователя.
@@ -51,12 +51,12 @@ public interface AuthService {
      * @param storedPasswordHash Хеш сохраненного пароля.
      * @return true, если введенный пароль соответствует сохраненному хешу пароля, иначе false.
      */
-    public boolean checkPassword(String password, String storedPasswordHash);
+    boolean checkPassword(String password, String storedPasswordHash);
 
     /**
      * Проверяет, является ли пользователь с указанным номером счета администратором.
      * @param accountNum Номер счета пользователя.
      * @return true, если пользователь является администратором, иначе false.
      */
-    public boolean isAdminByAccountNum(String accountNum);
+    boolean isAdminByAccountNum(String accountNum);
 }

@@ -14,18 +14,18 @@ public interface AuditService {
      * @param user Пользователь, выполнивший действие.
      * @param action Действие, которое нужно записать.
      */
-    public void addEntry(User user, String action);
+    void addEntry(User user, String action);
 
     /**
      * Получает журналы аудита для указанного пользователя.
      * @param user Пользователь, для которого нужно получить журналы аудита.
      * @return Список журналов аудита.
      */
-    public List<String> getEntries(User user);
+    List<String> getEntries(User user);
 
     /**
      * Получает все журналы аудита.
      * @return Map, где ключом является номер счета пользователя, а значением - список журналов аудита.
      */
-    public Map<String, List<String>> getAllEntries();
+    Map<String, List<String>> getAllEntries();
 }

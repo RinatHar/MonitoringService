@@ -14,7 +14,7 @@ public interface ReadingService {
      * @param reading Тип показания.
      * @param value Значение показания.
      */
-    public void addReading(User user, ReadingType reading, int value);
+    void addReading(User user, ReadingType reading, int value);
 
     /**
      * Проверяет, существует ли указанное показание для пользователя на текущую дату.
@@ -23,7 +23,7 @@ public interface ReadingService {
      * @param now Текущая дата.
      * @return true, если показание существует, иначе false.
      */
-    public boolean readingExists(User user, ReadingType reading, LocalDate now);
+    boolean readingExists(User user, ReadingType reading, LocalDate now);
 
     /**
      * Получает показания указанного пользователя за указанный месяц и год.
@@ -32,7 +32,7 @@ public interface ReadingService {
      * @param year Год, за который получаются показания.
      * @return Список показаний чтения.
      */
-    public List<ReadingRecord> getReadingsByMonth(User user, int month, int year);
+    List<ReadingRecord> getReadingsByMonth(User user, int month, int year);
 
     /**
      * Получает текущее показание чтения указанного типа для пользователя.
@@ -40,18 +40,18 @@ public interface ReadingService {
      * @param type Тип показания.
      * @return Optional<ReadingRecord>, содержащий текущее показание, если оно существует, иначе Optional.empty().
      */
-    public Optional<ReadingRecord> getCurrentReading(User user, ReadingType type);
+    Optional<ReadingRecord> getCurrentReading(User user, ReadingType type);
 
     /**
      * Получает историю показаний для указанного пользователя.
      * @param user Пользователь, для которого получается история показаний.
      * @return Список показаний.
      */
-    public List<ReadingRecord> getHistory(User user);
+    List<ReadingRecord> getHistory(User user);
 
     /**
      * Получает все показания всех пользователей.
      * @return Map, где ключом является номер счета пользователя, а значением - список показаний.
      */
-    public Map<String, List<ReadingRecord>> getAllReadings();
+    Map<String, List<ReadingRecord>> getAllReadings();
 }
