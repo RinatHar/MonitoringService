@@ -14,6 +14,16 @@ public class AuditMemoryStorage {
      */
     private final Map<String, List<String>> auditStorage = new HashMap<>();
 
+    private static AuditMemoryStorage instance;
+
+    private AuditMemoryStorage() {}
+
+    public static AuditMemoryStorage getInstance() {
+        if (instance == null) {
+            instance = new AuditMemoryStorage();
+        }
+        return instance;
+    }
     /**
      * Получить хранилище аудита.
      * @return Map, где ключ - счет пользователя, а значение - список его действий.

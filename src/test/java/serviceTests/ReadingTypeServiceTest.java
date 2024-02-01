@@ -3,7 +3,7 @@ package serviceTests;
 import org.junit.jupiter.api.*;
 import org.kharisov.entities.ReadingType;
 import org.kharisov.repos.interfaces.ReadingTypeRepo;
-import org.kharisov.services.ReadingTypeService;
+import org.kharisov.services.memoryImpls.ReadingTypeMemoryService;
 import org.mockito.Mockito;
 
 import java.util.Optional;
@@ -19,7 +19,7 @@ public class ReadingTypeServiceTest {
     private final String READING_TYPE = "ColdWater";
 
     ReadingTypeRepo readingTypeRepo;
-    ReadingTypeService readingTypeService;
+    ReadingTypeMemoryService readingTypeService;
 
     /**
      * Метод для настройки перед каждым тестом.
@@ -28,7 +28,7 @@ public class ReadingTypeServiceTest {
     @BeforeEach
     public void setUp() {
         readingTypeRepo = Mockito.mock(ReadingTypeRepo.class);
-        readingTypeService = new ReadingTypeService(readingTypeRepo);
+        readingTypeService = new ReadingTypeMemoryService(readingTypeRepo);
     }
 
     /**

@@ -3,7 +3,7 @@ package controllerTests;
 import org.junit.jupiter.api.*;
 import org.kharisov.entities.User;
 import org.kharisov.in.controllers.AuthController;
-import org.kharisov.services.AuthService;
+import org.kharisov.services.memoryImpls.AuthMemoryService;
 import org.mockito.Mockito;
 
 import java.util.Optional;
@@ -18,7 +18,7 @@ public class AuthControllerTest {
     private final String ACCOUNT_NUM = "1000200030004000";
     private final String PASSWORD = "password123";
 
-    private AuthService authService;
+    private AuthMemoryService authService;
     private AuthController authController;
     User user;
 
@@ -28,7 +28,7 @@ public class AuthControllerTest {
      */
     @BeforeEach
     public void setUp() {
-        authService = Mockito.mock(AuthService.class);
+        authService = Mockito.mock(AuthMemoryService.class);
         authController = new AuthController(authService);
         user = User
                 .builder()

@@ -20,7 +20,7 @@ public class AuditMemoryStorageTest {
      */
     @BeforeEach
     public void setUp() {
-        auditMemoryStorage = new AuditMemoryStorage();
+        auditMemoryStorage = AuditMemoryStorage.getInstance();
     }
 
     /**

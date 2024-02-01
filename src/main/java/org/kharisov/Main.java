@@ -1,32 +1,32 @@
 package org.kharisov;
 
-import org.kharisov.in.ConsoleInput;
-import org.kharisov.in.ConsoleUtils;
+import org.kharisov.factories.*;
+import org.kharisov.in.*;
 import org.kharisov.repos.interfaces.*;
-import org.kharisov.repos.memoryImpls.*;
+import org.kharisov.services.interfaces.*;
 import org.kharisov.storages.*;
-import org.kharisov.services.*;
 import org.kharisov.in.controllers.*;
 
 public class Main {
     public static void main(String[] args) {
-        UserMemoryStorage userStorage = new UserMemoryStorage();
-        ReadingTypeMemoryStorage indicatorTypeStorage = new ReadingTypeMemoryStorage();
-        AuditMemoryStorage auditStorage = new AuditMemoryStorage();
+        UserMemoryStorage userMemoryStorage = UserMemoryStorage.getInstance();
+        ReadingTypeMemoryStorage readingTypeMemoryStorage = ReadingTypeMemoryStorage.getInstance();
+        AuditMemoryStorage auditMemoryStorage = AuditMemoryStorage.getInstance();
 
-        UserRepo userMemoryRepo = new UserMemoryRepo(userStorage);
-        ReadingTypeRepo readingTypeRepo = new ReadingTypeMemoryRepo(indicatorTypeStorage);
-        AuditRepo auditRepo = new AuditMemoryRepo(auditStorage);
+        UserRepo userMemoryRepo = RepoFactory.createUserMemoryRepo(userMemoryStorage);
+        ReadingTypeRepo readingTypeMemoryRepo = RepoFactory.createReadingTypeMemoryRepo(readingTypeMemoryStorage);
+        AuditRepo auditMemoryRepo = RepoFactory.createAuditMemoryRepo(auditMemoryStorage);
 
-        AuthService authService = new AuthService(userMemoryRepo);
-        ReadingService readingService = new ReadingService(userMemoryRepo);
-        ReadingTypeService readingTypeService = new ReadingTypeService(readingTypeRepo);
-        AuditService auditService = new AuditService(auditRepo);
 
-        AuthController authController = new AuthController(authService);
-        ReadingController readingController = new ReadingController(readingService);
-        ReadingTypeController readingTypeController = new ReadingTypeController(readingTypeService);
-        AuditController auditController = new AuditController(auditService);
+        AuthService authMemoryService = ServiceFactory.createAuthService(userMemoryRepo);
+        ReadingService readingMemoryService = ServiceFactory.createReadingService(userMemoryRepo);
+        ReadingTypeService readingTypeMemoryService = ServiceFactory.createReadingTypeService(readingTypeMemoryRepo);
+        AuditService auditMemoryService = ServiceFactory.createAuditService(auditMemoryRepo);
+
+        AuthController authController = ControllerFactory.createAuthController(authMemoryService);
+        ReadingController readingController = ControllerFactory.createReadingController(readingMemoryService);
+        ReadingTypeController readingTypeController = ControllerFactory.createReadingTypeController(readingTypeMemoryService);
+        AuditController auditController = ControllerFactory.createAuditController(auditMemoryService);
 
         ConsoleUtils consoleUtils = new ConsoleUtils(authController, readingController, readingTypeController, auditController);
 

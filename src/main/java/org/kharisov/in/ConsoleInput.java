@@ -144,37 +144,37 @@ public class ConsoleInput {
         String command = scanner.nextLine();
         switch (command) {
             case "1" -> {
-                auditController.logAction(currentUser, "Регистрация");
+                auditController.addEntry(currentUser, "Регистрация");
                 setCurrentUser(consoleUtils.register(scanner, currentUser));
                 return true;
             }
             case "2" -> {
-                auditController.logAction(currentUser, "Сменить пользователя");
+                auditController.addEntry(currentUser, "Сменить пользователя");
                 setCurrentUser(consoleUtils.login(scanner, currentUser));
                 return true;
             }
             case "3" -> {
-                auditController.logAction(currentUser, "Отправить данные");
+                auditController.addEntry(currentUser, "Отправить данные");
                 consoleUtils.submit(scanner, currentUser);
                 return true;
             }
             case "4" -> {
-                auditController.logAction(currentUser, "Просмотреть текущие данные");
+                auditController.addEntry(currentUser, "Просмотреть текущие данные");
                 consoleUtils.viewCurrent(scanner, currentUser);
                 return true;
             }
             case "5" -> {
-                auditController.logAction(currentUser, "Просмотреть историю");
+                auditController.addEntry(currentUser, "Просмотреть историю");
                 consoleUtils.viewIndicatorsByMonth(scanner, currentUser);
                 return true;
             }
             case "6" -> {
-                auditController.logAction(currentUser, "Просмотреть историю");
+                auditController.addEntry(currentUser, "Просмотреть историю");
                 consoleUtils.viewHistory(currentUser);
                 return true;
             }
             case "7" -> {
-                auditController.logAction(currentUser, "Выход");
+                auditController.addEntry(currentUser, "Выход");
                 return false;
             }
             default -> {
@@ -206,57 +206,57 @@ public class ConsoleInput {
         String command = scanner.nextLine();
         switch (command) {
             case "1" -> {
-                auditController.logAction(currentUser, "Регистрация");
+                auditController.addEntry(currentUser, "Регистрация");
                 setCurrentUser(consoleUtils.register(scanner, currentUser));
                 return true;
             }
             case "2" -> {
-                auditController.logAction(currentUser, "Сменить пользователя");
+                auditController.addEntry(currentUser, "Сменить пользователя");
                 setCurrentUser(consoleUtils.login(scanner, currentUser));
                 return true;
             }
             case "3" -> {
-                auditController.logAction(currentUser, "Отправить данные");
+                auditController.addEntry(currentUser, "Отправить данные");
                 consoleUtils.submit(scanner, currentUser);
                 return true;
             }
             case "4" -> {
-                auditController.logAction(currentUser, "Просмотреть текущие данные");
+                auditController.addEntry(currentUser, "Просмотреть текущие данные");
                 consoleUtils.viewCurrent(scanner, currentUser);
                 return true;
             }
             case "5" -> {
-                auditController.logAction(currentUser, "Просмотреть данные за месяц");
+                auditController.addEntry(currentUser, "Просмотреть данные за месяц");
                 consoleUtils.viewIndicatorsByMonth(scanner, currentUser);
                 return true;
             }
             case "6" -> {
-                auditController.logAction(currentUser, "Просмотреть историю");
+                auditController.addEntry(currentUser, "Просмотреть историю");
                 consoleUtils.viewHistory(currentUser);
                 return true;
             }
             case "7" -> {
-                auditController.logAction(currentUser, "Добавить тип показания");
+                auditController.addEntry(currentUser, "Добавить тип показания");
                 consoleUtils.addIndicatorType(scanner);
                 return true;
             }
             case "8" -> {
-                auditController.logAction(currentUser, "Просмотреть показания всех пользователей");
+                auditController.addEntry(currentUser, "Просмотреть показания всех пользователей");
                 consoleUtils.viewAllReadings();
                 return true;
             }
             case "9" -> {
-                auditController.logAction(currentUser, "Сделать другого пользователя администратором");
+                auditController.addEntry(currentUser, "Сделать другого пользователя администратором");
                 consoleUtils.makeUserAdmin(scanner);
                 return true;
             }
             case "10" -> {
-                auditController.logAction(currentUser, "Просмотр действий всех пользователей");
-                consoleUtils.getAllLogs();
+                auditController.addEntry(currentUser, "Просмотр действий всех пользователей");
+                consoleUtils.getAllEntries();
                 return true;
             }
             case "11" -> {
-                auditController.logAction(currentUser, "Выход");
+                auditController.addEntry(currentUser, "Выход");
                 return false;
             }
             default -> {

@@ -21,7 +21,7 @@ public class ReadingTypeMemoryStorageTest {
      */
     @BeforeEach
     public void setUp() {
-        readingTypeMemoryStorage = new ReadingTypeMemoryStorage();
+        readingTypeMemoryStorage = ReadingTypeMemoryStorage.getInstance();
     }
 
     /**

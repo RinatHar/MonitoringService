@@ -1,6 +1,7 @@
 package org.kharisov.in.controllers;
 
-import org.kharisov.services.ReadingTypeService;
+import org.kharisov.services.interfaces.ReadingTypeService;
+import org.kharisov.services.memoryImpls.ReadingTypeMemoryService;
 import org.kharisov.entities.ReadingType;
 
 import java.util.*;

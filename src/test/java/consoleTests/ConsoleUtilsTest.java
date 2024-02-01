@@ -217,18 +217,18 @@ public class ConsoleUtilsTest {
     }
 
     /**
-     * Тестирование метода getAllLogs.
+     * Тестирование метода getAllEntries.
      * Проверяет получение всех журналов.
      */
     @Test
-    public void testGetAllLogs() {
-        List<String> logs = Collections.singletonList("log1");
-        Map<String, List<String>> allLogs = new HashMap<>();
-        allLogs.put(ACCOUNT_NUM, logs);
-        when(auditController.getAllLogs()).thenReturn(allLogs);
+    public void testGetAllEntries() {
+        List<String> entries = Collections.singletonList("entry1");
+        Map<String, List<String>> allEntries = new HashMap<>();
+        allEntries.put(ACCOUNT_NUM, entries);
+        when(auditController.getAllEntries()).thenReturn(allEntries);
         when(authController.isAdminByAccountNum(ACCOUNT_NUM)).thenReturn(true);
-        consoleUtils.getAllLogs();
-        verify(auditController, times(1)).getAllLogs();
+        consoleUtils.getAllEntries();
+        verify(auditController, times(1)).getAllEntries();
     }
 
 

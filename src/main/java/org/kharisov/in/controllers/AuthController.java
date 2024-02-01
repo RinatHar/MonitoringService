@@ -1,7 +1,8 @@
 package org.kharisov.in.controllers;
 
 import org.kharisov.entities.User;
-import org.kharisov.services.AuthService;
+import org.kharisov.services.interfaces.AuthService;
+import org.kharisov.services.memoryImpls.AuthMemoryService;
 
 import java.util.Optional;
 

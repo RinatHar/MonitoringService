@@ -21,7 +21,7 @@ public class UserMemoryStorageTest {
      */
     @BeforeEach
     public void setUp() {
-        userMemoryStorage = new UserMemoryStorage();
+        userMemoryStorage = UserMemoryStorage.getInstance();
     }
 
     /**

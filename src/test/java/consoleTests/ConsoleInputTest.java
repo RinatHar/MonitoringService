@@ -86,7 +86,7 @@ public class ConsoleInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
         consoleInput.showMenuForAuthenticatedUser(new Scanner(in));
-        verify(auditController, times(1)).logAction(any(User.class), any(String.class));
+        verify(auditController, times(1)).addEntry(any(User.class), any(String.class));
         verify(consoleUtils, times(1)).register(any(Scanner.class), any(User.class));
     }
 }

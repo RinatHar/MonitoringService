@@ -313,12 +313,12 @@ public class ConsoleUtils {
     /**
      * Получает все журналы аудита.
      */
-    public void getAllLogs() {
-        Map<String, List<String>> logs = auditController.getAllLogs();
-        for (Map.Entry<String, List<String>> entry : logs.entrySet()) {
+    public void getAllEntries() {
+        Map<String, List<String>> entries = auditController.getAllEntries();
+        for (Map.Entry<String, List<String>> entry : entries.entrySet()) {
             System.out.println("\nПользователь: " + entry.getKey() + (authController.isAdminByAccountNum(entry.getKey()) ? " (Администратор)" : ""));
-            for (String log : entry.getValue()) {
-                System.out.println(" - " + log);
+            for (String value : entry.getValue()) {
+                System.out.println(" - " + value);
             }
             System.out.println("--------------------");
         }

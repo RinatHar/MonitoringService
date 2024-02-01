@@ -1,7 +1,8 @@
-package org.kharisov.services;
+package org.kharisov.services.memoryImpls;
 
 import org.kharisov.entities.User;
 import org.kharisov.repos.interfaces.AuditRepo;
+import org.kharisov.services.interfaces.AuditService;
 
 import java.util.*;
 
@@ -9,17 +10,17 @@ import java.util.*;
  * Класс AuditService представляет сервис для аудита.
  * Этот класс предоставляет методы для регистрации действий и получения журналов аудита.
  */
-public class AuditService {
+public class AuditMemoryService implements AuditService {
     /**
      * Репозиторий для управления хранилищем аудита.
      */
     private final AuditRepo auditMemoryRepo;
 
     /**
-     * Конструктор класса AuditService.
+     * Конструктор класса AuditMemoryService.
      * @param auditMemoryRepo Репозиторий для управления хранилищем аудита.
      */
-    public AuditService(AuditRepo auditMemoryRepo) {
+    public AuditMemoryService(AuditRepo auditMemoryRepo) {
         this.auditMemoryRepo = auditMemoryRepo;
     }
 
@@ -28,7 +29,7 @@ public class AuditService {
      * @param user Пользователь, выполнивший действие.
      * @param action Действие, которое нужно записать.
      */
-    public void logAction(User user, String action) {
+    public void addEntry(User user, String action) {
         auditMemoryRepo.logAction(user.getAccountNum(), action);
     }
 
@@ -37,7 +38,7 @@ public class AuditService {
      * @param user Пользователь, для которого нужно получить журналы аудита.
      * @return Список журналов аудита.
      */
-    public List<String> getLogs(User user) {
+    public List<String> getEntries(User user) {
         return auditMemoryRepo.getLogs(user.getAccountNum());
     }
 
@@ -45,7 +46,7 @@ public class AuditService {
      * Получает все журналы аудита.
      * @return Map, где ключом является номер счета пользователя, а значением - список журналов аудита.
      */
-    public Map<String, List<String>> getAllLogs() {
+    public Map<String, List<String>> getAllEntries() {
         return auditMemoryRepo.getAllLogs();
     }
 }

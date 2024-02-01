@@ -3,7 +3,7 @@ package serviceTests;
 import org.junit.jupiter.api.*;
 import org.kharisov.entities.*;
 import org.kharisov.repos.interfaces.UserRepo;
-import org.kharisov.services.ReadingService;
+import org.kharisov.services.memoryImpls.ReadingMemoryService;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ public class ReadingServiceTest {
     private final ReadingType READING_TYPE = ReadingType.Create("ColdWater");
 
     UserRepo userRepo;
-    ReadingService readingService;
+    ReadingMemoryService readingService;
     User user;
 
     /**
@@ -29,7 +29,7 @@ public class ReadingServiceTest {
     @BeforeEach
     public void setUp() {
         userRepo = Mockito.mock(UserRepo.class);
-        readingService = new ReadingService(userRepo);
+        readingService = new ReadingMemoryService(userRepo);
         user = User.builder().build();
     }
 

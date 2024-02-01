@@ -3,7 +3,7 @@ package controllerTests;
 import org.junit.jupiter.api.*;
 import org.kharisov.entities.*;
 import org.kharisov.in.controllers.ReadingController;
-import org.kharisov.services.ReadingService;
+import org.kharisov.services.memoryImpls.ReadingMemoryService;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
  */
 public class ReadingControllerTest {
 
-    private ReadingService readingService;
+    private ReadingMemoryService readingService;
     private ReadingController readingController;
 
     /**
@@ -26,7 +26,7 @@ public class ReadingControllerTest {
      */
     @BeforeEach
     public void setUp() {
-        readingService = Mockito.mock(ReadingService.class);
+        readingService = Mockito.mock(ReadingMemoryService.class);
         readingController = new ReadingController(readingService);
     }
 

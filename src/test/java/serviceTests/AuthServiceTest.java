@@ -3,7 +3,7 @@ package serviceTests;
 import org.junit.jupiter.api.*;
 import org.kharisov.entities.User;
 import org.kharisov.repos.interfaces.UserRepo;
-import org.kharisov.services.AuthService;
+import org.kharisov.services.memoryImpls.AuthMemoryService;
 import org.mockito.Mockito;
 
 import java.util.Optional;
@@ -19,7 +19,7 @@ public class AuthServiceTest {
     private final String PASSWORD = "password123";
 
     UserRepo userRepo;
-    AuthService authService;
+    AuthMemoryService authService;
     User user;
 
     /**
@@ -29,7 +29,7 @@ public class AuthServiceTest {
     @BeforeEach
     public void setUp() {
         userRepo = Mockito.mock(UserRepo.class);
-        authService = new AuthService(userRepo);
+        authService = new AuthMemoryService(userRepo);
         user = User
                 .builder()
                 .accountNum(ACCOUNT_NUM)

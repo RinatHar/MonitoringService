@@ -3,7 +3,7 @@ package controllerTests;
 import org.junit.jupiter.api.*;
 import org.kharisov.entities.ReadingType;
 import org.kharisov.in.controllers.ReadingTypeController;
-import org.kharisov.services.ReadingTypeService;
+import org.kharisov.services.memoryImpls.ReadingTypeMemoryService;
 import org.mockito.Mockito;
 
 import java.util.*;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
  */
 public class ReadingTypeControllerTest {
 
-    private ReadingTypeService readingTypeService;
+    private ReadingTypeMemoryService readingTypeService;
     private ReadingTypeController readingTypeController;
 
     /**
@@ -25,7 +25,7 @@ public class ReadingTypeControllerTest {
      */
     @BeforeEach
     public void setUp() {
-        readingTypeService = Mockito.mock(ReadingTypeService.class);
+        readingTypeService = Mockito.mock(ReadingTypeMemoryService.class);
         readingTypeController = new ReadingTypeController(readingTypeService);
     }
 

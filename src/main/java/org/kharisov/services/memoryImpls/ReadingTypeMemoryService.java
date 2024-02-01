@@ -1,7 +1,8 @@
-package org.kharisov.services;
+package org.kharisov.services.memoryImpls;
 
 import org.kharisov.repos.interfaces.ReadingTypeRepo;
 import org.kharisov.entities.ReadingType;
+import org.kharisov.services.interfaces.ReadingTypeService;
 
 import java.util.*;
 
@@ -9,7 +10,7 @@ import java.util.*;
  * Класс ReadingTypeService представляет сервис для работы с типами показаний.
  * Этот класс предоставляет методы для добавления типов показаний, получения типа показания по имени и получения всех названий типов показаний.
  */
-public class ReadingTypeService {
+public class ReadingTypeMemoryService implements ReadingTypeService {
     /**
      * Репозиторий для управления хранилищем типов показаний.
      */
@@ -19,7 +20,7 @@ public class ReadingTypeService {
      * Конструктор класса ReadingTypeService.
      * @param readingTypeRepo Репозиторий для управления хранилищем типов показаний.
      */
-    public ReadingTypeService(ReadingTypeRepo readingTypeRepo)  {
+    public ReadingTypeMemoryService(ReadingTypeRepo readingTypeRepo)  {
         this.readingTypeRepo = readingTypeRepo;
     }
 
