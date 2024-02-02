@@ -38,11 +38,7 @@ public class AuthControllerTest {
                 .build();
     }
 
-    /**
-     * Тестирование метода register.
-     * Проверяет, что пользователь корректно регистрируется в сервисе аутентификации.
-     * Добавляет пользователя в сервис и затем проверяет, что он был добавлен.
-     */
+    @DisplayName("Тестирование метода register с проверкой корректной регистрации пользователя в сервисе аутентификации")
     @Test
     public void testRegister() {
 
@@ -55,10 +51,7 @@ public class AuthControllerTest {
         assertThat(result.get()).isEqualTo(user);
     }
 
-    /**
-     * Тестирование метода login.
-     * Проверяет, проходит ли аутентификация пользователя.
-     */
+    @DisplayName("Тестирование метода login с проверкой прохождения аутентификации пользователя")
     @Test
     public void testLogin() {
 
@@ -71,10 +64,7 @@ public class AuthControllerTest {
         assertThat(result.get()).isEqualTo(user);
     }
 
-    /**
-     * Тестирование метода makeUserAdminIfUserExists.
-     * Проверяет, что пользователь становится администратором, если он существует.
-     */
+    @DisplayName("Тестирование метода makeUserAdminIfUserExists с проверкой назначения пользователя администратором при его наличии")
     @Test
     public void testMakeUserAdminIfUserExists() {
 
@@ -89,10 +79,7 @@ public class AuthControllerTest {
         assertThat(result).isTrue();
     }
 
-    /**
-     * Тестирование метода makeUserAdminIfUserDoesNotExist.
-     * Проверяет, что пользователь не становится администратором, если он не существует.
-     */
+    @DisplayName("Тестирование метода makeUserAdminIfUserDoesNotExist с проверкой отсутствия назначения пользователя администратором при его отсутствии")
     @Test
     public void testMakeUserAdminIfUserDoesNotExist() {
 
@@ -104,11 +91,7 @@ public class AuthControllerTest {
         assertThat(result).isFalse();
     }
 
-    /**
-     * Тестирование метода addAdmin.
-     * Проверяет, что администратор корректно добавляется в сервис аутентификации.
-     * Добавляет администратора в сервис и затем проверяет, что он был добавлен.
-     */
+    @DisplayName("Тестирование метода addAdmin с проверкой корректного добавления администратора в сервис аутентификации")
     @Test
     public void testAddAdmin() {
         User admin = User
@@ -125,10 +108,7 @@ public class AuthControllerTest {
         verify(authService, times(1)).addUser(any(User.class));
     }
 
-    /**
-     * Тестирование метода isAdminByAccountNum.
-     * Проверяет, является ли пользователь администратором по номеру аккаунта.
-     */
+    @DisplayName("Тестирование метода isAdminByAccountNum с проверкой определения, является ли пользователь администратором по номеру аккаунта")
     @Test
     public void testIsAdminByAccountNum() {
 

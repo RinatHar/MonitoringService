@@ -29,11 +29,7 @@ public class UserMemoryRepoTest {
         userMemoryRepo = new UserMemoryRepo(userStorage);
     }
 
-    /**
-     * Тестирование метода addUser.
-     * Проверяет, что пользователь корректно добавляется в хранилище.
-     * Добавляет пользователя в хранилище и затем проверяет, что он был добавлен.
-     */
+    @DisplayName("Тестирование метода addUser с проверкой корректного добавления пользователя в хранилище")
     @Test
     public void testAddUser() {
         User user = User.builder().build();
@@ -48,11 +44,7 @@ public class UserMemoryRepoTest {
         verify(userStorage, times(1)).getStorage();
     }
 
-    /**
-     * Тестирование метода getUser.
-     * Проверяет, что пользователь корректно извлекается из хранилища.
-     * Добавляет пользователя в хранилище и затем проверяет, что он был корректно извлечен.
-     */
+    @DisplayName("Тестирование метода getUser с проверкой корректного извлечения пользователя из хранилища")
     @Test
     public void testGetUser() {
         User user = User.builder().build();
@@ -67,11 +59,7 @@ public class UserMemoryRepoTest {
         verify(userStorage, times(1)).getStorage();
     }
 
-    /**
-     * Тестирование метода getAllUsers.
-     * Проверяет, что все пользователи корректно извлекаются из хранилища.
-     * Добавляет пользователей в хранилище и затем проверяет, что они были корректно извлечены.
-     */
+    @DisplayName("Тестирование метода getAllUsers с проверкой корректного извлечения всех пользователей из хранилища")
     @Test
     public void testGetAllUsers() {
         User user1 = User.builder().build();

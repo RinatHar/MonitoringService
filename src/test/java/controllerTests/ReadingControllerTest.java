@@ -30,11 +30,7 @@ public class ReadingControllerTest {
         readingController = new ReadingController(readingService);
     }
 
-    /**
-     * Тестирование метода addReading.
-     * Проверяет, что чтение корректно добавляется в сервис чтения.
-     * Добавляет чтение в сервис и затем проверяет, что оно было добавлено.
-     */
+    @DisplayName("Тестирование метода addReading с проверкой корректного добавления чтения в сервис чтения")
     @Test
     public void testAddReading() {
         User user = User.builder().build();
@@ -48,10 +44,7 @@ public class ReadingControllerTest {
         verify(readingService, times(1)).addReading(user, reading, value);
     }
 
-    /**
-     * Тестирование метода getCurrentIndicator.
-     * Проверяет, что текущий индикатор корректно извлекается из сервиса.
-     */
+    @DisplayName("Тестирование метода getCurrentIndicator с проверкой корректного извлечения текущего индикатора из сервиса")
     @Test
     public void testGetCurrentIndicator() {
         User user = User.builder().build();
@@ -70,10 +63,7 @@ public class ReadingControllerTest {
         assertThat(result.get()).isEqualTo(record);
     }
 
-    /**
-     * Тестирование метода getIndicatorsByMonth.
-     * Проверяет, что индикаторы за месяц корректно извлекаются из сервиса.
-     */
+    @DisplayName("Тестирование метода getIndicatorsByMonth с проверкой корректного извлечения индикаторов за месяц из сервиса")
     @Test
     public void testGetIndicatorsByMonth() {
         User user = User.builder().build();
@@ -94,10 +84,7 @@ public class ReadingControllerTest {
         assertThat(result).isEqualTo(records);
     }
 
-    /**
-     * Тестирование метода getHistory.
-     * Проверяет, что история чтений корректно извлекается из сервиса.
-     */
+    @DisplayName("Тестирование метода getHistory с проверкой корректного извлечения истории чтений из сервиса")
     @Test
     public void testGetHistory() {
         User user = User.builder().build();
@@ -116,10 +103,7 @@ public class ReadingControllerTest {
         assertThat(result).isEqualTo(records);
     }
 
-    /**
-     * Тестирование метода getAllReadings.
-     * Проверяет, что все чтения корректно извлекаются из сервиса.
-     */
+    @DisplayName("Тестирование метода getAllReadings с проверкой корректного извлечения всех чтений из сервиса")
     @Test
     public void testGetAllReadings() {
         User user = User.builder().build();
@@ -140,10 +124,7 @@ public class ReadingControllerTest {
         assertThat(result).isEqualTo(allReadings);
     }
 
-    /**
-     * Тестирование метода readingExists.
-     * Проверяет, существует ли чтение.
-     */
+    @DisplayName("Тестирование метода readingExists с проверкой на существование чтения")
     @Test
     public void testReadingExists() {
         User user = User.builder().build();

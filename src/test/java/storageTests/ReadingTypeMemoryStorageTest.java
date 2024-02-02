@@ -24,12 +24,7 @@ public class ReadingTypeMemoryStorageTest {
         readingTypeMemoryStorage = ReadingTypeMemoryStorage.getInstance();
     }
 
-    /**
-     * Тестирование метода getStorage.
-     * Проверяет, что данные корректно сохраняются в хранилище.
-     * Добавляет данные в хранилище и затем получает их.
-     * Проверяет, что полученные данные соответствуют добавленным.
-     */
+    @DisplayName("Тестирование метода getStorage с проверкой корректного сохранения данных в хранилище")
     @Test
     public void testGetStorage() {
         String name = "type1";

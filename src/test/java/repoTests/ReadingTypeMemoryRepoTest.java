@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
- * Класс для тестирования репозитория типов чтения в памяти.
+ * Класс для тестирования репозитория типов показаний в памяти.
  */
 public class ReadingTypeMemoryRepoTest {
 
@@ -29,11 +29,8 @@ public class ReadingTypeMemoryRepoTest {
         repo = new ReadingTypeMemoryRepo(storage);
     }
 
-    /**
-     * Тестирование метода addReadingType.
-     * Проверяет, что тип чтения корректно добавляется в хранилище.
-     * Добавляет тип чтения в хранилище и затем проверяет, что он был добавлен.
-     */
+    @DisplayName("Тестирование метода addReadingType с проверкой " +
+            "корректного добавления типа показаний в хранилище")
     @Test
     public void testAddReadingType() {
         String name = "type1";
@@ -49,11 +46,8 @@ public class ReadingTypeMemoryRepoTest {
         verify(storage, times(1)).getStorage();
     }
 
-    /**
-     * Тестирование метода getReadingType.
-     * Проверяет, что тип чтения корректно извлекается из хранилища.
-     * Добавляет тип чтения в хранилище и затем проверяет, что он был корректно извлечен.
-     */
+    @DisplayName("Тестирование метода getReadingType с проверкой " +
+            "корректного извлечения типа показаний из хранилища")
     @Test
     public void testGetReadingType() {
         String name = "type1";
@@ -70,11 +64,8 @@ public class ReadingTypeMemoryRepoTest {
         assertThat(result.get()).isEqualTo(type);
     }
 
-    /**
-     * Тестирование метода getReadingNames.
-     * Проверяет, что имена типов чтения корректно извлекаются из хранилища.
-     * Добавляет типы чтения в хранилище и затем проверяет, что их имена были корректно извлечены.
-     */
+    @DisplayName("Тестирование метода getReadingNames с проверкой " +
+            "корректного извлечения имен типов показаний из хранилища")
     @Test
     public void testGetReadingNames() {
         String name1 = "type1";

@@ -29,11 +29,7 @@ public class ReadingTypeControllerTest {
         readingTypeController = new ReadingTypeController(readingTypeService);
     }
 
-    /**
-     * Тестирование метода addReadingType.
-     * Проверяет, что тип чтения корректно добавляется в сервис типов чтения.
-     * Добавляет тип чтения в сервис и затем проверяет, что он был добавлен.
-     */
+    @DisplayName("Тестирование метода addReadingType с проверкой корректного добавления типа чтения в сервис типов чтения")
     @Test
     public void testAddReadingType() {
         String name = "type1";
@@ -45,10 +41,7 @@ public class ReadingTypeControllerTest {
         verify(readingTypeService, times(1)).addReadingType(name);
     }
 
-    /**
-     * Тестирование метода getReadingType.
-     * Проверяет, что тип чтения корректно извлекается из сервиса.
-     */
+    @DisplayName("Тестирование метода getReadingType с проверкой корректного извлечения типа чтения из сервиса")
     @Test
     public void testGetReadingType() {
         String name = "type1";
@@ -62,10 +55,7 @@ public class ReadingTypeControllerTest {
         assertThat(result.get()).isEqualTo(type);
     }
 
-    /**
-     * Тестирование метода getReadingNames.
-     * Проверяет, что имена типов чтения корректно извлекаются из сервиса.
-     */
+    @DisplayName("Тестирование метода getReadingNames с проверкой корректного извлечения имен типов чтения из сервиса")
     @Test
     public void testGetReadingNames() {
         Set<String> names = new HashSet<>(Arrays.asList("type1", "type2"));

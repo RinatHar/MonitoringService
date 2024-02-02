@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
- * Класс для тестирования сервиса типов чтения.
+ * Класс для тестирования сервиса типов показаний.
  */
 public class ReadingTypeServiceTest {
     private final String READING_TYPE = "ColdWater";
@@ -31,10 +31,8 @@ public class ReadingTypeServiceTest {
         readingTypeService = new ReadingTypeMemoryService(readingTypeRepo);
     }
 
-    /**
-     * Тестирование метода addOnlyOneReadingType.
-     * Проверяет, что тип чтения добавляется только один раз.
-     */
+    @DisplayName("Тестирование метода addOnlyOneReadingType с проверкой, " +
+            "что тип показания добавляется только один раз")
     @Test
     public void addOnlyOneReadingType() {
         doNothing().when(readingTypeRepo).addReadingType(READING_TYPE);
@@ -42,10 +40,7 @@ public class ReadingTypeServiceTest {
         verify(readingTypeRepo, times(1)).addReadingType(READING_TYPE);
     }
 
-    /**
-     * Тестирование метода getReadingType.
-     * Проверяет, что тип чтения корректно извлекается из сервиса.
-     */
+    @DisplayName("Тестирование метода getReadingType с проверкой корректного извлечения типа показания из сервиса")
     @Test
     public void getReadingType() {
         ReadingType readingType = ReadingType.Create(READING_TYPE);
@@ -55,10 +50,8 @@ public class ReadingTypeServiceTest {
         assertThat(result.get()).isEqualTo(readingType);
     }
 
-    /**
-     * Тестирование метода getReadingNames.
-     * Проверяет, что имена типов чтения корректно извлекаются из сервиса.
-     */
+    @DisplayName("Тестирование метода getReadingNames с проверкой " +
+            "корректного извлечения имен типов показания из сервиса")
     @Test
     public void getReadingNames() {
         Set<String> names = Set.of("ColdWater", "HotWater");

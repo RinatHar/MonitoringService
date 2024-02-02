@@ -29,11 +29,8 @@ public class AuditServiceTest {
         auditService = new AuditMemoryService(auditRepo);
     }
 
-    /**
-     * Тестирование метода logAction.
-     * Проверяет, что действие корректно записывается в репозиторий аудита.
-     * Добавляет действие в репозиторий и затем проверяет, что оно было добавлено.
-     */
+    @DisplayName("Тестирование метода logAction с проверкой " +
+            "корректной записи действия в репозиторий аудита")
     @Test
     public void testLogAction() {
         User user = User.builder().build();
@@ -46,11 +43,8 @@ public class AuditServiceTest {
         verify(auditRepo, times(1)).logAction(user.getAccountNum(), action);
     }
 
-    /**
-     * Тестирование метода getLogs.
-     * Проверяет, что журналы действий пользователя корректно извлекаются из репозитория.
-     * Добавляет журнал действий в репозиторий и затем проверяет, что он был корректно извлечен.
-     */
+    @DisplayName("Тестирование метода getEntries с проверкой " +
+            "корректного извлечения журналов действий пользователя из репозитория")
     @Test
     public void testGetEntries() {
         User user = User.builder().build();
@@ -63,11 +57,8 @@ public class AuditServiceTest {
         assertThat(logs).containsExactly(action);
     }
 
-    /**
-     * Тестирование метода getAllLogs.
-     * Проверяет, что все журналы действий корректно извлекаются из репозитория.
-     * Добавляет журналы действий в репозиторий и затем проверяет, что они были корректно извлечены.
-     */
+    @DisplayName("Тестирование метода getAllEntries с проверкой " +
+            "корректного извлечения всех журналов действий из репозитория")
     @Test
     public void testGetAllEntries() {
         User user = User.builder().build();

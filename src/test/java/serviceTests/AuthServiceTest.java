@@ -38,10 +38,7 @@ public class AuthServiceTest {
                 .build();
     }
 
-    /**
-     * Тестирование метода userExists.
-     * Проверяет, существует ли пользователь.
-     */
+    @DisplayName("Тестирование метода userExists с проверкой на существование пользователя")
     @Test
     public void testUserExists() {
 
@@ -52,10 +49,7 @@ public class AuthServiceTest {
         assertThat(exists).isTrue();
     }
 
-    /**
-     * Тестирование метода getUserByAccountNum.
-     * Проверяет, получает ли сервис пользователя по номеру аккаунта.
-     */
+    @DisplayName("Тестирование метода getUserByAccountNum с проверкой получения пользователя по номеру аккаунта")
     @Test
     public void testGetUserByAccountNum() {
 
@@ -66,10 +60,7 @@ public class AuthServiceTest {
         assertThat(result).isEqualTo(user);
     }
 
-    /**
-     * Тестирование метода addUserSuccess.
-     * Проверяет, успешно ли добавляется пользователь.
-     */
+    @DisplayName("Тестирование метода addUserSuccess с проверкой успешного добавления пользователя")
     @Test
     public void testAddUserSuccess() {
 
@@ -81,10 +72,8 @@ public class AuthServiceTest {
         assertThat(result.get()).isEqualTo(user);
     }
 
-    /**
-     * Тестирование метода addUserFail.
-     * Проверяет, что при добавлении пользователя с недопустимыми данными возвращается пустой результат.
-     */
+    @DisplayName("Тестирование метода addUserFail с проверкой " +
+            "на отсутствие добавления пользователя с недопустимыми данными")
     @Test
     public void testAddUserFail() {
         String accountNum = "1234";
@@ -102,10 +91,7 @@ public class AuthServiceTest {
         assertThat(result).isEmpty();
     }
 
-    /**
-     * Тестирование метода logIn.
-     * Проверяет, проходит ли аутентификация пользователя.
-     */
+    @DisplayName("Тестирование метода logIn с проверкой прохождения аутентификации пользователя")
     @Test
     void testLogIn() {
         user = Mockito.mock(User.class);
@@ -120,10 +106,8 @@ public class AuthServiceTest {
         assertThat(authService.logIn(ACCOUNT_NUM, "wrongPassword")).isFalse();
     }
 
-    /**
-     * Тестирование метода isAdminByAccountNum.
-     * Проверяет, является ли пользователь администратором по номеру аккаунта.
-     */
+    @DisplayName("Тестирование метода isAdminByAccountNum с проверкой, " +
+            "является ли пользователь администратором по номеру аккаунта")
     @Test
     public void isAdminByAccountNum() {
         user = User
@@ -140,10 +124,8 @@ public class AuthServiceTest {
         assertThat(isAdmin).isTrue();
     }
 
-    /**
-     * Тестирование метода testPasswordHashing.
-     * Проверяет, что хеш пароля создается правильно и что неправильный пароль не проходит проверку.
-     */
+    @DisplayName("Тестирование метода testPasswordHashing с проверкой " +
+            "создания правильного хеша пароля и проверки неправильного пароля")
     @Test
     public void testPasswordHashing() {
         String password = "TestPassword123";

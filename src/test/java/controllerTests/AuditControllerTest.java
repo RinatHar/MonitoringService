@@ -29,11 +29,7 @@ public class AuditControllerTest {
         auditController = new AuditController(auditService);
     }
 
-    /**
-     * Тестирование метода addEntry.
-     * Проверяет, что действие корректно записывается в сервис аудита.
-     * Добавляет действие в сервис и затем проверяет, что оно было добавлено.
-     */
+    @DisplayName("Тестирование метода addEntry с проверкой корректной записи действия в сервис аудита")
     @Test
     public void testAddEntry() {
         User user = User.builder().build();
@@ -46,11 +42,7 @@ public class AuditControllerTest {
         verify(auditService, times(1)).addEntry(user, action);
     }
 
-    /**
-     * Тестирование метода getEntries.
-     * Проверяет, что журналы действий пользователя корректно извлекаются из сервиса.
-     * Добавляет журнал действий в сервис и затем проверяет, что он был корректно извлечен.
-     */
+    @DisplayName("Тестирование метода getEntries с проверкой корректного извлечения журналов действий пользователя из сервиса")
     @Test
     public void testGetEntries() {
         User user = User.builder().build();
@@ -63,11 +55,7 @@ public class AuditControllerTest {
         assertThat(result).isEqualTo(entries);
     }
 
-    /**
-     * Тестирование метода getAllEntries.
-     * Проверяет, что все журналы действий корректно извлекаются из сервиса.
-     * Добавляет журналы действий в сервис и затем проверяет, что они были корректно извлечены.
-     */
+    @DisplayName("Тестирование метода getAllEntries с проверкой корректного извлечения всех журналов действий из сервиса")
     @Test
     public void testGetAllEntries() {
         User user1 = User.builder().build();

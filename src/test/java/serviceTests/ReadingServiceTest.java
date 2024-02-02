@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
- * Класс для тестирования сервиса чтения.
+ * Класс для тестирования сервиса показаний.
  */
 public class ReadingServiceTest {
     private final ReadingType READING_TYPE = ReadingType.Create("ColdWater");
@@ -33,11 +33,7 @@ public class ReadingServiceTest {
         user = User.builder().build();
     }
 
-    /**
-     * Тестирование метода addReading.
-     * Проверяет, что чтение корректно добавляется в сервис.
-     * Добавляет чтение в сервис и затем проверяет, что оно было добавлено.
-     */
+    @DisplayName("Тестирование метода addReading с проверкой корректного добавления показания в сервис")
     @Test
     public void addReading() {
         int value = 10;
@@ -46,10 +42,7 @@ public class ReadingServiceTest {
         assertThat(user.getReadings().get(0).getType()).isEqualTo(READING_TYPE);
     }
 
-    /**
-     * Тестирование метода readingExists.
-     * Проверяет, существует ли чтение.
-     */
+    @DisplayName("Тестирование метода readingExists с проверкой на существование показания")
     @Test
     public void readingExists() {
         int value = 10;
@@ -57,11 +50,8 @@ public class ReadingServiceTest {
         assertThat(readingService.readingExists(user, READING_TYPE, LocalDate.now())).isTrue();
     }
 
-    /**
-     * Тестирование метода getReadingsByMonth.
-     * Проверяет, что чтения за месяц корректно извлекаются из сервиса.
-     * Добавляет чтение в сервис и затем проверяет, что оно было корректно извлечено.
-     */
+    @DisplayName("Тестирование метода getReadingsByMonth с проверкой " +
+            "корректного извлечения показаний за месяц из сервиса")
     @Test
     public void getReadingsByMonth() {
         int value = 10;
@@ -70,11 +60,8 @@ public class ReadingServiceTest {
         assertThat(readings).isNotEmpty();
     }
 
-    /**
-     * Тестирование метода getCurrentReading.
-     * Проверяет, что текущее чтение корректно извлекается из сервиса.
-     * Добавляет чтение в сервис и затем проверяет, что оно было корректно извлечено.
-     */
+    @DisplayName("Тестирование метода getCurrentReading с проверкой " +
+            "корректного извлечения текущего показания из сервиса")
     @Test
     public void getCurrentReading() {
         int value = 10;
@@ -83,11 +70,7 @@ public class ReadingServiceTest {
         assertThat(currentReading).isPresent();
     }
 
-    /**
-     * Тестирование метода getHistory.
-     * Проверяет, что история чтений корректно извлекается из сервиса.
-     * Добавляет чтение в сервис и затем проверяет, что оно было корректно извлечено.
-     */
+    @DisplayName("Тестирование метода getHistory с проверкой корректного извлечения истории показаний из сервиса")
     @Test
     public void getHistory() {
         int value = 10;
@@ -96,11 +79,7 @@ public class ReadingServiceTest {
         assertThat(history).isNotEmpty();
     }
 
-    /**
-     * Тестирование метода getAllReadings.
-     * Проверяет, что все чтения корректно извлекаются из сервиса.
-     * Добавляет чтения в сервис и затем проверяет, что они были корректно извлечены.
-     */
+    @DisplayName("Тестирование метода getAllReadings с проверкой корректного извлечения всех показаний из сервиса")
     @Test
     public void getAllReadings() {
         User user1 = User.builder()
