@@ -1,6 +1,8 @@
 package org.kharisov.entities;
 
 import lombok.*;
+import org.kharisov.enums.Role;
+
 import java.util.*;
 
 /**
@@ -31,14 +33,14 @@ public class User {
      * Флаг, указывающий, является ли пользователь администратором.
      */
     @Builder.Default
-    private boolean isAdmin = false;
+    private Role role = Role.USER;
 
     /**
      * Проверяет, является ли пользователь администратором.
      * @return true, если пользователь является администратором, иначе false.
      */
     public boolean isAdmin() {
-        return isAdmin;
+        return role == Role.ADMIN;
     }
 
     /**
@@ -51,7 +53,7 @@ public class User {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         User user = (User) obj;
-        return isAdmin == user.isAdmin &&
+        return role == user.role &&
                 Objects.equals(accountNum, user.accountNum) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(readings, user.readings);
@@ -63,7 +65,7 @@ public class User {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(accountNum, password, readings, isAdmin);
+        return Objects.hash(accountNum, password, readings, role);
     }
 }
 

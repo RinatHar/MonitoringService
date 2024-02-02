@@ -2,6 +2,7 @@ package controllerTests;
 
 import org.junit.jupiter.api.*;
 import org.kharisov.entities.User;
+import org.kharisov.enums.Role;
 import org.kharisov.in.controllers.AuthController;
 import org.kharisov.services.memoryImpls.AuthMemoryService;
 import org.mockito.Mockito;
@@ -114,7 +115,7 @@ public class AuthControllerTest {
                 .builder()
                 .accountNum(ACCOUNT_NUM)
                 .password(PASSWORD)
-                .isAdmin(true)
+                .role(Role.ADMIN)
                 .build();
 
         when(authService.addUser(any(User.class))).thenReturn(Optional.of(admin));

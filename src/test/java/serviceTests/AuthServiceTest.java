@@ -2,6 +2,7 @@ package serviceTests;
 
 import org.junit.jupiter.api.*;
 import org.kharisov.entities.User;
+import org.kharisov.enums.Role;
 import org.kharisov.repos.interfaces.UserRepo;
 import org.kharisov.services.memoryImpls.AuthMemoryService;
 import org.mockito.Mockito;
@@ -129,7 +130,7 @@ public class AuthServiceTest {
                 .builder()
                 .accountNum(ACCOUNT_NUM)
                 .password(PASSWORD)
-                .isAdmin(true)
+                .role(Role.ADMIN)
                 .build();
 
         when(userRepo.getUser(ACCOUNT_NUM)).thenReturn(user);
