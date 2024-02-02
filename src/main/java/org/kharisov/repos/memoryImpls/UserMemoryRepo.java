@@ -15,7 +15,7 @@ public class UserMemoryRepo implements UserRepo {
     /**
      * Хранилище для пользователей в памяти.
      */
-    UserMemoryStorage userStorage;
+    private final UserMemoryStorage userStorage;
 
     /**
      * Конструктор класса UserMemoryRepo.
