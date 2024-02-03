@@ -9,21 +9,25 @@ import java.util.*;
  * Этот класс использует Map для хранения объектов User.
  */
 public class UserMemoryStorage {
-
     /**
      * Хранилище пользователей.
      * Ключ - номер счета, значение - объект User.
      */
     private final Map<String, User> userStorage = new HashMap<>();
 
-    /**
-     * Конструктор по умолчанию.
-     */
-    public UserMemoryStorage() {
+    private static UserMemoryStorage instance;
+
+    private UserMemoryStorage() {}
+
+    public static UserMemoryStorage getInstance() {
+        if (instance == null) {
+            instance = new UserMemoryStorage();
+        }
+        return instance;
     }
 
     /**
-     * Получить хранилище пользователей.
+     * Метод для получения хранилища пользователей.
      * @return Map, где ключ - номер счета в виде строки, а значение - объект User.
      */
     public Map<String, User> getStorage() {

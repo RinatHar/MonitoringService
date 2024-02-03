@@ -1,8 +1,9 @@
-package org.kharisov.services;
+package org.kharisov.services.memoryImpls;
 
 import org.kharisov.entities.*;
 import org.kharisov.repos.interfaces.UserRepo;
 import org.kharisov.entities.ReadingType;
+import org.kharisov.services.interfaces.ReadingService;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
  * Класс ReadingService представляет сервис для работы с показаниями.
  * Этот класс предоставляет методы для добавления показаний, проверки их существования, получения показаний по месяцу и году, получения текущего показания, истории показаний и всех показаний.
  */
-public class ReadingService {
+public class ReadingMemoryService implements ReadingService {
     /**
      * Репозиторий для управления хранилищем пользователей.
      */
@@ -22,7 +23,7 @@ public class ReadingService {
      * Конструктор класса ReadingService.
      * @param userRepo Репозиторий для управления хранилищем пользователей.
      */
-    public ReadingService(UserRepo userRepo) {
+    public ReadingMemoryService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 

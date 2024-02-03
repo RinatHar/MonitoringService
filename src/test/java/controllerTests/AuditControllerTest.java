@@ -3,7 +3,7 @@ package controllerTests;
 import org.junit.jupiter.api.*;
 import org.kharisov.entities.User;
 import org.kharisov.in.controllers.AuditController;
-import org.kharisov.services.AuditService;
+import org.kharisov.services.memoryImpls.AuditMemoryService;
 import org.mockito.Mockito;
 
 import java.util.*;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
  */
 public class AuditControllerTest {
 
-    private AuditService auditService;
+    private AuditMemoryService auditService;
     private AuditController auditController;
 
     /**
@@ -25,64 +25,52 @@ public class AuditControllerTest {
      */
     @BeforeEach
     public void setUp() {
-        auditService = Mockito.mock(AuditService.class);
+        auditService = Mockito.mock(AuditMemoryService.class);
         auditController = new AuditController(auditService);
     }
 
-    /**
-     * Тестирование метода logAction.
-     * Проверяет, что действие корректно записывается в сервис аудита.
-     * Добавляет действие в сервис и затем проверяет, что оно было добавлено.
-     */
+    @DisplayName("Тестирование метода addEntry с проверкой корректной записи действия в сервис аудита")
     @Test
-    public void testLogAction() {
+    public void testAddEntry() {
         User user = User.builder().build();
         String action = "action1";
 
-        doNothing().when(auditService).logAction(user, action);
+        doNothing().when(auditService).addEntry(user, action);
 
-        auditController.logAction(user, action);
+        auditController.addEntry(user, action);
 
-        verify(auditService, times(1)).logAction(user, action);
+        verify(auditService, times(1)).addEntry(user, action);
     }
 
-    /**
-     * Тестирование метода getLogs.
-     * Проверяет, что журналы действий пользователя корректно извлекаются из сервиса.
-     * Добавляет журнал действий в сервис и затем проверяет, что он был корректно извлечен.
-     */
+    @DisplayName("Тестирование метода getEntries с проверкой корректного извлечения журналов действий пользователя из сервиса")
     @Test
-    public void testGetLogs() {
+    public void testGetEntries() {
         User user = User.builder().build();
-        List<String> logs = Arrays.asList("action1", "action2");
+        List<String> entries = Arrays.asList("action1", "action2");
 
-        when(auditService.getLogs(user)).thenReturn(logs);
+        when(auditService.getEntries(user)).thenReturn(entries);
 
-        List<String> result = auditController.getLogs(user);
+        List<String> result = auditController.getEntries(user);
 
-        assertThat(result).isEqualTo(logs);
+        assertThat(result).isEqualTo(entries);
     }
 
-    /**
-     * Тестирование метода getAllLogs.
-     * Проверяет, что все журналы действий корректно извлекаются из сервиса.
-     * Добавляет журналы действий в сервис и затем проверяет, что они были корректно извлечены.
-     */
+    @DisplayName("Тестирование метода getAllEntries с проверкой корректного извлечения всех журналов действий из сервиса")
     @Test
-    public void testGetAllLogs() {
+    public void testGetAllEntries() {
         User user1 = User.builder().build();
         User user2 = User.builder().build();
-        List<String> logs1 = Arrays.asList("action1", "action2");
-        List<String> logs2 = Arrays.asList("action3", "action4");
-        Map<String, List<String>> allLogs = new HashMap<>();
-        allLogs.put(user1.getAccountNum(), logs1);
-        allLogs.put(user2.getAccountNum(), logs2);
+        List<String> entries1 = Arrays.asList("action1", "action2");
+        List<String> entries2 = Arrays.asList("action3", "action4");
+        Map<String, List<String>> allEntries = new HashMap<>();
+        allEntries.put(user1.getAccountNum(), entries1);
+        allEntries.put(user2.getAccountNum(), entries2);
 
-        when(auditService.getAllLogs()).thenReturn(allLogs);
+        when(auditService.getAllEntries()).thenReturn(allEntries);
 
-        Map<String, List<String>> result = auditController.getAllLogs();
+        Map<String, List<String>> result = auditController.getAllEntries();
 
-        assertThat(result).isEqualTo(allLogs);
+        assertThat(result).isEqualTo(allEntries);
     }
 }
 

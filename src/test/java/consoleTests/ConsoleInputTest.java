@@ -36,23 +36,17 @@ public class ConsoleInputTest {
         consoleInput = new ConsoleInput(authController, readingController, readingTypeController, auditController, consoleUtils);
     }
 
-    /**
-     * Тестирование метода start.
-     * Пользователь выбирает первую опцию в меню, а затем выбирает '3' для выхода.
-     */
+    @DisplayName("Тестирование метода start с выбором первой опции и выходом")
     @Test
     public void testStart() {
-        String input = "1\n3\n"; // Пользователь выбирает первую опцию в меню, а затем выбирает '3' для выхода
+        String input = "1\n3\n";
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
         consoleInput.start();
         verify(consoleUtils, times(1)).register(any(Scanner.class), isNull());
     }
 
-    /**
-     * Тестирование метода initAdminAndIndicatorTypes.
-     * Проверяет добавление администратора и типов показателей.
-     */
+    @DisplayName("Тестирование метода initAdminAndIndicatorTypes с проверкой добавления администратора и типов показателей")
     @Test
     public void testInitAdminAndIndicatorTypes() {
         consoleInput.initAdminAndIndicatorTypes();
@@ -62,10 +56,7 @@ public class ConsoleInputTest {
         verify(readingTypeController, times(1)).addReadingType("Отопление");
     }
 
-    /**
-     * Тестирование метода showMenuForUnauthenticatedUser.
-     * Пользователь выбирает первую опцию в меню.
-     */
+    @DisplayName("Тестирование метода showMenuForUnauthenticatedUser с выбором первой опции")
     @Test
     public void testShowMenuForUnauthenticatedUser() {
         String input = "1\n"; // Пользователь выбирает первую опцию в меню
@@ -75,10 +66,7 @@ public class ConsoleInputTest {
         verify(consoleUtils, times(1)).register(any(Scanner.class), isNull());
     }
 
-    /**
-     * Тестирование метода showMenuForAuthenticatedUser.
-     * Пользователь выбирает первую опцию в меню.
-     */
+    @DisplayName("Тестирование метода showMenuForAuthenticatedUser с выбором первой опции")
     @Test
     public void testShowMenuForAuthenticatedUser() {
         consoleInput.setCurrentUser(User.builder().build());
@@ -86,7 +74,7 @@ public class ConsoleInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
         consoleInput.showMenuForAuthenticatedUser(new Scanner(in));
-        verify(auditController, times(1)).logAction(any(User.class), any(String.class));
+        verify(auditController, times(1)).addEntry(any(User.class), any(String.class));
         verify(consoleUtils, times(1)).register(any(Scanner.class), any(User.class));
     }
 }

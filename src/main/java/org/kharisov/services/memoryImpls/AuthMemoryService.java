@@ -1,7 +1,8 @@
-package org.kharisov.services;
+package org.kharisov.services.memoryImpls;
 
 import org.kharisov.entities.User;
 import org.kharisov.repos.interfaces.UserRepo;
+import org.kharisov.services.interfaces.AuthService;
 
 import java.security.*;
 import java.util.*;
@@ -10,7 +11,7 @@ import java.util.*;
  * Класс AuthService представляет сервис для аутентификации и авторизации пользователей.
  * Этот класс предоставляет методы для проверки существования пользователя, добавления пользователя, входа в систему и проверки административных прав.
  */
-public class AuthService {
+public class AuthMemoryService implements AuthService {
     /**
      * Репозиторий для управления хранилищем пользователей.
      */
@@ -20,7 +21,7 @@ public class AuthService {
      * Конструктор класса AuthService.
      * @param userRepo Репозиторий для управления хранилищем пользователей.
      */
-    public AuthService(UserRepo userRepo) {
+    public AuthMemoryService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 
@@ -72,6 +73,11 @@ public class AuthService {
         return user != null && checkPassword(password, user.getPassword());
     }
 
+    /**
+     * Метод для хеширования пароля с использованием соли.
+     * @param password Пароль, который нужно захешировать.
+     * @return Хеш пароля, сгенерированный с использованием соли. Если произошла ошибка, возвращает исходный пароль.
+     */
     public String hashPassword(String password) {
         try {
             // Генерируем соль
@@ -93,6 +99,12 @@ public class AuthService {
         }
     }
 
+    /**
+     * Метод для проверки пароля пользователя.
+     * @param password Введенный пароль.
+     * @param storedPasswordHash Хеш сохраненного пароля.
+     * @return true, если введенный пароль соответствует сохраненному хешу пароля, иначе false.
+     */
     public boolean checkPassword(String password, String storedPasswordHash) {
         try {
             // Извлекаем соль и хеш из сохраненного значения

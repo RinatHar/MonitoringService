@@ -21,15 +21,10 @@ public class UserMemoryStorageTest {
      */
     @BeforeEach
     public void setUp() {
-        userMemoryStorage = new UserMemoryStorage();
+        userMemoryStorage = UserMemoryStorage.getInstance();
     }
 
-    /**
-     * Тестирование метода getStorage.
-     * Проверяет, что данные корректно сохраняются в хранилище.
-     * Добавляет данные в хранилище и затем получает их.
-     * Проверяет, что полученные данные соответствуют добавленным.
-     */
+    @DisplayName("Тестирование метода getStorage с проверкой корректного сохранения данных в хранилище")
     @Test
     public void testGetStorage() {
         User user = User.builder().build();

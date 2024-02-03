@@ -1,7 +1,8 @@
 package org.kharisov.in.controllers;
 
 import org.kharisov.entities.User;
-import org.kharisov.services.AuthService;
+import org.kharisov.enums.Role;
+import org.kharisov.services.interfaces.AuthService;
 
 import java.util.Optional;
 
@@ -62,7 +63,7 @@ public class AuthController {
      */
     public boolean makeUserAdmin(String accountNum) {
         if (authService.userExists(accountNum)) {
-            authService.getUserByAccountNum(accountNum).setAdmin(true);
+            authService.getUserByAccountNum(accountNum).setRole(Role.ADMIN);
             return true;
         }
         else {
@@ -80,7 +81,7 @@ public class AuthController {
                 .builder()
                 .accountNum(accountNum)
                 .password(password)
-                .isAdmin(true)
+                .role(Role.ADMIN)
                 .build();
         authService.addUser(admin);
     }

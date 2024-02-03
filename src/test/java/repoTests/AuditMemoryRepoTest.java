@@ -32,11 +32,8 @@ public class AuditMemoryRepoTest {
         storage = new HashMap<>();
     }
 
-    /**
-     * Тестирование метода logAction.
-     * Проверяет, что действие корректно записывается в хранилище аудита.
-     * Добавляет действие в хранилище и затем проверяет, что оно было добавлено.
-     */
+    @DisplayName("Тестирование метода logAction с проверкой корректной записи " +
+            "действия в хранилище аудита")
     @Test
     public void testLogAction() {
         storage.put(ACCOUNT_NUM, new ArrayList<>(List.of(ACTION)));
@@ -48,11 +45,8 @@ public class AuditMemoryRepoTest {
         verify(auditStorage, times(2)).getStorage();
     }
 
-    /**
-     * Тестирование метода getLogs.
-     * Проверяет, что журналы действий пользователя корректно извлекаются из хранилища.
-     * Добавляет журнал действий в хранилище и затем проверяет, что он был корректно извлечен.
-     */
+    @DisplayName("Тестирование метода getLogs с проверкой корректного извлечения " +
+            "журналов действий пользователя из хранилища")
     @Test
     public void testGetLogs() {
         storage.put(ACCOUNT_NUM, List.of(ACTION));
@@ -64,11 +58,8 @@ public class AuditMemoryRepoTest {
         assertThat(logs).containsExactly(ACTION);
     }
 
-    /**
-     * Тестирование метода getAllLogs.
-     * Проверяет, что все журналы действий корректно извлекаются из хранилища.
-     * Добавляет журналы действий в хранилище и затем проверяет, что они были корректно извлечены.
-     */
+    @DisplayName("Тестирование метода getAllLogs с проверкой корректного извлечения " +
+            "всех журналов действий из хранилища")
     @Test
     public void testGetAllLogs() {
         storage.put(ACCOUNT_NUM, List.of(ACTION));

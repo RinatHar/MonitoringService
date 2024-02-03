@@ -1,7 +1,7 @@
 package org.kharisov.in.controllers;
 
 import org.kharisov.entities.User;
-import org.kharisov.services.AuditService;
+import org.kharisov.services.interfaces.AuditService;
 
 import java.util.*;
 
@@ -28,8 +28,8 @@ public class AuditController {
      * @param user Пользователь, выполнивший действие.
      * @param action Действие, которое нужно зарегистрировать.
      */
-    public void logAction(User user, String action) {
-        auditService.logAction(user, action);
+    public void addEntry(User user, String action) {
+        auditService.addEntry(user, action);
     }
 
     /**
@@ -37,16 +37,16 @@ public class AuditController {
      * @param user Пользователь, для которого нужно получить журналы аудита.
      * @return Список журналов аудита.
      */
-    public List<String> getLogs(User user) {
-        return auditService.getLogs(user);
+    public List<String> getEntries(User user) {
+        return auditService.getEntries(user);
     }
 
     /**
      * Получает все журналы аудита.
      * @return Map, где ключом является номер счета пользователя, а значением - список журналов аудита.
      */
-    public Map<String, List<String>> getAllLogs() {
-        return auditService.getAllLogs();
+    public Map<String, List<String>> getAllEntries() {
+        return auditService.getAllEntries();
     }
 }
 
