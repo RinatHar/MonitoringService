@@ -1,14 +1,26 @@
 package org.kharisov;
 
+import liquibase.exception.CommandExecutionException;
+import liquibase.exception.DatabaseException;
 import org.kharisov.factories.*;
 import org.kharisov.in.*;
+import org.kharisov.liquibase.LiquibaseExample;
 import org.kharisov.repos.interfaces.*;
 import org.kharisov.services.interfaces.*;
 import org.kharisov.storages.*;
 import org.kharisov.in.controllers.*;
 
+import java.sql.SQLException;
+
 public class Main {
     public static void main(String[] args) {
+
+        try {
+            LiquibaseExample.runMigration();
+        } catch (SQLException | DatabaseException | CommandExecutionException e) {
+            System.out.println("SQL Exception in migration " + e.getMessage());
+        }
+
         UserMemoryStorage userMemoryStorage = UserMemoryStorage.getInstance();
         ReadingTypeMemoryStorage readingTypeMemoryStorage = ReadingTypeMemoryStorage.getInstance();
         AuditMemoryStorage auditMemoryStorage = AuditMemoryStorage.getInstance();

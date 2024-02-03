@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: rinat
+      changes:
+        - insert:
+            tableName: reading_types
+            columns:
+              - column:
+                  name: name
+                  value: "Горячая вода"
+        - insert:
+            tableName: reading_types
+            columns:
+              - column:
+                  name: name
+                  value: "Холодная вода"
+        - insert:
+            tableName: reading_types
+            columns:
+              - column:
+                  name: name
+                  value: "Отопление"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: account_num
+                  value: "0000000000000000"
+              - column:
+                  name: password
+                  value: "vnWiLrRQo065WzKaLIOP/Q==$W8L4vS42mrM9pCHNgZFqJj+MzLWMmEbvx/RhRMvWb9o="
+              - column:
+                  name: is_admin
+                  value: true
