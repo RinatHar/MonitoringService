@@ -30,7 +30,7 @@ public class AuditMemoryService implements AuditService {
      * @param action Действие, которое нужно записать.
      */
     public void addEntry(User user, String action) {
-        auditMemoryRepo.logAction(user.getAccountNum(), action);
+        auditMemoryRepo.addEntry(user.getAccountNum(), action);
     }
 
     /**
@@ -39,7 +39,7 @@ public class AuditMemoryService implements AuditService {
      * @return Список журналов аудита.
      */
     public List<String> getEntries(User user) {
-        return auditMemoryRepo.getLogs(user.getAccountNum());
+        return auditMemoryRepo.getEntries(user.getAccountNum());
     }
 
     /**
@@ -47,6 +47,6 @@ public class AuditMemoryService implements AuditService {
      * @return Map, где ключом является номер счета пользователя, а значением - список журналов аудита.
      */
     public Map<String, List<String>> getAllEntries() {
-        return auditMemoryRepo.getAllLogs();
+        return auditMemoryRepo.getAllEntries();
     }
 }

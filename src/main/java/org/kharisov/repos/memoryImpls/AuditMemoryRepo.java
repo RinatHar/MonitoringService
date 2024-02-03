@@ -30,7 +30,7 @@ public class AuditMemoryRepo implements AuditRepo {
      * @param action Записываемое действие.
      */
     @Override
-    public void logAction(String accountNum, String action) {
+    public void addEntry(String accountNum, String action) {
         if (!auditStorage.getStorage().containsKey(accountNum)) {
             auditStorage.getStorage().put(accountNum, new ArrayList<>());
         }
@@ -43,7 +43,7 @@ public class AuditMemoryRepo implements AuditRepo {
      * @return Список действий пользователя для указанного аккаунта.
      */
     @Override
-    public List<String> getLogs(String accountNum) {
+    public List<String> getEntries(String accountNum) {
         return auditStorage.getStorage().get(accountNum);
     }
 
@@ -52,7 +52,7 @@ public class AuditMemoryRepo implements AuditRepo {
      * @return Карта, где ключ - это номер аккаунта, а значение - список действий пользователя для этого аккаунта.
      */
     @Override
-    public Map<String, List<String>> getAllLogs() {
+    public Map<String, List<String>> getAllEntries() {
         return auditStorage.getStorage();
     }
 }
