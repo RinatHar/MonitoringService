@@ -1,31 +1,27 @@
 package org.kharisov;
 
-import liquibase.exception.CommandExecutionException;
-import liquibase.exception.DatabaseException;
-import org.kharisov.dtos.*;
+import org.kharisov.configs.Config;
 import org.kharisov.factories.*;
 import org.kharisov.in.*;
-import org.kharisov.liquibase.LiquibaseExample;
 import org.kharisov.repos.databaseImpls.*;
-import org.kharisov.repos.interfaces.*;
-import org.kharisov.services.databaseImpls.AuditDbService;
-import org.kharisov.services.databaseImpls.AuthDbService;
-import org.kharisov.services.databaseImpls.ReadingDbService;
-import org.kharisov.services.databaseImpls.ReadingTypeDbService;
 import org.kharisov.services.interfaces.*;
-import org.kharisov.storages.*;
 import org.kharisov.in.controllers.*;
 
-import java.sql.SQLException;
-
 public class Main {
+
     public static void main(String[] args) {
 
-        AuditDbRepo auditDbRepo = RepoFactory.createAuditDbRepo();
-        UserDbRepo userDbRepo = RepoFactory.createUserDbRepo();
-        ReadingDbRepo readingDbRepo = RepoFactory.createReadingDbRepo();
-        ReadingTypeDbRepo readingTypeDbRepo = RepoFactory.createReadingTypeDbRepo();
-        RoleDbRepo roleDbRepo = RepoFactory.createRoleDbRepo();
+        final String DB_URL = Config.get("database.url") + "?currentSchema=" + Config.get("database.schema");
+        final String DB_USERNAME = Config.get("database.username");
+        final String DB_PASSWORD = Config.get("database.password");
+
+        ConnectionPool connectionPool = new ConnectionPool(DB_URL, DB_USERNAME, DB_PASSWORD, 5);
+
+        AuditDbRepo auditDbRepo = RepoFactory.createAuditDbRepo(connectionPool);
+        UserDbRepo userDbRepo = RepoFactory.createUserDbRepo(connectionPool);
+        ReadingDbRepo readingDbRepo = RepoFactory.createReadingDbRepo(connectionPool);
+        ReadingTypeDbRepo readingTypeDbRepo = RepoFactory.createReadingTypeDbRepo(connectionPool);
+        RoleDbRepo roleDbRepo = RepoFactory.createRoleDbRepo(connectionPool);
 
         AuthService authService = ServiceFactory.createAuthService(userDbRepo, roleDbRepo);
         ReadingService readingService = ServiceFactory.createReadingService(readingDbRepo, readingTypeDbRepo, userDbRepo);
