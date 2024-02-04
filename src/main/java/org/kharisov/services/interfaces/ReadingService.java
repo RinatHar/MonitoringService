@@ -1,8 +1,6 @@
 package org.kharisov.services.interfaces;
 
-import org.kharisov.entities.ReadingRecord;
-import org.kharisov.entities.ReadingType;
-import org.kharisov.entities.User;
+import org.kharisov.entities.*;
 
 import java.time.LocalDate;
 import java.util.*;

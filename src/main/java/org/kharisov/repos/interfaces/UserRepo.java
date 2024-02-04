@@ -2,8 +2,7 @@ package org.kharisov.repos.interfaces;
 
 import org.kharisov.entities.User;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Интерфейс UserRepo представляет контракт для репозитория пользователей.

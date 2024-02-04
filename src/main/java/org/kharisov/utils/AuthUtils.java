@@ -2,11 +2,12 @@ package org.kharisov.utils;
 
 import org.kharisov.entities.User;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.security.*;
 import java.util.Base64;
 
+/**
+ * Класс AuthUtils предоставляет статические методы для работы с аутентификацией пользователя.
+ */
 public class AuthUtils {
     /**
      * Метод для хеширования пароля с использованием соли.
@@ -59,6 +60,15 @@ public class AuthUtils {
         }
     }
 
+    /**
+     * Проверяет, является ли пользователь действительным.
+     *
+     * @param user Пользователь, который должен быть проверен.
+     * @return true, если пользователь действителен, иначе false.
+     * Пользователь считается действительным, если:
+     * — его номер счета состоит из 16 цифр,
+     * — его пароль содержит не менее 8 символов.
+     */
     public static boolean isValid(User user) {
         return (user.getAccountNum().length() == 16
                 && user.getAccountNum().matches("\\d+")

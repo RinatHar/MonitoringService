@@ -1,15 +1,9 @@
 package org.kharisov.factories;
 
 import org.kharisov.in.controllers.*;
-import org.kharisov.services.databaseImpls.AuditDbService;
-import org.kharisov.services.databaseImpls.AuthDbService;
-import org.kharisov.services.databaseImpls.ReadingDbService;
-import org.kharisov.services.databaseImpls.ReadingTypeDbService;
+import org.kharisov.services.databaseImpls.*;
 import org.kharisov.services.interfaces.*;
-import org.kharisov.services.memoryImpls.AuditMemoryService;
-import org.kharisov.services.memoryImpls.AuthMemoryService;
-import org.kharisov.services.memoryImpls.ReadingMemoryService;
-import org.kharisov.services.memoryImpls.ReadingTypeMemoryService;
+import org.kharisov.services.memoryImpls.*;
 
 /**
  * Класс ControllerFactory представляет фабрику контроллеров.

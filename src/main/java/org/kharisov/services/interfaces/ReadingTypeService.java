@@ -2,8 +2,7 @@ package org.kharisov.services.interfaces;
 
 import org.kharisov.entities.ReadingType;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public interface ReadingTypeService {
 

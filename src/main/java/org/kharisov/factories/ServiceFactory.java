@@ -1,24 +1,11 @@
 package org.kharisov.factories;
 
 import org.kharisov.repos.databaseImpls.*;
-import org.kharisov.repos.interfaces.AuditRepo;
-import org.kharisov.repos.interfaces.ReadingTypeRepo;
-import org.kharisov.repos.interfaces.UserRepo;
-import org.kharisov.repos.memoryImpls.AuditMemoryRepo;
-import org.kharisov.repos.memoryImpls.ReadingTypeMemoryRepo;
-import org.kharisov.repos.memoryImpls.UserMemoryRepo;
-import org.kharisov.services.databaseImpls.AuditDbService;
-import org.kharisov.services.databaseImpls.AuthDbService;
-import org.kharisov.services.databaseImpls.ReadingDbService;
-import org.kharisov.services.databaseImpls.ReadingTypeDbService;
-import org.kharisov.services.interfaces.AuditService;
-import org.kharisov.services.interfaces.AuthService;
-import org.kharisov.services.interfaces.ReadingService;
-import org.kharisov.services.interfaces.ReadingTypeService;
-import org.kharisov.services.memoryImpls.AuditMemoryService;
-import org.kharisov.services.memoryImpls.AuthMemoryService;
-import org.kharisov.services.memoryImpls.ReadingMemoryService;
-import org.kharisov.services.memoryImpls.ReadingTypeMemoryService;
+import org.kharisov.repos.interfaces.*;
+import org.kharisov.repos.memoryImpls.*;
+import org.kharisov.services.databaseImpls.*;
+import org.kharisov.services.interfaces.*;
+import org.kharisov.services.memoryImpls.*;
 
 /**
  * Класс ServiceFactory представляет фабрику сервисов.
