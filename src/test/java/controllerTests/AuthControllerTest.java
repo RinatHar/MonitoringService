@@ -64,19 +64,26 @@ public class AuthControllerTest {
         assertThat(result.get()).isEqualTo(user);
     }
 
-    @DisplayName("Тестирование метода makeUserAdminIfUserExists с проверкой назначения пользователя администратором при его наличии")
+    @DisplayName("Тестирование метода makeUserAdmin с проверкой назначения пользователя администратором при его наличии")
     @Test
-    public void testMakeUserAdminIfUserExists() {
+    public void testMakeUserAdmin() {
 
-        when(authService.userExists(ACCOUNT_NUM)).thenReturn(true);
-        when(authService.getUserByAccountNum(ACCOUNT_NUM)).thenReturn(Optional.ofNullable(user));
+        // Подготавливаем данные для теста
+        String accountNum = "1234567890123456";
+        when(authService.userExists(accountNum)).thenReturn(true);
+        when(authService.getUserByAccountNum(accountNum)).thenReturn(Optional.of(user));
+        when(authService.changeUserRole(user, Role.ADMIN)).thenReturn(true);
 
-        boolean result = authController.makeUserAdmin(ACCOUNT_NUM);
+        // Вызываем тестируемый метод
+        boolean result = authController.makeUserAdmin(accountNum);
 
-        verify(authService, times(1)).userExists(ACCOUNT_NUM);
-        verify(authService, times(1)).getUserByAccountNum(ACCOUNT_NUM);
-        assert(user.isAdmin());
+        // Проверяем результат
         assertThat(result).isTrue();
+
+        // Проверяем, что методы были вызваны с правильными аргументами
+        verify(authService).userExists(accountNum);
+        verify(authService).getUserByAccountNum(accountNum);
+        verify(authService).changeUserRole(user, Role.ADMIN);
     }
 
     @DisplayName("Тестирование метода makeUserAdminIfUserDoesNotExist с проверкой отсутствия назначения пользователя администратором при его отсутствии")

@@ -87,6 +87,7 @@ public class AuthServiceTest {
 
         when(userRepo.addUser(user)).thenReturn(Optional.ofNullable(user));
 
+        assert user != null;
         Optional<User> result = authService.addUser(user);
 
         assertThat(result).isEmpty();
