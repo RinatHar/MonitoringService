@@ -22,6 +22,18 @@ databaseChangeLog:
                   name: name
                   value: "Отопление"
         - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: "USER"
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: "ADMIN"
+        - insert:
             tableName: users
             columns:
               - column:
@@ -31,5 +43,5 @@ databaseChangeLog:
                   name: password
                   value: "vnWiLrRQo065WzKaLIOP/Q==$W8L4vS42mrM9pCHNgZFqJj+MzLWMmEbvx/RhRMvWb9o="
               - column:
-                  name: is_admin
-                  value: true
+                  name: role_id
+                  value: "2"
