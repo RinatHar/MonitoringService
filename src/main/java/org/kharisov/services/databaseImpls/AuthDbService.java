@@ -1,31 +1,56 @@
 package org.kharisov.services.databaseImpls;
 
-import org.kharisov.dtos.RoleDto;
-import org.kharisov.dtos.UserDto;
+import org.kharisov.dtos.*;
 import org.kharisov.entities.User;
 import org.kharisov.enums.Role;
-import org.kharisov.repos.databaseImpls.RoleDbRepo;
-import org.kharisov.repos.databaseImpls.UserDbRepo;
+import org.kharisov.repos.databaseImpls.*;
 import org.kharisov.services.interfaces.AuthService;
 import org.kharisov.utils.AuthUtils;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
+/**
+ * Класс AuthDbService представляет собой службу для работы с аутентификацией и авторизацией в базе данных.
+ * Он реализует интерфейс AuthService и использует репозитории UserDbRepo и RoleDbRepo для выполнения операций с базой данных.
+ */
 public class AuthDbService implements AuthService {
+    /**
+     * Репозиторий для работы с пользователями.
+     */
     private final UserDbRepo userDbRepo;
+    /**
+     * Репозиторий для работы с ролями.
+     */
     private final RoleDbRepo roleDbRepo;
 
+    /**
+     * Конструктор класса AuthDbService.
+     *
+     * @param userDbRepo Репозиторий для работы с пользователями.
+     * @param roleDbRepo Репозиторий для работы с ролями.
+     */
     public AuthDbService(UserDbRepo userDbRepo, RoleDbRepo roleDbRepo) {
         this.userDbRepo = userDbRepo;
         this.roleDbRepo = roleDbRepo;
     }
 
+    /**
+     * Проверяет, существует ли пользователь с указанным номером счета.
+     *
+     * @param accountNum Номер счета пользователя.
+     * @return true, если пользователь существует, иначе false.
+     */
     @Override
     public boolean userExists(String accountNum) {
         return userDbRepo.getByAccountNum(accountNum).isPresent();
     }
 
+    /**
+     * Возвращает пользователя по его номеру счета.
+     *
+     * @param accountNum Номер счета пользователя.
+     * @return Объект пользователя или пустой Optional, если пользователь не найден.
+     */
     @Override
     public Optional<User> getUserByAccountNum(String accountNum) {
         Optional<UserDto> userDtoOptional = userDbRepo.getByAccountNum(accountNum);
@@ -44,6 +69,12 @@ public class AuthDbService implements AuthService {
         return Optional.empty();
     }
 
+    /**
+     * Добавляет нового пользователя.
+     *
+     * @param user Объект пользователя для добавления.
+     * @return Объект добавленного пользователя или пустой Optional, если добавление не удалось.
+     */
     @Override
     public Optional<User> addUser(User user) {
         if (AuthUtils.isValid(user)) {
@@ -64,6 +95,13 @@ public class AuthDbService implements AuthService {
         return Optional.empty();
     }
 
+    /**
+     * Проверяет, совпадает ли указанный пароль с паролем пользователя, найденным по номеру счета.
+     *
+     * @param accountNum Номер счета пользователя.
+     * @param password   Пароль для проверки.
+     * @return true, если пароли совпадают, иначе false.
+     */
     @Override
     public boolean logIn(String accountNum, String password) {
         Optional<UserDto> userDtoOptional = userDbRepo.getByAccountNum(accountNum);
@@ -75,6 +113,12 @@ public class AuthDbService implements AuthService {
         }
     }
 
+    /**
+     * Проверяет, является ли пользователь с указанным номером счета администратором.
+     *
+     * @param accountNum Номер счета пользователя.
+     * @return true, если пользователь является администратором, иначе false.
+     */
     @Override
     public boolean isAdminByAccountNum(String accountNum) {
         Optional<UserDto> userDtoOptional = userDbRepo.getByAccountNum(accountNum);
@@ -87,5 +131,22 @@ public class AuthDbService implements AuthService {
             }
         }
         return false;
+    }
+
+    /**
+     * Изменяет роль пользователя.
+     *
+     * @param user Пользователь, для которого требуется изменить роль.
+     * @param role Новая роль, которую нужно установить для пользователя.
+     * @return true, если роль пользователя была успешно изменена, иначе false.
+     */
+    @Override
+    public boolean changeUserRole(User user, Role role) {
+        RoleDto roleDto = new RoleDto();
+        roleDto.setName(role.name());
+        Optional<RoleDto> roleDtoOptional = roleDbRepo.changeRoleByAccountNum(
+                user.getAccountNum(),
+                roleDto);
+        return roleDtoOptional.isPresent();
     }
 }

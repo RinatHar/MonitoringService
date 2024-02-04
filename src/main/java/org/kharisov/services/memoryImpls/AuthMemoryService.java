@@ -1,11 +1,11 @@
 package org.kharisov.services.memoryImpls;
 
 import org.kharisov.entities.User;
+import org.kharisov.enums.Role;
 import org.kharisov.repos.interfaces.UserRepo;
 import org.kharisov.services.interfaces.AuthService;
 import org.kharisov.utils.AuthUtils;
 
-import java.security.*;
 import java.util.*;
 
 /**
@@ -86,5 +86,17 @@ public class AuthMemoryService implements AuthService {
         return false;
 
 
+    }
+
+    /**
+     * Изменяет роль пользователя.
+     * @param user Объект User, представляющий пользователя.
+     * @param role Объект Role, представляющий новую роль для пользователя.
+     * @return true, если роль успешно изменена, иначе false.
+     */
+    @Override
+    public boolean changeUserRole(User user, Role role) {
+        user.setRole(role);
+        return true;
     }
 }

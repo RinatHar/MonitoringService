@@ -1,6 +1,7 @@
 package org.kharisov.services.interfaces;
 
 import org.kharisov.entities.User;
+import org.kharisov.enums.Role;
 
 import java.util.Optional;
 
@@ -44,4 +45,12 @@ public interface AuthService {
      * @return true, если пользователь является администратором, иначе false.
      */
     boolean isAdminByAccountNum(String accountNum);
+
+    /**
+     * Изменяет роль пользователя.
+     * @param user Объект User, представляющий пользователя.
+     * @param role Объект Role, представляющий новую роль для пользователя.
+     * @return true, если роль успешно изменена, иначе false.
+     */
+    boolean changeUserRole(User user, Role role);
 }

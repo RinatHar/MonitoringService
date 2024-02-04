@@ -64,8 +64,9 @@ public class AuthController {
     public boolean makeUserAdmin(String accountNum) {
         if (authService.userExists(accountNum)) {
             Optional<User> user = authService.getUserByAccountNum(accountNum);
-            user.ifPresent(value -> value.setRole(Role.ADMIN));
-            return true;
+            if (user.isPresent()) {
+                return authService.changeUserRole(user.get(), Role.ADMIN);
+            }
         }
         return false;
     }
