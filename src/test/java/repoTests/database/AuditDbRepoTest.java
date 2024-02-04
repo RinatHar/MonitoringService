@@ -43,7 +43,7 @@ public class AuditDbRepoTest {
         } catch (SQLException | DatabaseException | CommandExecutionException e) {
             System.out.println("SQL Exception in migration " + e.getMessage());
         }
-        // Создаем пул соединений
+
         connectionPool = new ConnectionPool(
                 postgres.getJdbcUrl(),
                 postgres.getUsername(),
@@ -51,15 +51,13 @@ public class AuditDbRepoTest {
                 2
         );
 
-        // Создаем экземпляр AuditDbRepo с этим пулом соединений
         auditDbRepo = new AuditDbRepo(connectionPool);
-        // Создаем экземпляр UserDbRepo с этим пулом соединений
         userDbRepo = new UserDbRepo(connectionPool);
     }
 
     @DisplayName("Тестирование добавления записи")
     @Test
-    public void testAdd() throws SQLException {
+    public void testAdd() {
         EntryDto entryDto = new EntryDto();
         entryDto.setAction("action");
         entryDto.setUserId(1L);
@@ -73,29 +71,23 @@ public class AuditDbRepoTest {
 
     @DisplayName("Тестирование получения записей по номеру счета")
     @Test
-    public void testGetEntriesByAccountNum() throws SQLException {
+    public void testGetEntriesByAccountNum() {
 
-        // Создаем тестового пользователя
         UserDto userDto = new UserDto();
         userDto.setAccountNum("testAccountNum");
         userDto.setPassword("password");
         userDto.setRoleId(1L);
 
-        // Добавляем пользователя в базу данных
         userDbRepo.add(userDto);
 
-        // Создаем экземпляр AuditDbRepo с этим пулом соединений
         AuditDbRepo auditDbRepo = new AuditDbRepo(connectionPool);
 
-        // Создаем тестовые данные
         EntryDto entryDto = new EntryDto();
         entryDto.setAction("action");
         entryDto.setUserId(userDto.getId());
 
-        // Добавляем элемент в базу данных
         auditDbRepo.add(entryDto);
 
-        // Вызываем метод getEntriesByAccountNum и проверяем результат
         List<EntryDto> result = auditDbRepo.getEntriesByAccountNum(userDto.getAccountNum());
 
         assertThat(result).isNotEmpty();
@@ -104,16 +96,14 @@ public class AuditDbRepoTest {
 
     @DisplayName("Тестирование получения всех записей")
     @Test
-    public void testGetAll() throws SQLException {
-        // Создаем тестовые данные
+    public void testGetAll() {
+
         EntryDto entryDto = new EntryDto();
         entryDto.setAction("action");
         entryDto.setUserId(1L);
 
-        // Добавляем элемент в базу данных
         auditDbRepo.add(entryDto);
 
-        // Вызываем метод getAll и проверяем результат
         List<EntryDto> result = auditDbRepo.getAll();
 
         assertThat(result).isNotEmpty();

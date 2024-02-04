@@ -53,7 +53,7 @@ public class RoleDbRepoTest {
 
     @DisplayName("Тестирование добавления роли")
     @Test
-    public void testAddRole() throws SQLException {
+    public void testAddRole() {
         RoleDto roleDto = new RoleDto();
         roleDto.setName("test1");
 
@@ -65,7 +65,7 @@ public class RoleDbRepoTest {
 
     @DisplayName("Тестирование получения роли по ID")
     @Test
-    public void testGetRoleById() throws SQLException {
+    public void testGetRoleById() {
         Long testId = 1L;
 
         RoleDto roleDto = new RoleDto();
@@ -80,7 +80,7 @@ public class RoleDbRepoTest {
 
     @DisplayName("Тестирование получения роли по имени")
     @Test
-    public void testGetRoleByName() throws SQLException {
+    public void testGetRoleByName() {
         String testName = "test3";
 
         RoleDto roleDto = new RoleDto();
@@ -95,7 +95,7 @@ public class RoleDbRepoTest {
 
     @DisplayName("Тестирование получения всех ролей")
     @Test
-    public void testGetAllRoles() throws SQLException {
+    public void testGetAllRoles() {
         RoleDto roleDto = new RoleDto();
         roleDto.setName("test4");
         roleDbRepo.add(roleDto);

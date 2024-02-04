@@ -53,7 +53,7 @@ public class ReadingTypeDbRepoTest {
 
     @DisplayName("Тестирование добавления типа показаний")
     @Test
-    public void testAddReadingType() throws SQLException {
+    public void testAddReadingType() {
         ReadingTypeDto readingTypeDto = new ReadingTypeDto();
         readingTypeDto.setName("Отопление");
 
@@ -65,7 +65,7 @@ public class ReadingTypeDbRepoTest {
 
     @DisplayName("Тестирование получения типа показания по названию")
     @Test
-    public void testGetReadingTypeByName() throws SQLException {
+    public void testGetReadingTypeByName() {
         String testName = "Холодная вода";
 
         ReadingTypeDto readingTypeDto = new ReadingTypeDto();
@@ -80,7 +80,7 @@ public class ReadingTypeDbRepoTest {
 
     @DisplayName("Тестирование получения всех типов показаний")
     @Test
-    public void testGetAllReadingTypes() throws SQLException {
+    public void testGetAllReadingTypes() {
         ReadingTypeDto readingTypeDto = new ReadingTypeDto();
         readingTypeDto.setName("Горячая вода");
         readingTypeDbRepo.add(readingTypeDto);

@@ -53,7 +53,7 @@ public class UserDbRepoTest {
 
     @DisplayName("Тестирование добавления пользователя")
     @Test
-    public void testAddUser() throws SQLException {
+    public void testAddUser() {
         UserDto userDto = new UserDto();
         userDto.setAccountNum("testAccountNum1");
         userDto.setPassword("testPassword1");
@@ -69,7 +69,7 @@ public class UserDbRepoTest {
 
     @DisplayName("Тестирование получения пользователя по номеру счета")
     @Test
-    public void testGetUserByAccountNum() throws SQLException {
+    public void testGetUserByAccountNum() {
         String testAccountNum = "testAccountNum2";
 
         UserDto userDto = new UserDto();
@@ -86,7 +86,7 @@ public class UserDbRepoTest {
 
     @DisplayName("Тестирование получения всех пользователей")
     @Test
-    public void testGetAllUsers() throws SQLException {
+    public void testGetAllUsers() {
         UserDto userDto = new UserDto();
         userDto.setAccountNum("testAccountNum3");
         userDto.setPassword("testPassword3");

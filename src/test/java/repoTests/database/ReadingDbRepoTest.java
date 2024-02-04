@@ -64,15 +64,14 @@ public class ReadingDbRepoTest {
 
     @DisplayName("Тестирование добавления показания")
     @Test
-    public void testAdd() throws SQLException {
-        // Создаем тестовые данные
+    public void testAdd() {
+
         ReadingDto readingDto = new ReadingDto();
         readingDto.setTypeId(1L);
         readingDto.setUserId(1L);
         readingDto.setValue(100);
         readingDto.setDate(LocalDate.now());
 
-        // Добавляем элемент в базу данных
         Optional<ReadingDto> result = readingDbRepo.add(readingDto);
 
         assertThat(result).isPresent();
@@ -84,27 +83,23 @@ public class ReadingDbRepoTest {
 
     @DisplayName("Тестирование получения показаний по номеру счета")
     @Test
-    public void testGetAllByAccountNum() throws SQLException {
-        // Создаем тестового пользователя
+    public void testGetAllByAccountNum() {
+
         UserDto userDto = new UserDto();
         userDto.setAccountNum("testAccountNum");
         userDto.setPassword("password");
         userDto.setRoleId(1L);
 
-        // Добавляем пользователя в базу данных
         userDbRepo.add(userDto);
 
-        // Создаем тестовые данные
         ReadingDto readingDto = new ReadingDto();
         readingDto.setTypeId(1L);
         readingDto.setUserId(userDto.getId());
         readingDto.setValue(100);
         readingDto.setDate(LocalDate.now());
 
-        // Добавляем элемент в базу данных
         readingDbRepo.add(readingDto);
 
-        // Вызываем метод getAllByAccountNum и проверяем результат
         List<ReadingDto> result = readingDbRepo.getAllByAccountNum(userDto.getAccountNum());
 
         assertThat(result).isNotEmpty();
@@ -114,18 +109,16 @@ public class ReadingDbRepoTest {
 
     @DisplayName("Тестирование получения всех показаний")
     @Test
-    public void testGetAll() throws SQLException {
-        // Создаем тестовые данные
+    public void testGetAll() {
+
         ReadingDto readingDto = new ReadingDto();
         readingDto.setTypeId(1L);
         readingDto.setUserId(1L);
         readingDto.setValue(100);
         readingDto.setDate(LocalDate.now());
 
-        // Добавляем элемент в базу данных
         readingDbRepo.add(readingDto);
 
-        // Вызываем метод getAll и проверяем результат
         List<ReadingDto> result = readingDbRepo.getAll();
 
         assertThat(result).isNotEmpty();
