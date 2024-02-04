@@ -28,8 +28,9 @@ public class ReadingTypeMemoryService implements ReadingTypeService {
      * Добавляет новый тип показания.
      * @param name Имя нового типа показания.
      */
-    public void addReadingType(String name) {
+    public boolean addReadingType(String name) {
         readingTypeRepo.addReadingType(name);
+        return true;
     }
 
     /**

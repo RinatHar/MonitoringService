@@ -10,7 +10,7 @@ public interface ReadingTypeService {
      * Добавляет новый тип показания.
      * @param name Имя нового типа показания.
      */
-    void addReadingType(String name);
+    boolean addReadingType(String name);
 
     /**
      * Получает тип показания по имени.

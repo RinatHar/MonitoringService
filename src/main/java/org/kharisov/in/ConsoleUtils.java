@@ -69,7 +69,8 @@ public class ConsoleUtils {
             System.out.println("\nПользователь зарегистрирован");
             return user.get();
         } else {
-            System.out.println("\nНомер счета должен состоять из 16 целых чисел и пароль не менее 8 символов");
+            System.out.println("\nНеверные данные (номер счета - 16 цифр, пароль - не менее 8 символов) " +
+                    "или такой пользователь уже существует");
             return currentUser;
         }
     }
@@ -160,8 +161,9 @@ public class ConsoleUtils {
         System.out.println("\nВведите новый тип показания:");
         System.out.print("> ");
         String indicatorType = scanner.nextLine();
-        readingTypeController.addReadingType(indicatorType);
-        System.out.println("\nНовый тип показания добавлен");
+        if (readingTypeController.addReadingType(indicatorType))
+            System.out.println("\nНовый тип показания добавлен");
+        else System.out.println("\nЭтот тип уже существует");
 
     }
 

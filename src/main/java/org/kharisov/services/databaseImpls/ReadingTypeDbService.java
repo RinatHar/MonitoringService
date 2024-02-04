@@ -31,12 +31,18 @@ public class ReadingTypeDbService implements ReadingTypeService {
      * Добавляет новый тип показания.
      *
      * @param name Имя нового типа показания.
+     * @return Объект типа показания или пустой Optional, если тип показания не добавлен.
      */
     @Override
-    public void addReadingType(String name) {
-        ReadingTypeDto readingTypeDto = new ReadingTypeDto();
-        readingTypeDto.setName(name);
-        readingTypeDbRepo.add(readingTypeDto);
+    public boolean addReadingType(String name) {
+        Optional<ReadingType> optionalReadingType = getReadingType(name);
+        if (optionalReadingType.isEmpty()) {
+            ReadingTypeDto readingTypeDto = new ReadingTypeDto();
+            readingTypeDto.setName(name);
+            readingTypeDbRepo.add(readingTypeDto);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -51,9 +57,8 @@ public class ReadingTypeDbService implements ReadingTypeService {
         if (readingTypeDtoOptional.isPresent()) {
             ReadingTypeDto readingTypeDto = readingTypeDtoOptional.get();
             return Optional.of(ReadingType.Create(readingTypeDto.getName()));
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     /**

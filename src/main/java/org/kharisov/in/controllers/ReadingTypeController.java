@@ -27,8 +27,8 @@ public class ReadingTypeController {
      * Добавляет новый тип показания.
      * @param name Имя нового типа показания.
      */
-    public void addReadingType(String name) {
-        readingTypeService.addReadingType(name);
+    public boolean addReadingType(String name) {
+        return readingTypeService.addReadingType(name);
     }
 
     /**

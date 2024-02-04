@@ -17,6 +17,7 @@ databaseChangeLog:
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
+                    unique: true
         - createTable:
             tableName: readings
             columns:
@@ -82,6 +83,7 @@ databaseChangeLog:
                   type: VARCHAR(16)
                   constraints:
                     nullable: false
+                    unique: true
         - createTable:
             tableName: audit
             columns:
@@ -125,3 +127,7 @@ databaseChangeLog:
             constraintName: fk_users
             referencedTableName: users
             referencedColumnNames: id
+        - addUniqueConstraint:
+            columnNames: account_num, password
+            constraintName: users_account_password_uniq
+            tableName: users
