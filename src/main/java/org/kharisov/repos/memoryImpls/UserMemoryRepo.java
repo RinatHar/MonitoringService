@@ -27,23 +27,25 @@ public class UserMemoryRepo implements UserRepo {
 
     /**
      * Записывает пользователя в хранилище в памяти и возвращает его.
+     *
      * @param user Объект пользователя.
      * @return Объект пользователя.
      */
     @Override
-    public User addUser(User user) {
+    public Optional<User> addUser(User user) {
         userStorage.getStorage().put(user.getAccountNum(), user);
-        return user;
+        return Optional.of(user);
     }
 
     /**
      * Возвращает пользователя из хранилища в памяти по его счету.
+     *
      * @param accountNum Счет пользователя.
      * @return Объект пользователя.
      */
     @Override
-    public User getUser(String accountNum) {
-        return userStorage.getStorage().get(accountNum);
+    public Optional<User> getUser(String accountNum) {
+        return Optional.ofNullable(userStorage.getStorage().get(accountNum));
     }
 
     /**

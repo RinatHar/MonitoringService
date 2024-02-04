@@ -21,7 +21,7 @@ public interface AuthService {
      * @param accountNum Номер счета пользователя.
      * @return Объект User, если пользователь существует, иначе null.
      */
-    User getUserByAccountNum(String accountNum);
+    Optional<User> getUserByAccountNum(String accountNum);
 
     /**
      * Добавляет нового пользователя, если выполнены условия валидации.
@@ -37,21 +37,6 @@ public interface AuthService {
      * @return true, если пользователь может войти в систему, иначе false.
      */
     boolean logIn(String accountNum, String password);
-
-    /**
-     * Метод для хеширования пароля с использованием соли.
-     * @param password Пароль, который нужно захешировать.
-     * @return Хеш пароля, сгенерированный с использованием соли. Если произошла ошибка, возвращает исходный пароль.
-     */
-    String hashPassword(String password);
-
-    /**
-     * Метод для проверки пароля пользователя.
-     * @param password Введенный пароль.
-     * @param storedPasswordHash Хеш сохраненного пароля.
-     * @return true, если введенный пароль соответствует сохраненному хешу пароля, иначе false.
-     */
-    boolean checkPassword(String password, String storedPasswordHash);
 
     /**
      * Проверяет, является ли пользователь с указанным номером счета администратором.

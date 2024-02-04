@@ -13,6 +13,10 @@ import java.time.LocalDate;
 @Builder
 public class ReadingRecord {
     /**
+     * Счет пользователя.
+     */
+    private String accountNum;
+    /**
      * Тип показания.
      */
     private ReadingType type;

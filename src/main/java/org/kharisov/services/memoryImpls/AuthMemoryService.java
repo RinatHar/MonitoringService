@@ -3,6 +3,7 @@ package org.kharisov.services.memoryImpls;
 import org.kharisov.entities.User;
 import org.kharisov.repos.interfaces.UserRepo;
 import org.kharisov.services.interfaces.AuthService;
+import org.kharisov.utils.AuthUtils;
 
 import java.security.*;
 import java.util.*;
@@ -31,8 +32,8 @@ public class AuthMemoryService implements AuthService {
      * @return true, если пользователь существует, иначе false.
      */
     public boolean userExists(String accountNum) {
-        User user = getUserByAccountNum(accountNum);
-        return user != null;
+        Optional<User> user = getUserByAccountNum(accountNum);
+        return user.isPresent();
     }
 
     /**
@@ -40,7 +41,7 @@ public class AuthMemoryService implements AuthService {
      * @param accountNum Номер счета пользователя.
      * @return Объект User, если пользователь существует, иначе null.
      */
-    public User getUserByAccountNum(String accountNum) {
+    public Optional<User> getUserByAccountNum(String accountNum) {
         return userRepo.getUser(accountNum);
     }
 
@@ -51,11 +52,9 @@ public class AuthMemoryService implements AuthService {
      */
     public Optional<User> addUser(User user) {
         user.setAccountNum(user.getAccountNum().strip());
-        if (user.getAccountNum().length() == 16
-                && user.getAccountNum().matches("\\d+")
-                && user.getPassword().length() > 7) {
-            user.setPassword(hashPassword(user.getPassword()));
-            return Optional.ofNullable(userRepo.addUser(user));
+        if (AuthUtils.isValid(user)) {
+            user.setPassword(AuthUtils.hashPassword(user.getPassword()));
+            return userRepo.addUser(user);
         }
         else {
             return Optional.empty();
@@ -69,59 +68,8 @@ public class AuthMemoryService implements AuthService {
      * @return true, если пользователь может войти в систему, иначе false.
      */
     public boolean logIn(String accountNum, String password) {
-        User user = getUserByAccountNum(accountNum);
-        return user != null && checkPassword(password, user.getPassword());
-    }
-
-    /**
-     * Метод для хеширования пароля с использованием соли.
-     * @param password Пароль, который нужно захешировать.
-     * @return Хеш пароля, сгенерированный с использованием соли. Если произошла ошибка, возвращает исходный пароль.
-     */
-    public String hashPassword(String password) {
-        try {
-            // Генерируем соль
-            SecureRandom random = new SecureRandom();
-            byte[] salt = new byte[16];
-            random.nextBytes(salt);
-
-            // Добавляем соль к паролю
-            String saltedPassword = Base64.getEncoder().encodeToString(salt) + password;
-
-            // Хешируем пароль с солью
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(saltedPassword.getBytes());
-
-            // Возвращаем хеш пароля вместе с солью
-            return Base64.getEncoder().encodeToString(salt) + "$" + Base64.getEncoder().encodeToString(hash);
-        } catch (NoSuchAlgorithmException ex) {
-            return password;
-        }
-    }
-
-    /**
-     * Метод для проверки пароля пользователя.
-     * @param password Введенный пароль.
-     * @param storedPasswordHash Хеш сохраненного пароля.
-     * @return true, если введенный пароль соответствует сохраненному хешу пароля, иначе false.
-     */
-    public boolean checkPassword(String password, String storedPasswordHash) {
-        try {
-            // Извлекаем соль и хеш из сохраненного значения
-            String[] parts = storedPasswordHash.split("\\$");
-            String salt = parts[0];
-            String storedHash = parts[1];
-
-            // Добавляем соль к введенному паролю и хешируем его
-            String saltedPassword = salt + password;
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(saltedPassword.getBytes());
-
-            // Сравниваем полученный хеш с сохраненным хешем
-            return Base64.getEncoder().encodeToString(hash).equals(storedHash);
-        } catch (NoSuchAlgorithmException ex) {
-            return false;
-        }
+        Optional<User> user = getUserByAccountNum(accountNum);
+        return user.isPresent() && AuthUtils.checkPassword(password, user.get().getPassword());
     }
 
     /**
@@ -130,6 +78,13 @@ public class AuthMemoryService implements AuthService {
      * @return true, если пользователь является администратором, иначе false.
      */
     public boolean isAdminByAccountNum(String accountNum) {
-        return getUserByAccountNum(accountNum).isAdmin();
+        Optional<User> user = getUserByAccountNum(accountNum);
+        if (user.isPresent()) {
+            user.get().isAdmin();
+            return true;
+        }
+        return false;
+
+
     }
 }

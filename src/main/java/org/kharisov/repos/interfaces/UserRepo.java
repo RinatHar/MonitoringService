@@ -3,6 +3,7 @@ package org.kharisov.repos.interfaces;
 import org.kharisov.entities.User;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Интерфейс UserRepo представляет контракт для репозитория пользователей.
@@ -14,14 +15,14 @@ public interface UserRepo {
      * @param user Объект пользователя.
      * @return Объект пользователя.
      */
-    User addUser(User user);
+    Optional<User> addUser(User user);
 
     /**
      * Возвращает пользователя из хранилища по его счету.
      * @param accountNum Счет пользователя.
      * @return Объект пользователя.
      */
-    User getUser(String accountNum);
+    Optional<User> getUser(String accountNum);
 
     /**
      * Возвращает всех пользователя из хранилища.

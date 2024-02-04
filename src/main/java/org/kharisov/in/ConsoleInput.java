@@ -69,7 +69,6 @@ public class ConsoleInput {
      * Запускает взаимодействие пользователя с консолью.
      */
     public void start() {
-        initAdminAndIndicatorTypes();
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         while (running) {
@@ -81,16 +80,6 @@ public class ConsoleInput {
                 running = showMenuForAuthenticatedUser(scanner);
             }
         }
-    }
-
-    /**
-     * Инициализирует администратора и типы показателей.
-     */
-    public void initAdminAndIndicatorTypes() {
-        authController.addAdmin("0000000000000000", "admin12345");
-        readingTypeController.addReadingType("Горячая вода");
-        readingTypeController.addReadingType("Холодная вода");
-        readingTypeController.addReadingType("Отопление");
     }
 
     /**

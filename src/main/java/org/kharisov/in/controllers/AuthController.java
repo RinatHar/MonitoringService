@@ -51,7 +51,7 @@ public class AuthController {
      */
     public Optional<User> login(String accountNum, String pass) {
         if (authService.logIn(accountNum, pass)) {
-            return Optional.ofNullable(authService.getUserByAccountNum(accountNum));
+            return authService.getUserByAccountNum(accountNum);
         }
         return Optional.empty();
     }
@@ -63,12 +63,11 @@ public class AuthController {
      */
     public boolean makeUserAdmin(String accountNum) {
         if (authService.userExists(accountNum)) {
-            authService.getUserByAccountNum(accountNum).setRole(Role.ADMIN);
+            Optional<User> user = authService.getUserByAccountNum(accountNum);
+            user.ifPresent(value -> value.setRole(Role.ADMIN));
             return true;
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     /**

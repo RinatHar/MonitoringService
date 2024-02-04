@@ -323,4 +323,14 @@ public class ConsoleUtils {
             System.out.println("--------------------");
         }
     }
+
+    /**
+     * Инициализирует администратора и типы показателей.
+     */
+    public static void initAdminAndIndicatorTypes(AuthController authController, ReadingTypeController readingTypeController) {
+        authController.addAdmin("0000000000000000", "admin12345");
+        readingTypeController.addReadingType("Горячая вода");
+        readingTypeController.addReadingType("Холодная вода");
+        readingTypeController.addReadingType("Отопление");
+    }
 }

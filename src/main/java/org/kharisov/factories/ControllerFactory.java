@@ -1,6 +1,10 @@
 package org.kharisov.factories;
 
 import org.kharisov.in.controllers.*;
+import org.kharisov.services.databaseImpls.AuditDbService;
+import org.kharisov.services.databaseImpls.AuthDbService;
+import org.kharisov.services.databaseImpls.ReadingDbService;
+import org.kharisov.services.databaseImpls.ReadingTypeDbService;
 import org.kharisov.services.interfaces.*;
 import org.kharisov.services.memoryImpls.AuditMemoryService;
 import org.kharisov.services.memoryImpls.AuthMemoryService;
@@ -20,6 +24,8 @@ public class ControllerFactory {
     public static AuthController createAuthController(AuthService authService) {
         if (authService instanceof AuthMemoryService) {
             return new AuthController(authService);
+        } else if (authService instanceof AuthDbService) {
+            return new AuthController(authService);
         } else {
             throw new IllegalArgumentException("Unsupported service type");
         }
@@ -32,6 +38,8 @@ public class ControllerFactory {
      */
     public static AuditController createAuditController(AuditService auditService) {
         if (auditService instanceof AuditMemoryService) {
+            return new AuditController(auditService);
+        } else if (auditService instanceof AuditDbService) {
             return new AuditController(auditService);
         } else {
             throw new IllegalArgumentException("Unsupported service type");
@@ -46,6 +54,8 @@ public class ControllerFactory {
     public static ReadingController createReadingController(ReadingService readingService) {
         if (readingService instanceof ReadingMemoryService) {
             return new ReadingController(readingService);
+        } else if (readingService instanceof ReadingDbService) {
+            return new ReadingController(readingService);
         } else {
             throw new IllegalArgumentException("Unsupported service type");
         }
@@ -58,6 +68,8 @@ public class ControllerFactory {
      */
     public static ReadingTypeController createReadingTypeController(ReadingTypeService readingTypeService) {
         if (readingTypeService instanceof ReadingTypeMemoryService) {
+            return new ReadingTypeController(readingTypeService);
+        } else if (readingTypeService instanceof ReadingTypeDbService) {
             return new ReadingTypeController(readingTypeService);
         } else {
             throw new IllegalArgumentException("Unsupported service type");

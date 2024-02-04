@@ -1,5 +1,7 @@
 package org.kharisov.factories;
 
+import org.kharisov.dtos.*;
+import org.kharisov.repos.databaseImpls.*;
 import org.kharisov.repos.interfaces.AuditRepo;
 import org.kharisov.repos.interfaces.ReadingTypeRepo;
 import org.kharisov.repos.interfaces.UserRepo;
@@ -40,5 +42,45 @@ public class RepoFactory {
      */
     public static ReadingTypeRepo createReadingTypeMemoryRepo(ReadingTypeMemoryStorage readingTypeMemoryStorage) {
         return new ReadingTypeMemoryRepo(readingTypeMemoryStorage);
+    }
+
+    /**
+     * Создает репозиторий пользователей в базе данных.
+     * @return Объект UserDbRepo, реализующий репозиторий пользователей в базе данных.
+     */
+    public static UserDbRepo createUserDbRepo() {
+        return new UserDbRepo();
+    }
+
+    /**
+     * Создает репозиторий аудита в базе данных.
+     * @return Объект AuditDbRepo, реализующий репозиторий аудита в базе данных.
+     */
+    public static AuditDbRepo createAuditDbRepo() {
+        return new AuditDbRepo();
+    }
+
+    /**
+     * Создает репозиторий типов показаний в базе данных.
+     * @return Объект ReadingTypeDbRepo, реализующий репозиторий типов показаний в базе данных.
+     */
+    public static ReadingTypeDbRepo createReadingTypeDbRepo() {
+        return new ReadingTypeDbRepo();
+    }
+
+    /**
+     * Создает репозиторий показаний в базе данных.
+     * @return Объект ReadingDbRepo, реализующий репозиторий показаний в базе данных.
+     */
+    public static ReadingDbRepo createReadingDbRepo() {
+        return new ReadingDbRepo();
+    }
+
+    /**
+     * Создает репозиторий ролей в базе данных.
+     * @return Объект RoleDbRepo, реализующий репозиторий ролей в базе данных.
+     */
+    public static RoleDbRepo createRoleDbRepo() {
+        return new RoleDbRepo();
     }
 }
