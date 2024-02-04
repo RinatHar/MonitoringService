@@ -56,7 +56,7 @@ public class AuthControllerTest {
     public void testLogin() {
 
         when(authService.logIn(ACCOUNT_NUM, PASSWORD)).thenReturn(true);
-        when(authService.getUserByAccountNum(ACCOUNT_NUM)).thenReturn(user);
+        when(authService.getUserByAccountNum(ACCOUNT_NUM)).thenReturn(Optional.ofNullable(user));
 
         Optional<User> result = authController.login(ACCOUNT_NUM, PASSWORD);
 
@@ -69,7 +69,7 @@ public class AuthControllerTest {
     public void testMakeUserAdminIfUserExists() {
 
         when(authService.userExists(ACCOUNT_NUM)).thenReturn(true);
-        when(authService.getUserByAccountNum(ACCOUNT_NUM)).thenReturn(user);
+        when(authService.getUserByAccountNum(ACCOUNT_NUM)).thenReturn(Optional.ofNullable(user));
 
         boolean result = authController.makeUserAdmin(ACCOUNT_NUM);
 

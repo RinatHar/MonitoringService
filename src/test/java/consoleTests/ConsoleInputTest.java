@@ -46,16 +46,6 @@ public class ConsoleInputTest {
         verify(consoleUtils, times(1)).register(any(Scanner.class), isNull());
     }
 
-    @DisplayName("Тестирование метода initAdminAndIndicatorTypes с проверкой добавления администратора и типов показателей")
-    @Test
-    public void testInitAdminAndIndicatorTypes() {
-        consoleInput.initAdminAndIndicatorTypes();
-        verify(authController, times(1)).addAdmin("0000000000000000", "admin12345");
-        verify(readingTypeController, times(1)).addReadingType("Горячая вода");
-        verify(readingTypeController, times(1)).addReadingType("Холодная вода");
-        verify(readingTypeController, times(1)).addReadingType("Отопление");
-    }
-
     @DisplayName("Тестирование метода showMenuForUnauthenticatedUser с выбором первой опции")
     @Test
     public void testShowMenuForUnauthenticatedUser() {

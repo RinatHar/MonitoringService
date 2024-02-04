@@ -1,4 +1,4 @@
-package repoTests;
+package repoTests.memory;
 
 import org.junit.jupiter.api.*;
 import org.kharisov.entities.User;
@@ -38,9 +38,9 @@ public class UserMemoryRepoTest {
 
         when(userStorage.getStorage()).thenReturn(storage);
 
-        User result = userMemoryRepo.addUser(user);
+        Optional<User> result = userMemoryRepo.addUser(user);
 
-        assertThat(result).isEqualTo(user);
+        assertThat(result).isEqualTo(Optional.of(user));
         verify(userStorage, times(1)).getStorage();
     }
 
@@ -53,9 +53,9 @@ public class UserMemoryRepoTest {
 
         when(userStorage.getStorage()).thenReturn(storage);
 
-        User result = userMemoryRepo.getUser(user.getAccountNum());
+        Optional<User> result = userMemoryRepo.getUser(user.getAccountNum());
 
-        assertThat(result).isEqualTo(user);
+        assertThat(result).isEqualTo(Optional.of(user));
         verify(userStorage, times(1)).getStorage();
     }
 

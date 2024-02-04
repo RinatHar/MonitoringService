@@ -1,4 +1,4 @@
-package repoTests;
+package repoTests.memory;
 
 import org.junit.jupiter.api.*;
 import org.kharisov.entities.ReadingType;

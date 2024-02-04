@@ -198,6 +198,14 @@ public class ConsoleUtilsTest {
         verify(auditController, times(1)).getAllEntries();
     }
 
-
+    @DisplayName("Тестирование метода initAdminAndIndicatorTypes с проверкой добавления администратора и типов показателей")
+    @Test
+    public void testInitAdminAndIndicatorTypes() {
+        ConsoleUtils.initAdminAndIndicatorTypes(authController, readingTypeController);
+        verify(authController, times(1)).addAdmin("0000000000000000", "admin12345");
+        verify(readingTypeController, times(1)).addReadingType("Горячая вода");
+        verify(readingTypeController, times(1)).addReadingType("Холодная вода");
+        verify(readingTypeController, times(1)).addReadingType("Отопление");
+    }
 
 }

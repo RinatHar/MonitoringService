@@ -29,18 +29,18 @@ public class AuditServiceTest {
         auditService = new AuditMemoryService(auditRepo);
     }
 
-    @DisplayName("Тестирование метода logAction с проверкой " +
+    @DisplayName("Тестирование метода addEntry с проверкой " +
             "корректной записи действия в репозиторий аудита")
     @Test
     public void testLogAction() {
         User user = User.builder().build();
         String action = "action1";
 
-        doNothing().when(auditRepo).logAction(user.getAccountNum(), action);
+        doNothing().when(auditRepo).addEntry(user.getAccountNum(), action);
 
         auditService.addEntry(user, action);
 
-        verify(auditRepo, times(1)).logAction(user.getAccountNum(), action);
+        verify(auditRepo, times(1)).addEntry(user.getAccountNum(), action);
     }
 
     @DisplayName("Тестирование метода getEntries с проверкой " +
@@ -50,7 +50,7 @@ public class AuditServiceTest {
         User user = User.builder().build();
         String action = "action1";
 
-        when(auditRepo.getLogs(user.getAccountNum())).thenReturn(List.of(action));
+        when(auditRepo.getEntries(user.getAccountNum())).thenReturn(List.of(action));
 
         List<String> logs = auditService.getEntries(user);
 
@@ -67,7 +67,7 @@ public class AuditServiceTest {
         Map<String, List<String>> storage = new HashMap<>();
         storage.put(user.getAccountNum(), List.of(action));
 
-        when(auditRepo.getAllLogs()).thenReturn(storage);
+        when(auditRepo.getAllEntries()).thenReturn(storage);
 
         Map<String, List<String>> allEntries = auditService.getAllEntries();
 

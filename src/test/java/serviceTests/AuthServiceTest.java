@@ -5,6 +5,7 @@ import org.kharisov.entities.User;
 import org.kharisov.enums.Role;
 import org.kharisov.repos.interfaces.UserRepo;
 import org.kharisov.services.memoryImpls.AuthMemoryService;
+import org.kharisov.utils.AuthUtils;
 import org.mockito.Mockito;
 
 import java.util.Optional;
@@ -42,7 +43,7 @@ public class AuthServiceTest {
     @Test
     public void testUserExists() {
 
-        when(userRepo.getUser(ACCOUNT_NUM)).thenReturn(user);
+        when(userRepo.getUser(ACCOUNT_NUM)).thenReturn(Optional.ofNullable(user));
 
         boolean exists = authService.userExists(ACCOUNT_NUM);
 
@@ -53,18 +54,18 @@ public class AuthServiceTest {
     @Test
     public void testGetUserByAccountNum() {
 
-        when(userRepo.getUser(ACCOUNT_NUM)).thenReturn(user);
+        when(userRepo.getUser(ACCOUNT_NUM)).thenReturn(Optional.ofNullable(user));
 
-        User result = authService.getUserByAccountNum(ACCOUNT_NUM);
+        Optional<User> result = authService.getUserByAccountNum(ACCOUNT_NUM);
 
-        assertThat(result).isEqualTo(user);
+        assertThat(result).isEqualTo(Optional.of(user));
     }
 
     @DisplayName("Тестирование метода addUserSuccess с проверкой успешного добавления пользователя")
     @Test
     public void testAddUserSuccess() {
 
-        when(userRepo.addUser(user)).thenReturn(user);
+        when(userRepo.addUser(user)).thenReturn(Optional.ofNullable(user));
 
         Optional<User> result = authService.addUser(user);
 
@@ -84,7 +85,7 @@ public class AuthServiceTest {
                 .password(password)
                 .build();
 
-        when(userRepo.addUser(user)).thenReturn(user);
+        when(userRepo.addUser(user)).thenReturn(Optional.ofNullable(user));
 
         Optional<User> result = authService.addUser(user);
 
@@ -96,8 +97,8 @@ public class AuthServiceTest {
     void testLogIn() {
         user = Mockito.mock(User.class);
 
-        Mockito.when(authService.getUserByAccountNum(ACCOUNT_NUM)).thenReturn(user);
-        Mockito.when(user.getPassword()).thenReturn(authService.hashPassword(PASSWORD));
+        Mockito.when(authService.getUserByAccountNum(ACCOUNT_NUM)).thenReturn(Optional.ofNullable(user));
+        Mockito.when(user.getPassword()).thenReturn(AuthUtils.hashPassword(PASSWORD));
 
         // Проверяем, что пользователь может войти в систему
         assertThat(authService.logIn(ACCOUNT_NUM, PASSWORD)).isTrue();
@@ -117,7 +118,7 @@ public class AuthServiceTest {
                 .role(Role.ADMIN)
                 .build();
 
-        when(userRepo.getUser(ACCOUNT_NUM)).thenReturn(user);
+        when(userRepo.getUser(ACCOUNT_NUM)).thenReturn(Optional.ofNullable(user));
 
         boolean isAdmin = authService.isAdminByAccountNum(ACCOUNT_NUM);
 
@@ -130,12 +131,12 @@ public class AuthServiceTest {
     public void testPasswordHashing() {
         String password = "TestPassword123";
 
-        String hashedPassword = authService.hashPassword(password);
+        String hashedPassword = AuthUtils.hashPassword(password);
 
         // Проверяем, что хеш создан правильно
-        assertThat(authService.checkPassword(password, hashedPassword)).isTrue();
+        assertThat(AuthUtils.checkPassword(password, hashedPassword)).isTrue();
 
         // Проверяем, что неправильный пароль не проходит проверку
-        assertThat(authService.checkPassword("WrongPassword", hashedPassword)).isFalse();
+        assertThat(AuthUtils.checkPassword("WrongPassword", hashedPassword)).isFalse();
     }
 }
