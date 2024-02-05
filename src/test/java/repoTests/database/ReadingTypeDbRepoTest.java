@@ -55,7 +55,7 @@ public class ReadingTypeDbRepoTest {
     @Test
     public void testAddReadingType() {
         ReadingTypeDto readingTypeDto = new ReadingTypeDto();
-        readingTypeDto.setName("Отопление");
+        readingTypeDto.setName("test1");
 
         Optional<ReadingTypeDto> result = readingTypeDbRepo.add(readingTypeDto);
 
@@ -66,7 +66,7 @@ public class ReadingTypeDbRepoTest {
     @DisplayName("Тестирование получения типа показания по названию")
     @Test
     public void testGetReadingTypeByName() {
-        String testName = "Холодная вода";
+        String testName = "test2";
 
         ReadingTypeDto readingTypeDto = new ReadingTypeDto();
         readingTypeDto.setName(testName);
@@ -82,7 +82,7 @@ public class ReadingTypeDbRepoTest {
     @Test
     public void testGetAllReadingTypes() {
         ReadingTypeDto readingTypeDto = new ReadingTypeDto();
-        readingTypeDto.setName("Горячая вода");
+        readingTypeDto.setName("test3");
         readingTypeDbRepo.add(readingTypeDto);
 
         List<ReadingTypeDto> result = readingTypeDbRepo.getAll();

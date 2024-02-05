@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
- * Класс для тестирования контроллера типов чтения.
+ * Класс для тестирования контроллера типов показаний.
  */
 public class ReadingTypeControllerTest {
 
@@ -29,22 +29,22 @@ public class ReadingTypeControllerTest {
         readingTypeController = new ReadingTypeController(readingTypeService);
     }
 
-    @DisplayName("Тестирование метода addReadingType с проверкой корректного добавления типа чтения в сервис типов чтения")
+    @DisplayName("Тестирование метода addReadingType с проверкой корректного добавления типа показания в сервис типов показаний")
     @Test
     public void testAddReadingType() {
         String name = "type1";
 
-        doNothing().when(readingTypeService).addReadingType(name);
+        when(readingTypeService.addReadingType(name)).thenReturn(true);
 
         readingTypeController.addReadingType(name);
 
         verify(readingTypeService, times(1)).addReadingType(name);
     }
 
-    @DisplayName("Тестирование метода getReadingType с проверкой корректного извлечения типа чтения из сервиса")
+    @DisplayName("Тестирование метода getReadingType с проверкой корректного извлечения типа показания из сервиса")
     @Test
     public void testGetReadingType() {
-        String name = "type1";
+        String name = "type2";
         ReadingType type = ReadingType.Create(name);
 
         when(readingTypeService.getReadingType(name)).thenReturn(Optional.of(type));
@@ -55,10 +55,10 @@ public class ReadingTypeControllerTest {
         assertThat(result.get()).isEqualTo(type);
     }
 
-    @DisplayName("Тестирование метода getReadingNames с проверкой корректного извлечения имен типов чтения из сервиса")
+    @DisplayName("Тестирование метода getReadingNames с проверкой корректного извлечения имен типов показаний из сервиса")
     @Test
     public void testGetReadingNames() {
-        Set<String> names = new HashSet<>(Arrays.asList("type1", "type2"));
+        Set<String> names = new HashSet<>(Arrays.asList("type3", "type4"));
 
         when(readingTypeService.getReadingNames()).thenReturn(names);
 
