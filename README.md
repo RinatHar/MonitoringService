@@ -2,11 +2,7 @@
 
 Веб-сервис для подачи показаний счетчиков отопления, горячей и холодной воды.
 
-## Запуск сервиса
+Ссылки на домашние работы.
 
-Переходим в директорию: 
-```bash
-./src/main/java/org/kharisov
-```
-
-Запускаем сервис через файл Main().
+- [_ДЗ №1_](https://github.com/RinatHar/MonitoringService/tree/check-branch)
+- [_ДЗ №2_](https://github.com/RinatHar/MonitoringService/pull/3)
