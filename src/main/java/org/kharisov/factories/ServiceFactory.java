@@ -1,70 +1,14 @@
 package org.kharisov.factories;
 
 import org.kharisov.repos.databaseImpls.*;
-import org.kharisov.repos.interfaces.*;
-import org.kharisov.repos.memoryImpls.*;
 import org.kharisov.services.databaseImpls.*;
 import org.kharisov.services.interfaces.*;
-import org.kharisov.services.memoryImpls.*;
 
 /**
  * Класс ServiceFactory представляет фабрику сервисов.
  * Этот класс предоставляет статические методы для создания различных сервисов.
  */
 public class ServiceFactory {
-    /**
-     * Создает сервис аутентификации.
-     * @param userRepo Репозиторий пользователей.
-     * @return Объект AuthService, реализующий сервис аутентификации.
-     */
-    public static AuthService createAuthService(UserRepo userRepo) {
-        if (userRepo instanceof UserMemoryRepo) {
-            return new AuthMemoryService(userRepo);
-        } else {
-            throw new IllegalArgumentException("Unsupported repository type");
-        }
-    }
-
-    /**
-     * Создает сервис аудита.
-     * @param auditRepo Репозиторий аудита.
-     * @return Объект AuditService, реализующий сервис аудита.
-     */
-    public static AuditService createAuditService(AuditRepo auditRepo) {
-        if (auditRepo instanceof AuditMemoryRepo) {
-            return new AuditMemoryService(auditRepo);
-        } else {
-            throw new IllegalArgumentException("Unsupported repository type");
-        }
-    }
-
-    /**
-     * Создает сервис чтения.
-     * @param userRepo Репозиторий пользователей.
-     * @return Объект ReadingService, реализующий сервис показаний.
-     */
-    public static ReadingService createReadingService(UserRepo userRepo) {
-        if (userRepo instanceof UserMemoryRepo) {
-            return new ReadingMemoryService(userRepo);
-        } else {
-            throw new IllegalArgumentException("Unsupported repository type");
-        }
-
-    }
-
-    /**
-     * Создает сервис типов чтения.
-     * @param readingTypeRepo Репозиторий типов показаний.
-     * @return Объект ReadingTypeService, реализующий сервис типов показаний.
-     */
-    public static ReadingTypeService createReadingTypeService(ReadingTypeRepo readingTypeRepo) {
-        if (readingTypeRepo instanceof ReadingTypeMemoryRepo) {
-            return new ReadingTypeMemoryService(readingTypeRepo);
-        } else {
-            throw new IllegalArgumentException("Unsupported repository type");
-        }
-    }
-
     /**
      * Создает сервис аутентификации для базы данных.
      * @param userRepo Репозиторий пользователей для базы данных.

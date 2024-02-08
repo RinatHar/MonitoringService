@@ -3,7 +3,7 @@ package controllerTests;
 import org.junit.jupiter.api.*;
 import org.kharisov.entities.User;
 import org.kharisov.in.controllers.AuditController;
-import org.kharisov.services.memoryImpls.AuditMemoryService;
+import org.kharisov.services.interfaces.AuditService;
 import org.mockito.Mockito;
 
 import java.util.*;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
  */
 public class AuditControllerTest {
 
-    private AuditMemoryService auditService;
+    private AuditService auditService;
     private AuditController auditController;
 
     /**
@@ -25,7 +25,7 @@ public class AuditControllerTest {
      */
     @BeforeEach
     public void setUp() {
-        auditService = Mockito.mock(AuditMemoryService.class);
+        auditService = Mockito.mock(AuditService.class);
         auditController = new AuditController(auditService);
     }
 

@@ -1,42 +1,12 @@
 package org.kharisov.factories;
 
 import org.kharisov.repos.databaseImpls.*;
-import org.kharisov.repos.interfaces.*;
-import org.kharisov.repos.memoryImpls.*;
-import org.kharisov.storages.*;
 
 /**
  * Класс RepoFactory представляет фабрику репозиториев.
  * Этот класс предоставляет статические методы для создания различных репозиториев.
  */
 public class RepoFactory {
-    /**
-     * Создает репозиторий пользователей.
-     * @param userMemoryStorage Хранилище пользователей в памяти.
-     * @return Объект UserRepo, реализующий репозиторий пользователей.
-     */
-    public static UserRepo createUserMemoryRepo(UserMemoryStorage userMemoryStorage) {
-        return new UserMemoryRepo(userMemoryStorage);
-    }
-
-    /**
-     * Создает репозиторий аудита.
-     * @param auditMemoryStorage Хранилище аудита в памяти.
-     * @return Объект AuditRepo, реализующий репозиторий аудита.
-     */
-    public static AuditRepo createAuditMemoryRepo(AuditMemoryStorage auditMemoryStorage) {
-        return new AuditMemoryRepo(auditMemoryStorage);
-    }
-
-    /**
-     * Создает репозиторий типов показаний.
-     * @param readingTypeMemoryStorage Хранилище типов показаний в памяти.
-     * @return Объект ReadingTypeRepo, реализующий репозиторий типов показаний.
-     */
-    public static ReadingTypeRepo createReadingTypeMemoryRepo(ReadingTypeMemoryStorage readingTypeMemoryStorage) {
-        return new ReadingTypeMemoryRepo(readingTypeMemoryStorage);
-    }
-
     /**
      * Создает репозиторий пользователей в базе данных.
      * @return Объект UserDbRepo, реализующий репозиторий пользователей в базе данных.
