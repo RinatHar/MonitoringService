@@ -1,6 +1,6 @@
 package org.kharisov.repos.databaseImpls;
 
-import org.kharisov.dtos.EntryDto;
+import org.kharisov.dtos.db.EntryDto;
 
 import java.sql.*;
 import java.util.*;

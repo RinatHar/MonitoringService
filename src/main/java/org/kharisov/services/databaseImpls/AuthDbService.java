@@ -1,6 +1,7 @@
 package org.kharisov.services.databaseImpls;
 
-import org.kharisov.dtos.*;
+import org.kharisov.dtos.db.RoleDto;
+import org.kharisov.dtos.db.UserDto;
 import org.kharisov.entities.User;
 import org.kharisov.enums.Role;
 import org.kharisov.repos.databaseImpls.*;

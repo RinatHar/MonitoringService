@@ -1,0 +1,115 @@
+package org.kharisov.in.servlets.admin;
+
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+import org.kharisov.dtos.in.AdminDtoIn;
+import org.kharisov.dtos.in.ReadingTypeDtoIn;
+import org.kharisov.dtos.in.UserDtoIn;
+import org.kharisov.entities.ReadingRecord;
+import org.kharisov.entities.ReadingType;
+import org.kharisov.entities.User;
+import org.kharisov.enums.Role;
+import org.kharisov.mappers.AdminMapper;
+import org.kharisov.mappers.ReadingTypeMapper;
+import org.kharisov.mappers.UserMapper;
+import org.kharisov.services.interfaces.*;
+import org.kharisov.utils.*;
+import org.kharisov.validators.DtosInValidator;
+
+import java.io.IOException;
+import java.util.*;
+
+
+@WebServlet("/admin/*")
+public class AdminServlet extends HttpServlet {
+
+    private AuthService authService;
+    private AuditService auditService;
+    private ReadingTypeService readingTypeService;
+    private ReadingService readingService;
+
+    @Override
+    public void init() {
+        authService = (AuthService) getServletContext().getAttribute("authService");
+        auditService = (AuditService) getServletContext().getAttribute("auditService");
+        readingTypeService = (ReadingTypeService) getServletContext().getAttribute("readingTypeService");
+        readingService = (ReadingService) getServletContext().getAttribute("readingService");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String jwt = AuthUtils.extractJwtFromRequest(req);
+        String subject = AuthUtils.getSubjectFromJwt(jwt);
+        Role role = Role.valueOf(AuthUtils.getRoleFromJwt(jwt));
+
+        User user = User.builder()
+                .accountNum(subject)
+                .role(role)
+                .build();
+
+        String pathInfo = req.getPathInfo();
+
+        if (Objects.equals(user.getRole().toString(), "ADMIN")) {
+            if (pathInfo.equals("/audit")) {
+                Map<String, List<String>> allAudits = auditService.getAllEntries();
+                ResponseUtils.sendSuccessResponse(resp, allAudits);
+            } else if (pathInfo.equals("/readings")) {
+                Map<String, List<ReadingRecord>> allReadings = readingService.getAllReadings();
+                ResponseUtils.sendSuccessResponse(resp, allReadings);
+            } else {
+                ResponseUtils.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid request data");
+            }
+        } else {
+            ResponseUtils.sendErrorResponse(resp, HttpServletResponse.SC_FORBIDDEN, "Access denied");
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String jwt = AuthUtils.extractJwtFromRequest(req);
+        String subject = AuthUtils.getSubjectFromJwt(jwt);
+        Role role = Role.valueOf(AuthUtils.getRoleFromJwt(jwt));
+
+        User user = User.builder()
+                .accountNum(subject)
+                .role(role)
+                .build();
+
+        String pathInfo = req.getPathInfo();
+
+        if (Objects.equals(user.getRole().toString(), "ADMIN")) {
+            if (pathInfo.equals("/makeAdmin")) {
+                AdminDtoIn adminDto = DtoUtils.parseDtoFromRequest(req, AdminDtoIn.class);
+                if (!DtosInValidator.isValid(adminDto).isEmpty()) {
+                    ResponseUtils.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid request data");
+                    return;
+                }
+                User newAdmin = AdminMapper.INSTANCE.toEntity(adminDto);
+                boolean isSuccess = authService.changeUserRole(newAdmin, Role.ADMIN);
+                if (isSuccess) {
+                    ResponseUtils.sendSuccessResponse(resp, "User promoted to admin successfully");
+                } else {
+                    ResponseUtils.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to promote user");
+                }
+            } else if (pathInfo.equals("/addReadingType")) {
+                ReadingTypeDtoIn readingTypeDto = DtoUtils.parseDtoFromRequest(req, ReadingTypeDtoIn.class);
+                if (!DtosInValidator.isValid(readingTypeDto).isEmpty()) {
+                    ResponseUtils.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid request data");
+                    return;
+                }
+                ReadingType readingType = ReadingTypeMapper.INSTANCE.toEntity(readingTypeDto);
+                boolean isSuccess = readingTypeService.addReadingType(readingType.getValue());
+                if (isSuccess) {
+                    ResponseUtils.sendSuccessResponse(resp, "Reading type added successfully");
+                } else {
+                    ResponseUtils.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to add reading type");
+                }
+            } else {
+                ResponseUtils.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid request data");
+            }
+        } else {
+            ResponseUtils.sendErrorResponse(resp, HttpServletResponse.SC_FORBIDDEN, "Access denied");
+        }
+    }
+}
+

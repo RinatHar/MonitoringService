@@ -1,6 +1,6 @@
 package org.kharisov.repos.databaseImpls;
 
-import org.kharisov.dtos.ReadingDto;
+import org.kharisov.dtos.db.ReadingDto;
 import org.kharisov.entities.ReadingType;
 
 import java.sql.*;

@@ -1,6 +1,5 @@
 package org.kharisov.in.servlets.auth;
 
-import com.fasterxml.jackson.databind.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import org.kharisov.dtos.in.UserDtoIn;
@@ -17,7 +16,6 @@ import java.util.*;
 public class RegisterServlet extends HttpServlet {
 
     private AuthService authService;
-    private final ObjectMapper objectMapper;
 
     @Override
     public void init() {
@@ -25,8 +23,6 @@ public class RegisterServlet extends HttpServlet {
     }
 
     public RegisterServlet() {
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package org.kharisov.repos.databaseImpls;
 
-import org.kharisov.dtos.RoleDto;
+import org.kharisov.dtos.db.RoleDto;
 
 import java.sql.*;
 import java.util.*;

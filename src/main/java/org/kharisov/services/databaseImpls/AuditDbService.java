@@ -1,6 +1,7 @@
 package org.kharisov.services.databaseImpls;
 
-import org.kharisov.dtos.*;
+import org.kharisov.dtos.db.EntryDto;
+import org.kharisov.dtos.db.UserDto;
 import org.kharisov.entities.User;
 import org.kharisov.repos.databaseImpls.*;
 import org.kharisov.services.interfaces.AuditService;

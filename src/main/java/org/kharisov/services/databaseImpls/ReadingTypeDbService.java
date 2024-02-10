@@ -1,6 +1,6 @@
 package org.kharisov.services.databaseImpls;
 
-import org.kharisov.dtos.ReadingTypeDto;
+import org.kharisov.dtos.db.ReadingTypeDto;
 import org.kharisov.entities.ReadingType;
 import org.kharisov.repos.databaseImpls.ReadingTypeDbRepo;
 import org.kharisov.services.interfaces.ReadingTypeService;

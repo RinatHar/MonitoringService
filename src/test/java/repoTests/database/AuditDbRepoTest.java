@@ -4,7 +4,8 @@ import liquibase.exception.*;
 import org.junit.jupiter.api.*;
 import org.kharisov.configs.Config;
 import org.kharisov.configs.ConnectionPoolConfig;
-import org.kharisov.dtos.*;
+import org.kharisov.dtos.db.EntryDto;
+import org.kharisov.dtos.db.UserDto;
 import org.kharisov.liquibase.LiquibaseExample;
 import org.kharisov.repos.databaseImpls.*;
 

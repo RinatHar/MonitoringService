@@ -4,7 +4,7 @@ import liquibase.exception.*;
 import org.junit.jupiter.api.*;
 import org.kharisov.configs.Config;
 import org.kharisov.configs.ConnectionPoolConfig;
-import org.kharisov.dtos.ReadingTypeDto;
+import org.kharisov.dtos.db.ReadingTypeDto;
 import org.kharisov.liquibase.LiquibaseExample;
 import org.kharisov.repos.databaseImpls.*;
 import org.testcontainers.containers.PostgreSQLContainer;

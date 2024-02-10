@@ -1,6 +1,8 @@
 package org.kharisov.services.databaseImpls;
 
-import org.kharisov.dtos.*;
+import org.kharisov.dtos.db.ReadingDto;
+import org.kharisov.dtos.db.ReadingTypeDto;
+import org.kharisov.dtos.db.UserDto;
 import org.kharisov.entities.*;
 import org.kharisov.repos.databaseImpls.*;
 import org.kharisov.services.interfaces.ReadingService;
@@ -48,13 +50,15 @@ public class ReadingDbService implements ReadingService {
      * @param user Пользователь, для которого добавляется показание.
      * @param reading Тип показания.
      * @param value Значение показания.
+     * @return true, если успешно добавлено, иначе false.
      */
     @Override
-    public void addReading(User user, ReadingType reading, int value) {
+    public boolean addReading(User user, ReadingType reading, int value) {
         ReadingDto readingDto = new ReadingDto();
         Optional<UserDto> optionalUserDto = userDbRepo.getByAccountNum(user.getAccountNum());
         Optional<ReadingTypeDto> optionalReadingTypeDto = readingTypeDbRepo.getByName(reading.getValue());
-        if (optionalUserDto.isPresent() && optionalReadingTypeDto.isPresent()) {
+        if (optionalUserDto.isPresent() &&
+                optionalReadingTypeDto.isPresent()) {
             UserDto userDto = optionalUserDto.get();
             ReadingTypeDto readingTypeDto = optionalReadingTypeDto.get();
 
@@ -63,9 +67,9 @@ public class ReadingDbService implements ReadingService {
             readingDto.setValue(value);
             readingDto.setDate(LocalDate.now());
 
-            readingDbRepo.add(readingDto);
+            return readingDbRepo.add(readingDto).isPresent();
         }
-
+        return false;
     }
 
     /**
@@ -98,6 +102,7 @@ public class ReadingDbService implements ReadingService {
         return readings.stream()
                 .filter(r -> r.getDate().getMonthValue() == month && r.getDate().getYear() == year)
                 .map(r -> ReadingRecord.builder()
+                        .accountNum(r.getAccountNum())
                         .type(r.getType())
                         .value(r.getValue())
                         .date(r.getDate())
@@ -119,6 +124,7 @@ public class ReadingDbService implements ReadingService {
                 .filter(r -> r.getType().equals(type))
                 .max(Comparator.comparing(ReadingDto::getDate))
                 .map(r -> ReadingRecord.builder()
+                        .accountNum(r.getAccountNum())
                         .type(r.getType())
                         .value(r.getValue())
                         .date(r.getDate())
@@ -136,6 +142,7 @@ public class ReadingDbService implements ReadingService {
         List<ReadingDto> readings = readingDbRepo.getAllByAccountNum(user.getAccountNum());
         return readings.stream()
                 .map(r -> ReadingRecord.builder()
+                        .accountNum(r.getAccountNum())
                         .type(r.getType())
                         .value(r.getValue())
                         .date(r.getDate())

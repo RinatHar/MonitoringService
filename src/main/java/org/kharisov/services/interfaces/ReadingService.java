@@ -11,8 +11,9 @@ public interface ReadingService {
      * @param user Пользователь, для которого добавляется показание.
      * @param reading Тип показания.
      * @param value Значение показания.
+     * @return true, если успешно добавлено, иначе false.
      */
-    void addReading(User user, ReadingType reading, int value);
+    boolean addReading(User user, ReadingType reading, int value);
 
     /**
      * Проверяет, существует ли указанное показание для пользователя на текущую дату.

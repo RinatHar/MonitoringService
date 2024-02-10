@@ -1,14 +1,18 @@
 package org.kharisov.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.Map;
 
 public class ResponseUtils {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
     public static void sendSuccessResponse(HttpServletResponse resp, Object data) throws IOException {
         resp.setStatus(HttpServletResponse.SC_OK);
