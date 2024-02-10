@@ -43,8 +43,8 @@ public class UserDbRepo extends BaseDbRepo<Long, UserDto> {
                     return Optional.of(dto);
                 }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot add user", e);
+        } catch (SQLException ignored) {
+
         } finally {
             connectionPool.returnConnectionToPool(connection);
         }
@@ -75,8 +75,8 @@ public class UserDbRepo extends BaseDbRepo<Long, UserDto> {
                 }
             }
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot get user", e);
+        } catch (SQLException ignored) {
+
         } finally {
             connectionPool.returnConnectionToPool(connection);
         }
@@ -105,8 +105,8 @@ public class UserDbRepo extends BaseDbRepo<Long, UserDto> {
                 user.setRoleId(resultSet.getLong("role_id"));
                 users.add(user);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot get all users", e);
+        } catch (SQLException ignored) {
+
         } finally {
             connectionPool.returnConnectionToPool(connection);
         }

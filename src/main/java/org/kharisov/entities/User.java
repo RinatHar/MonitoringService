@@ -12,6 +12,8 @@ import java.util.*;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     /**
      * Номер счета пользователя.
@@ -22,12 +24,6 @@ public class User {
      * Пароль пользователя.
      */
     private String password;
-
-    /**
-     * Список показаний пользователя.
-     */
-    @Builder.Default
-    private List<ReadingRecord> readings = new ArrayList<>();
 
     /**
      * Флаг, указывающий, является ли пользователь администратором.
@@ -55,8 +51,7 @@ public class User {
         User user = (User) obj;
         return role == user.role &&
                 Objects.equals(accountNum, user.accountNum) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(readings, user.readings);
+                Objects.equals(password, user.password);
     }
 
     /**
@@ -65,7 +60,7 @@ public class User {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(accountNum, password, readings, role);
+        return Objects.hash(accountNum, password, role);
     }
 }
 

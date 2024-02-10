@@ -1,9 +1,14 @@
 package org.kharisov.utils;
 
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.kharisov.configs.Config;
 import org.kharisov.entities.User;
+import org.kharisov.enums.Role;
 
 import java.security.*;
-import java.util.Base64;
+import java.util.*;
 
 /**
  * Класс AuthUtils предоставляет статические методы для работы с аутентификацией пользователя.
@@ -73,5 +78,46 @@ public class AuthUtils {
         return (user.getAccountNum().length() == 16
                 && user.getAccountNum().matches("\\d+")
                 && user.getPassword().length() > 7);
+    }
+
+    public static Map<String, String> refreshToken(String refreshToken) {
+        String secretKey = Config.get("jwt.secretKey");
+        Key key = Keys.hmacShaKeyFor((byte[])Decoders.BASE64.decode(secretKey));
+
+        try {
+            Jws<Claims> jws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(refreshToken);
+            String accountNum = ((Claims)jws.getBody()).getSubject();
+            String role = (String)((Claims)jws.getBody()).get("role", String.class);
+            User user = new User();
+            user.setAccountNum(accountNum);
+            user.setRole(Role.valueOf(role));
+            return createJwtForUser(user);
+        } catch (JwtException var7) {
+            System.out.println("Refresh token is invalid");
+            return null;
+        }
+    }
+
+    public static Map<String, String> createJwtForUser(User user) {
+        String secretKey = Config.get("jwt.secretKey");
+        Key key = Keys.hmacShaKeyFor((byte[])Decoders.BASE64.decode(secretKey));
+        String accessToken = Jwts.builder().setSubject(user.getAccountNum()).claim("role", user.getRole()).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + 3600000L)).signWith(key).compact();
+        String refreshToken = Jwts.builder().setId(UUID.randomUUID().toString()).setSubject(user.getAccountNum()).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + 86400000L)).signWith(key).compact();
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("accessToken", accessToken);
+        tokens.put("refreshToken", refreshToken);
+        return tokens;
+    }
+
+    public static String getRoleFromJwt(String jwt) {
+        String secretKey = Config.get("jwt.secretKey");
+        Key key = Keys.hmacShaKeyFor((byte[]) Decoders.BASE64.decode(secretKey));
+
+        try {
+            Jws<Claims> jws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
+            return (String)((Claims)jws.getBody()).get("role", String.class);
+        } catch (JwtException var4) {
+            return null;
+        }
     }
 }

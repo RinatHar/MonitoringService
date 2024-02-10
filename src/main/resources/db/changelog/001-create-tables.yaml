@@ -61,6 +61,7 @@ databaseChangeLog:
                   type: VARCHAR(16)
                   constraints:
                     nullable: false
+                    unique: true
               - column:
                   name: password
                   type: VARCHAR(128)
@@ -127,7 +128,3 @@ databaseChangeLog:
             constraintName: fk_users
             referencedTableName: users
             referencedColumnNames: id
-        - addUniqueConstraint:
-            columnNames: account_num, password
-            constraintName: users_account_password_uniq
-            tableName: users
