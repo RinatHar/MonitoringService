@@ -12,7 +12,4 @@ public interface ReadingTypeMapper {
 
     @Mapping(target = "name", source = "name")
     ReadingType toEntity(ReadingTypeDtoIn dto);
-
-    @Mapping(target = "name", source = "value")
-    ReadingTypeDtoIn toDto(ReadingType entity);
 }

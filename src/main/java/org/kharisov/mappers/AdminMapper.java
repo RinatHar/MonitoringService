@@ -11,6 +11,4 @@ public interface AdminMapper {
     AdminMapper INSTANCE = Mappers.getMapper(AdminMapper.class);
 
     User toEntity(AdminDtoIn adminDtoIn);
-
-    AdminDtoIn toDTO(User user);
 }

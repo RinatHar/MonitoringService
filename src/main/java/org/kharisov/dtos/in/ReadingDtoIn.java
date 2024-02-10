@@ -9,7 +9,7 @@ import org.kharisov.annotations.*;
 public class ReadingDtoIn {
     @NotNull
     @ReadingTypeExists
-    private String readingType;
+    private String type;
 
     @NotNull
     @IsInteger
