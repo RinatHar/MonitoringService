@@ -16,7 +16,7 @@ public class ReadingType {
      * Конструктор для класса.
      * @param name Название типа показания.
      */
-    private ReadingType(String name) {
+    public ReadingType(String name) {
         this.name = name;
     }
 

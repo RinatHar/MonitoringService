@@ -32,14 +32,6 @@ public class User {
     private Role role = Role.USER;
 
     /**
-     * Проверяет, является ли пользователь администратором.
-     * @return true, если пользователь является администратором, иначе false.
-     */
-    public boolean isAdmin() {
-        return role == Role.ADMIN;
-    }
-
-    /**
      * Переопределение метода equals для сравнения объектов User.
      * @param obj Объект, с которым сравнивается текущий объект.
      * @return true, если объекты равны, иначе false.
