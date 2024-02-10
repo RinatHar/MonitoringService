@@ -1,5 +1,7 @@
 package org.kharisov.repos.databaseImpls;
 
+import org.kharisov.configs.ConnectionPoolConfig;
+
 import java.sql.*;
 import java.util.*;
 
@@ -14,21 +16,13 @@ public class ConnectionPool {
     private final String password;
     private final int MAX_POOL_SIZE;
 
-    /**
-     * Конструктор класса ConnectionPool.
-     *
-     * @param url      URL базы данных.
-     * @param user     Имя пользователя базы данных.
-     * @param password Пароль пользователя базы данных.
-     * @param size     Размер пула соединений.
-     */
-    public ConnectionPool(String url, String user, String password, int size) {
-        this.url = url;
-        this.user = user;
-        this.password = password;
-        this.connectionPool = new ArrayList<>(size);
-        this.MAX_POOL_SIZE = size;
-        initializeConnectionPool();
+    public ConnectionPool(ConnectionPoolConfig config) {
+        this.url = config.getUrl();
+        this.user = config.getUser();
+        this.password = config.getPassword();
+        this.connectionPool = new ArrayList<>(config.getSize());
+        this.MAX_POOL_SIZE = config.getSize();
+        this.initializeConnectionPool();
     }
 
     /**

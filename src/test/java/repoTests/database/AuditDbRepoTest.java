@@ -3,6 +3,7 @@ package repoTests.database;
 import liquibase.exception.*;
 import org.junit.jupiter.api.*;
 import org.kharisov.configs.Config;
+import org.kharisov.configs.ConnectionPoolConfig;
 import org.kharisov.dtos.*;
 import org.kharisov.liquibase.LiquibaseExample;
 import org.kharisov.repos.databaseImpls.*;
@@ -44,12 +45,11 @@ public class AuditDbRepoTest {
             System.out.println("SQL Exception in migration " + e.getMessage());
         }
 
-        connectionPool = new ConnectionPool(
-                postgres.getJdbcUrl(),
-                postgres.getUsername(),
-                postgres.getPassword(),
-                2
-        );
+        ConnectionPoolConfig config = new ConnectionPoolConfig();
+        config.setUrl(postgres.getJdbcUrl());
+        config.setUser(postgres.getUsername());
+        config.setPassword(postgres.getPassword());
+        connectionPool = new ConnectionPool(config);
 
         auditDbRepo = new AuditDbRepo(connectionPool);
         userDbRepo = new UserDbRepo(connectionPool);

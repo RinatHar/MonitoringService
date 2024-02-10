@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kharisov.configs.Config;
+import org.kharisov.configs.ConnectionPoolConfig;
 import org.kharisov.dtos.ReadingDto;
 import org.kharisov.dtos.UserDto;
 import org.kharisov.liquibase.LiquibaseExample;
@@ -51,12 +52,11 @@ public class ReadingDbRepoTest {
         } catch (SQLException | DatabaseException | CommandExecutionException e) {
             System.out.println("SQL Exception in migration " + e.getMessage());
         }
-        connectionPool = new ConnectionPool(
-                postgres.getJdbcUrl(),
-                postgres.getUsername(),
-                postgres.getPassword(),
-                2
-        );
+        ConnectionPoolConfig config = new ConnectionPoolConfig();
+        config.setUrl(postgres.getJdbcUrl());
+        config.setUser(postgres.getUsername());
+        config.setPassword(postgres.getPassword());
+        connectionPool = new ConnectionPool(config);
 
         readingDbRepo = new ReadingDbRepo(connectionPool);
         userDbRepo = new UserDbRepo(connectionPool);
