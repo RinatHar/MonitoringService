@@ -1,7 +1,6 @@
 package org.kharisov.mappers;
 
 import org.kharisov.dtos.in.AdminDtoIn;
-import org.kharisov.dtos.in.UserDtoIn;
 import org.kharisov.entities.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

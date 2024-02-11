@@ -1,5 +1,6 @@
 package org.kharisov.services.databaseImpls;
 
+import org.kharisov.annotations.Audit;
 import org.kharisov.dtos.db.ReadingTypeDto;
 import org.kharisov.entities.ReadingType;
 import org.kharisov.repos.databaseImpls.ReadingTypeDbRepo;
@@ -34,6 +35,7 @@ public class ReadingTypeDbService implements ReadingTypeService {
      * @return Объект типа показания или пустой Optional, если тип показания не добавлен.
      */
     @Override
+    @Audit(action = "addReadingType")
     public boolean addReadingType(String name) {
         Optional<ReadingType> optionalReadingType = getReadingType(name);
         if (optionalReadingType.isEmpty()) {

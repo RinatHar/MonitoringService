@@ -2,9 +2,9 @@ package org.kharisov.in.servlets.admin;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import org.kharisov.configs.UserContextHolder;
 import org.kharisov.dtos.in.AdminDtoIn;
 import org.kharisov.dtos.in.ReadingTypeDtoIn;
-import org.kharisov.dtos.in.UserDtoIn;
 import org.kharisov.entities.ReadingRecord;
 import org.kharisov.entities.ReadingType;
 import org.kharisov.entities.User;
@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.*;
 
 
-@WebServlet("/admin/*")
+@WebServlet("/api/v1/admin/*")
 public class AdminServlet extends HttpServlet {
 
     private AuthService authService;
@@ -37,7 +37,7 @@ public class AdminServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String jwt = AuthUtils.extractJwtFromRequest(req);
         String subject = AuthUtils.getSubjectFromJwt(jwt);
         Role role = Role.valueOf(AuthUtils.getRoleFromJwt(jwt));
@@ -46,6 +46,7 @@ public class AdminServlet extends HttpServlet {
                 .accountNum(subject)
                 .role(role)
                 .build();
+        UserContextHolder.setUser(user);
 
         String pathInfo = req.getPathInfo();
 
@@ -65,7 +66,7 @@ public class AdminServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String jwt = AuthUtils.extractJwtFromRequest(req);
         String subject = AuthUtils.getSubjectFromJwt(jwt);
         Role role = Role.valueOf(AuthUtils.getRoleFromJwt(jwt));
@@ -74,6 +75,7 @@ public class AdminServlet extends HttpServlet {
                 .accountNum(subject)
                 .role(role)
                 .build();
+        UserContextHolder.setUser(user);
 
         String pathInfo = req.getPathInfo();
 

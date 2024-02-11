@@ -1,5 +1,7 @@
 package org.kharisov.services.databaseImpls;
 
+import org.kharisov.annotations.Audit;
+import org.kharisov.annotations.Loggable;
 import org.kharisov.dtos.db.ReadingDto;
 import org.kharisov.dtos.db.ReadingTypeDto;
 import org.kharisov.dtos.db.UserDto;
@@ -53,6 +55,7 @@ public class ReadingDbService implements ReadingService {
      * @return true, если успешно добавлено, иначе false.
      */
     @Override
+    @Audit(action = "addReading")
     public boolean addReading(User user, ReadingType reading, int value) {
         ReadingDto readingDto = new ReadingDto();
         Optional<UserDto> optionalUserDto = userDbRepo.getByAccountNum(user.getAccountNum());
@@ -97,6 +100,7 @@ public class ReadingDbService implements ReadingService {
      * @return Список записей показаний за указанный месяц и год.
      */
     @Override
+    @Audit(action = "getReadingsByMonth")
     public List<ReadingRecord> getReadingsByMonth(User user, int month, int year) {
         List<ReadingDto> readings = readingDbRepo.getAllByAccountNum(user.getAccountNum());
         return readings.stream()
@@ -118,6 +122,7 @@ public class ReadingDbService implements ReadingService {
      * @return Запись текущего показания или пустой Optional, если показание не найдено.
      */
     @Override
+    @Audit(action = "getCurrentReading")
     public Optional<ReadingRecord> getCurrentReading(User user, ReadingType type) {
         List<ReadingDto> readings = readingDbRepo.getAllByAccountNum(user.getAccountNum());
         return readings.stream()
@@ -138,6 +143,7 @@ public class ReadingDbService implements ReadingService {
      * @return Список записей всех показаний пользователя.
      */
     @Override
+    @Audit(action = "getHistory")
     public List<ReadingRecord> getHistory(User user) {
         List<ReadingDto> readings = readingDbRepo.getAllByAccountNum(user.getAccountNum());
         return readings.stream()
@@ -156,6 +162,8 @@ public class ReadingDbService implements ReadingService {
      * @return Map, где ключ - это номер счета, а значение - это список записей показаний.
      */
     @Override
+    @Audit(action = "getAllReadings")
+    @Loggable
     public Map<String, List<ReadingRecord>> getAllReadings() {
         List<ReadingDto> readings = readingDbRepo.getAll();
         return readings.stream()

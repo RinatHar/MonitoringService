@@ -1,5 +1,6 @@
 package org.kharisov.services.databaseImpls;
 
+import org.kharisov.annotations.Audit;
 import org.kharisov.dtos.db.RoleDto;
 import org.kharisov.dtos.db.UserDto;
 import org.kharisov.entities.User;
@@ -77,6 +78,7 @@ public class AuthDbService implements AuthService {
      * @return Объект добавленного пользователя или пустой Optional, если добавление не удалось.
      */
     @Override
+    @Audit(action = "register")
     public Optional<User> addUser(User user) {
         if (AuthUtils.isValid(user)) {
             Optional<RoleDto> roleDtoOptional = roleDbRepo.getByName(String.valueOf(user.getRole()));
@@ -104,6 +106,7 @@ public class AuthDbService implements AuthService {
      * @return true, если пароли совпадают, иначе false.
      */
     @Override
+    @Audit(action = "logIn")
     public boolean logIn(String accountNum, String password) {
         Optional<UserDto> userDtoOptional = userDbRepo.getByAccountNum(accountNum);
         if (userDtoOptional.isPresent()) {
@@ -142,6 +145,7 @@ public class AuthDbService implements AuthService {
      * @return true, если роль пользователя была успешно изменена, иначе false.
      */
     @Override
+    @Audit(action = "changeUserRole")
     public boolean changeUserRole(User user, Role role) {
         RoleDto roleDto = new RoleDto();
         roleDto.setName(role.name());

@@ -4,7 +4,7 @@ import jakarta.servlet.ServletContext;
 import org.kharisov.services.interfaces.ReadingTypeService;
 
 public class ReadingTypeServiceSingleton {
-    private static ReadingTypeService instance;
+    public static ReadingTypeService instance;
 
     private ReadingTypeServiceSingleton() {}
 

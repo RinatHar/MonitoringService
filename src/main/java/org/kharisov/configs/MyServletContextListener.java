@@ -3,18 +3,23 @@ package org.kharisov.configs;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebListener;
 import org.kharisov.repos.databaseImpls.*;
-import org.kharisov.services.databaseImpls.AuditDbService;
-import org.kharisov.services.databaseImpls.AuthDbService;
-import org.kharisov.services.databaseImpls.ReadingDbService;
-import org.kharisov.services.databaseImpls.ReadingTypeDbService;
-import org.kharisov.services.interfaces.AuditService;
-import org.kharisov.services.interfaces.AuthService;
-import org.kharisov.services.interfaces.ReadingService;
-import org.kharisov.services.interfaces.ReadingTypeService;
-import org.kharisov.services.singletons.ReadingTypeServiceSingleton;
+import org.kharisov.services.databaseImpls.*;
+import org.kharisov.services.interfaces.*;
+import org.kharisov.services.singletons.*;
 
+/**
+ * Класс MyServletContextListener реализует интерфейс ServletContextListener и
+ * используется для инициализации различных сервисов при старте веб-приложения.
+ */
 @WebListener
 public class MyServletContextListener implements ServletContextListener {
+
+    /**
+     * Метод contextInitialized вызывается при старте веб-приложения.
+     * Он инициализирует различные сервисы и добавляет их в контекст сервлета.
+     *
+     * @param sce событие контекста сервлета.
+     */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
@@ -42,6 +47,7 @@ public class MyServletContextListener implements ServletContextListener {
                 new AuditDbRepo(connectionPool3)
         );
         ctx.setAttribute("auditService", auditService);
+        AuditServiceSingleton.initialize(ctx);
 
         ConnectionPool connectionPool4 = new ConnectionPool(config);
         ReadingTypeService readingTypeService = new ReadingTypeDbService(new ReadingTypeDbRepo(connectionPool4));

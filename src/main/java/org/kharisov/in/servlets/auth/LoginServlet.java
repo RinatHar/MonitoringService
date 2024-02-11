@@ -2,6 +2,7 @@ package org.kharisov.in.servlets.auth;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import org.kharisov.configs.UserContextHolder;
 import org.kharisov.dtos.in.UserDtoIn;
 import org.kharisov.entities.User;
 import org.kharisov.enums.Role;
@@ -13,7 +14,7 @@ import org.kharisov.validators.DtosInValidator;
 import java.io.IOException;
 import java.util.*;
 
-@WebServlet("/login")
+@WebServlet("/api/v1/login")
 public class LoginServlet extends HttpServlet {
 
     private AuthService authService;
@@ -27,13 +28,14 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         UserDtoIn userDto = DtoUtils.parseDtoFromRequest(req, UserDtoIn.class);
         if (!DtosInValidator.isValid(userDto).isEmpty()) {
             ResponseUtils.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid request data");
             return;
         }
         User user = UserMapper.INSTANCE.toEntity(userDto);
+        UserContextHolder.setUser(user);
         if (authService.isAdminByAccountNum(user.getAccountNum())) {
             user.setRole(Role.ADMIN);
         }

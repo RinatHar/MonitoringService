@@ -111,6 +111,7 @@ public class AuthUtils {
         String refreshToken = Jwts.builder()
                 .setId(UUID.randomUUID().toString())
                 .setSubject(user.getAccountNum())
+                .claim("role", user.getRole().toString())
                 .setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + 86400000L))
                 .signWith(key)
                 .compact();

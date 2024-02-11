@@ -4,6 +4,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.kharisov.configs.UserContextHolder;
 import org.kharisov.dtos.in.ReadingDtoIn;
 import org.kharisov.entities.ReadingRecord;
 import org.kharisov.entities.ReadingType;
@@ -21,7 +22,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet("/readings/*")
+@WebServlet("/api/v1/readings/*")
 public class ReadingServlet extends HttpServlet {
 
     private ReadingService readingService;
@@ -32,7 +33,7 @@ public class ReadingServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String jwt = AuthUtils.extractJwtFromRequest(req);
         String subject = AuthUtils.getSubjectFromJwt(jwt);
         Role role = Role.valueOf(AuthUtils.getRoleFromJwt(jwt));
@@ -41,6 +42,7 @@ public class ReadingServlet extends HttpServlet {
                 .accountNum(subject)
                 .role(role)
                 .build();
+        UserContextHolder.setUser(user);
 
         String pathInfo = req.getPathInfo();
 
@@ -77,13 +79,14 @@ public class ReadingServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String jwt = AuthUtils.extractJwtFromRequest(req);
         String subject = AuthUtils.getSubjectFromJwt(jwt);
 
         User user = User.builder()
                 .accountNum(subject)
                 .build();
+        UserContextHolder.setUser(user);
 
         ReadingDtoIn readingDto = DtoUtils.parseDtoFromRequest(req, ReadingDtoIn.class);
         if (!DtosInValidator.isValid(readingDto).isEmpty()) {
