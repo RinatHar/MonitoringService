@@ -1,6 +1,4 @@
-package org.kharisov.repos.databaseImpls;
-
-import org.kharisov.configs.ConnectionPoolConfig;
+package org.kharisov.configs;
 
 import java.sql.*;
 import java.util.*;

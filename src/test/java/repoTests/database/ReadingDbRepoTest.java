@@ -10,7 +10,7 @@ import org.kharisov.configs.ConnectionPoolConfig;
 import org.kharisov.dtos.db.ReadingDto;
 import org.kharisov.dtos.db.UserDto;
 import org.kharisov.liquibase.LiquibaseExample;
-import org.kharisov.repos.databaseImpls.ConnectionPool;
+import org.kharisov.configs.ConnectionPool;
 import org.kharisov.repos.databaseImpls.ReadingDbRepo;
 import org.kharisov.repos.databaseImpls.UserDbRepo;
 import org.testcontainers.containers.PostgreSQLContainer;

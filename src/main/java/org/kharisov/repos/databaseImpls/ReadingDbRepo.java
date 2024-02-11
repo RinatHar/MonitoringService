@@ -1,7 +1,9 @@
 package org.kharisov.repos.databaseImpls;
 
+import org.kharisov.configs.ConnectionPool;
 import org.kharisov.domains.ReadingType;
 import org.kharisov.dtos.db.ReadingDto;
+import org.kharisov.repos.base.BaseDbRepo;
 
 import java.sql.Date;
 import java.sql.*;

@@ -2,8 +2,7 @@ package repoTests.database;
 
 import liquibase.exception.*;
 import org.junit.jupiter.api.*;
-import org.kharisov.configs.Config;
-import org.kharisov.configs.ConnectionPoolConfig;
+import org.kharisov.configs.*;
 import org.kharisov.dtos.db.ReadingTypeDto;
 import org.kharisov.liquibase.LiquibaseExample;
 import org.kharisov.repos.databaseImpls.*;
