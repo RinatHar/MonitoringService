@@ -1,37 +1,51 @@
 package org.kharisov.in.servlets.reading;
 
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import org.kharisov.configs.UserContextHolder;
+import org.kharisov.domains.*;
 import org.kharisov.dtos.in.ReadingDtoIn;
-import org.kharisov.entities.ReadingRecord;
-import org.kharisov.entities.ReadingType;
-import org.kharisov.entities.User;
 import org.kharisov.enums.Role;
 import org.kharisov.mappers.ReadingMapper;
 import org.kharisov.services.interfaces.ReadingService;
-import org.kharisov.utils.AuthUtils;
-import org.kharisov.utils.DtoUtils;
-import org.kharisov.utils.ResponseUtils;
-import org.kharisov.validators.DtosInValidator;
+import org.kharisov.utils.*;
+import org.kharisov.validators.DtoInValidator;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+/**
+ * Сервлет ReadingServlet обрабатывает запросы по пути "/api/v1/readings/*".
+ * Этот сервлет наследуется от HttpServlet и предоставляет функциональность работы с показаниями.
+ *
+ * <p>Сервлет использует следующие сервисы:</p>
+ * <ul>
+ *   <li>ReadingService: Сервис показаний.</li>
+ * </ul>
+ *
+ * @see HttpServlet
+ */
 @WebServlet("/api/v1/readings/*")
 public class ReadingServlet extends HttpServlet {
 
     private ReadingService readingService;
 
+    /**
+     * Инициализирует сервлет и получает сервис чтения из контекста сервлета.
+     */
     @Override
     public void init() {
         readingService = (ReadingService) getServletContext().getAttribute("readingService");
     }
 
+    /**
+     * Обрабатывает GET-запросы. Выполняет различные действия в зависимости от параметров запроса.
+     *
+     * @param req  объект HttpServletRequest, который содержит запрос клиента
+     * @param resp объект HttpServletResponse, который содержит ответ сервера
+     * @throws IOException если произошла ошибка ввода-вывода
+     */
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String jwt = AuthUtils.extractJwtFromRequest(req);
@@ -78,6 +92,16 @@ public class ReadingServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Обрабатывает POST-запросы. Проверяет валидность данных чтения,
+     * преобразует DTO в запись чтения и пытается добавить чтение.
+     * Если чтение успешно добавлено, отправляет ответ "Reading saved successfully".
+     * В противном случае отправляет ошибку.
+     *
+     * @param req  объект HttpServletRequest, который содержит запрос клиента
+     * @param resp объект HttpServletResponse, который содержит ответ сервера
+     * @throws IOException если произошла ошибка ввода-вывода
+     */
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String jwt = AuthUtils.extractJwtFromRequest(req);
@@ -89,7 +113,7 @@ public class ReadingServlet extends HttpServlet {
         UserContextHolder.setUser(user);
 
         ReadingDtoIn readingDto = DtoUtils.parseDtoFromRequest(req, ReadingDtoIn.class);
-        if (!DtosInValidator.isValid(readingDto).isEmpty()) {
+        if (!DtoInValidator.isValid(readingDto).isEmpty()) {
             ResponseUtils.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid request data");
             return;
         }

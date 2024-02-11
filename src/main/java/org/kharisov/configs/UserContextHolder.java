@@ -1,6 +1,6 @@
 package org.kharisov.configs;
 
-import org.kharisov.entities.User;
+import org.kharisov.domains.User;
 
 /**
  * Класс UserContextHolder используется для хранения и извлечения информации о пользователе в контексте текущего потока.

@@ -1,11 +1,8 @@
 package org.kharisov.services.databaseImpls;
 
-import org.kharisov.annotations.Audit;
-import org.kharisov.annotations.Loggable;
-import org.kharisov.dtos.db.ReadingDto;
-import org.kharisov.dtos.db.ReadingTypeDto;
-import org.kharisov.dtos.db.UserDto;
-import org.kharisov.entities.*;
+import org.kharisov.annotations.*;
+import org.kharisov.domains.*;
+import org.kharisov.dtos.db.*;
 import org.kharisov.repos.databaseImpls.*;
 import org.kharisov.services.interfaces.ReadingService;
 

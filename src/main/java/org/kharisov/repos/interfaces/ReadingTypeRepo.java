@@ -1,6 +1,6 @@
 package org.kharisov.repos.interfaces;
 
-import org.kharisov.entities.ReadingType;
+import org.kharisov.domains.ReadingType;
 
 import java.util.*;
 

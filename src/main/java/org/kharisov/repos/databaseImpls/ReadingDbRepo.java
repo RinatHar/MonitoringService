@@ -1,10 +1,10 @@
 package org.kharisov.repos.databaseImpls;
 
+import org.kharisov.domains.ReadingType;
 import org.kharisov.dtos.db.ReadingDto;
-import org.kharisov.entities.ReadingType;
 
-import java.sql.*;
 import java.sql.Date;
+import java.sql.*;
 import java.util.*;
 
 /**

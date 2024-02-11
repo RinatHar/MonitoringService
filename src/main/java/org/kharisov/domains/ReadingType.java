@@ -1,4 +1,4 @@
-package org.kharisov.entities;
+package org.kharisov.domains;
 
 import java.util.Objects;
 

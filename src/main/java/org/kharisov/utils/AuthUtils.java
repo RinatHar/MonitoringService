@@ -5,14 +5,25 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.kharisov.configs.Config;
-import org.kharisov.entities.User;
-import org.kharisov.enums.Role;
+import org.kharisov.domains.User;
 
 import java.security.*;
 import java.util.*;
 
 /**
- * Класс AuthUtils предоставляет статические методы для работы с аутентификацией пользователя.
+ * Класс AuthUtils предоставляет утилиты для аутентификации и авторизации пользователей.
+ *
+ * <p>Этот класс содержит следующие методы:</p>
+ * <ul>
+ *   <li>hashPassword(String password): Хеширует пароль с использованием соли.</li>
+ *   <li>checkPassword(String password, String storedPasswordHash): Проверяет, соответствует ли введенный пароль
+ *   сохраненному хешу пароля.</li>
+ *   <li>isValid(User user): Проверяет, является ли пользователь действительным.</li>
+ *   <li>createJwtForUser(User user): Создает JWT для пользователя.</li>
+ *   <li>extractJwtFromRequest(HttpServletRequest req): Извлекает JWT из запроса.</li>
+ *   <li>getRoleFromJwt(String jwt): Получает роль пользователя из JWT.</li>
+ *   <li>getSubjectFromJwt(String jwt): Получает субъект из JWT.</li>
+ * </ul>
  */
 public class AuthUtils {
     /**
@@ -81,24 +92,12 @@ public class AuthUtils {
                 && user.getPassword().length() > 7);
     }
 
-    public static Map<String, String> refreshToken(String refreshToken) {
-        String secretKey = Config.get("jwt.secretKey");
-        Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
-
-        try {
-            Jws<Claims> jws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(refreshToken);
-            String accountNum = (jws.getBody()).getSubject();
-            String role = (jws.getBody()).get("role", String.class);
-            User user = new User();
-            user.setAccountNum(accountNum);
-            user.setRole(Role.valueOf(role));
-            return createJwtForUser(user);
-        } catch (JwtException var7) {
-            System.out.println("Refresh token is invalid");
-            return null;
-        }
-    }
-
+    /**
+     * Создает JWT (JSON Web Token) для пользователя.
+     *
+     * @param user Пользователь, для которого создается JWT
+     * @return Map с accessToken и refreshToken
+     */
     public static Map<String, String> createJwtForUser(User user) {
         String secretKey = Config.get("jwt.secretKey");
         Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
@@ -121,6 +120,12 @@ public class AuthUtils {
         return tokens;
     }
 
+    /**
+     * Извлекает JWT из запроса.
+     *
+     * @param req Запрос, из которого извлекается JWT
+     * @return JWT в виде строки или null, если JWT не найден
+     */
     public static String extractJwtFromRequest(HttpServletRequest req) {
         String authHeader = req.getHeader("Authorization");
 
@@ -131,6 +136,12 @@ public class AuthUtils {
         return null;
     }
 
+    /**
+     * Получает роль пользователя из JWT.
+     *
+     * @param jwt JWT, из которого извлекается роль пользователя
+     * @return Роль пользователя в виде строки или null, если JWT недействителен
+     */
     public static String getRoleFromJwt(String jwt) {
         String secretKey = Config.get("jwt.secretKey");
         Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
@@ -143,6 +154,12 @@ public class AuthUtils {
         }
     }
 
+    /**
+     * Получает субъект из JWT.
+     *
+     * @param jwt JWT, из которого извлекается субъект
+     * @return Субъект в виде строки или null, если JWT недействителен
+     */
     public static String getSubjectFromJwt(String jwt) {
         String secretKey = Config.get("jwt.secretKey");
         Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
@@ -154,5 +171,4 @@ public class AuthUtils {
             return null;
         }
     }
-
 }

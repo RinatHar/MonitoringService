@@ -1,6 +1,6 @@
 package org.kharisov.repos.interfaces;
 
-import org.kharisov.entities.User;
+import org.kharisov.domains.User;
 
 import java.util.*;
 

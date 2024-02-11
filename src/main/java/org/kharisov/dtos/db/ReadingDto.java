@@ -2,7 +2,7 @@ package org.kharisov.dtos.db;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.kharisov.entities.ReadingType;
+import org.kharisov.domains.ReadingType;
 
 import java.time.LocalDate;
 

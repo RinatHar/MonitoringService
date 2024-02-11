@@ -5,7 +5,7 @@ import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.kharisov.annotations.Audit;
 import org.kharisov.configs.UserContextHolder;
-import org.kharisov.entities.User;
+import org.kharisov.domains.User;
 import org.kharisov.services.interfaces.AuditService;
 import org.kharisov.services.singletons.AuditServiceSingleton;
 

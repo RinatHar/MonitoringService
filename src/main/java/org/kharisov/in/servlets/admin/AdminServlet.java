@@ -3,23 +3,31 @@ package org.kharisov.in.servlets.admin;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import org.kharisov.configs.UserContextHolder;
-import org.kharisov.dtos.in.AdminDtoIn;
-import org.kharisov.dtos.in.ReadingTypeDtoIn;
-import org.kharisov.entities.ReadingRecord;
-import org.kharisov.entities.ReadingType;
-import org.kharisov.entities.User;
+import org.kharisov.dtos.in.*;
+import org.kharisov.domains.*;
 import org.kharisov.enums.Role;
-import org.kharisov.mappers.AdminMapper;
-import org.kharisov.mappers.ReadingTypeMapper;
-import org.kharisov.mappers.UserMapper;
+import org.kharisov.mappers.*;
 import org.kharisov.services.interfaces.*;
 import org.kharisov.utils.*;
-import org.kharisov.validators.DtosInValidator;
+import org.kharisov.validators.DtoInValidator;
 
 import java.io.IOException;
 import java.util.*;
 
-
+/**
+ * Сервлет AdminServlet обрабатывает запросы по пути "/api/v1/admin/*".
+ * Этот сервлет наследуется от HttpServlet и предоставляет функциональность администратора.
+ *
+ * <p>Сервлет использует следующие сервисы:</p>
+ * <ul>
+ *   <li>AuthService: Сервис аутентификации.</li>
+ *   <li>AuditService: Сервис аудита.</li>
+ *   <li>ReadingTypeService: Сервис типов показаний.</li>
+ *   <li>ReadingService: Сервис показаний.</li>
+ * </ul>
+ *
+ * @see HttpServlet
+ */
 @WebServlet("/api/v1/admin/*")
 public class AdminServlet extends HttpServlet {
 
@@ -28,6 +36,9 @@ public class AdminServlet extends HttpServlet {
     private ReadingTypeService readingTypeService;
     private ReadingService readingService;
 
+    /**
+     * Инициализирует сервлет и получает сервисы из контекста сервлета.
+     */
     @Override
     public void init() {
         authService = (AuthService) getServletContext().getAttribute("authService");
@@ -36,6 +47,13 @@ public class AdminServlet extends HttpServlet {
         readingService = (ReadingService) getServletContext().getAttribute("readingService");
     }
 
+    /**
+     * Обрабатывает GET-запросы. Выполняет различные действия в зависимости от роли пользователя и пути запроса.
+     *
+     * @param req  объект HttpServletRequest, который содержит запрос клиента
+     * @param resp объект HttpServletResponse, который содержит ответ сервера
+     * @throws IOException если произошла ошибка ввода-вывода
+     */
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String jwt = AuthUtils.extractJwtFromRequest(req);
@@ -65,6 +83,13 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Обрабатывает POST-запросы. Выполняет различные действия в зависимости от роли пользователя и пути запроса.
+     *
+     * @param req  объект HttpServletRequest, который содержит запрос клиента
+     * @param resp объект HttpServletResponse, который содержит ответ сервера
+     * @throws IOException если произошла ошибка ввода-вывода
+     */
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String jwt = AuthUtils.extractJwtFromRequest(req);
@@ -82,7 +107,7 @@ public class AdminServlet extends HttpServlet {
         if (Objects.equals(user.getRole().toString(), "ADMIN")) {
             if (pathInfo.equals("/makeAdmin")) {
                 AdminDtoIn adminDto = DtoUtils.parseDtoFromRequest(req, AdminDtoIn.class);
-                if (!DtosInValidator.isValid(adminDto).isEmpty()) {
+                if (!DtoInValidator.isValid(adminDto).isEmpty()) {
                     ResponseUtils.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid request data");
                     return;
                 }
@@ -95,7 +120,7 @@ public class AdminServlet extends HttpServlet {
                 }
             } else if (pathInfo.equals("/addReadingType")) {
                 ReadingTypeDtoIn readingTypeDto = DtoUtils.parseDtoFromRequest(req, ReadingTypeDtoIn.class);
-                if (!DtosInValidator.isValid(readingTypeDto).isEmpty()) {
+                if (!DtoInValidator.isValid(readingTypeDto).isEmpty()) {
                     ResponseUtils.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid request data");
                     return;
                 }
