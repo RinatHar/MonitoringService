@@ -6,7 +6,7 @@ import org.kharisov.entities.*;
 import org.kharisov.enums.Role;
 import org.kharisov.mappers.*;
 import org.kharisov.services.interfaces.*;
-import org.kharisov.validators.DtoInValidator;
+import org.kharisov.validators.*;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +38,7 @@ public class AdminController {
 
     @PostMapping("/makeAdmin")
     public ResponseEntity<String> makeAdmin(@RequestBody UserDto user) {
-        DtoInValidator.validate(user);
+        DtoInValidator.validate(user, AccountNumValidationGroup.class);
         UserRecord newAdmin = UserMapper.INSTANCE.toEntity(user);
         authService.changeUserRole(newAdmin, Role.ADMIN);
         return ResponseEntity.ok("The user has successfully become an administrator");

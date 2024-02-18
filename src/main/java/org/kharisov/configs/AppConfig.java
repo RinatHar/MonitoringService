@@ -158,9 +158,4 @@ public class AppConfig implements WebMvcConfigurer {
     public ReadingController readingController(ReadingService readingService, ReadingTypeService readingTypeService) {
         return new ReadingController(readingService, readingTypeService);
     }
-
-    @Bean
-    public AuditAspect auditAspect(AuditService auditService) {
-        return new AuditAspect(auditService);
-    }
 }

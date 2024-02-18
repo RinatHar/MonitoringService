@@ -90,7 +90,7 @@ public class AuthDbService implements AuthService {
     @Override
     @Audit(action = "register")
     public Optional<UserRecord> addUser(UserRecord user) throws MyDatabaseException {
-        if (AuthUtils.isValid(user)) {
+        if (AuthUtils.isValid(user) && !userExistsByAccountNum(user)) {
             Optional<RoleRecord> roleRecordOptional = authRepo.getRoleById(user.role_id());
             if (roleRecordOptional.isPresent()) {
                 RoleRecord roleRecord = roleRecordOptional.get();

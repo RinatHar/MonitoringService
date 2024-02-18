@@ -21,7 +21,7 @@ public class DtoInValidator {
         Set<ConstraintViolation<T>> violations = validator.validate(dto, groups);
 
         if (!violations.isEmpty()) {
-            throw new InvalidDtoException("Некорректно введены данные");
+            throw new InvalidDtoException("Data entered incorrectly");
         }
     }
 }

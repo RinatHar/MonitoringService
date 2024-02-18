@@ -24,7 +24,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody UserDto userDto) {
-        DtoInValidator.validate(userDto, PasswordValidationGroup.class);
+        DtoInValidator.validate(userDto);
 
         Long roleId = authService.getRoleIdByName(Role.USER);
         UserRecord user = UserMapper.INSTANCE.toEntityWithRole(userDto, roleId);
@@ -36,7 +36,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@RequestBody UserDto userDto) {
-        DtoInValidator.validate(userDto, PasswordValidationGroup.class);
+        DtoInValidator.validate(userDto);
 
         Long roleId = authService.getRoleIdByName(Role.USER);
         UserRecord user = UserMapper.INSTANCE.toEntityWithRole(userDto, roleId);
