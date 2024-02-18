@@ -1,8 +1,8 @@
 package org.kharisov.exceptions;
 
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.annotation.*;
 
 @RestControllerAdvice
 public class MyExceptionHandler {

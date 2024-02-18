@@ -1,8 +1,8 @@
 package org.kharisov.mappers;
 
 import org.kharisov.dtos.ReadingDto;
-import org.kharisov.entities.*;
-import org.mapstruct.*;
+import org.kharisov.entities.ReadingRecord;
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 /**

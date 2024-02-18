@@ -3,7 +3,7 @@ package org.kharisov.services.interfaces;
 import org.kharisov.entities.ReadingTypeRecord;
 import org.kharisov.exceptions.*;
 
-import java.util.*;
+import java.util.Set;
 
 public interface ReadingTypeService {
 

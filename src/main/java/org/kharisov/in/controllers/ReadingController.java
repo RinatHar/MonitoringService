@@ -1,19 +1,19 @@
 package org.kharisov.in.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.kharisov.dtos.*;
+import org.kharisov.dtos.ReadingDto;
 import org.kharisov.entities.*;
 import org.kharisov.exceptions.InvalidRequestParamException;
-import org.kharisov.mappers.*;
+import org.kharisov.mappers.ReadingMapper;
 import org.kharisov.services.interfaces.*;
-import org.kharisov.validators.*;
+import org.kharisov.validators.DtoInValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/readings")

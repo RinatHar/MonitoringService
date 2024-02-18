@@ -2,7 +2,7 @@ package org.kharisov.dtos;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.kharisov.annotations.*;
+import org.kharisov.annotations.IsInteger;
 
 /**
  * Класс ReadingDtoIn представляет собой Data Transfer Object (DTO) для передачи данных о чтении.

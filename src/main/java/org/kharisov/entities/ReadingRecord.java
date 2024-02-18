@@ -1,7 +1,5 @@
 package org.kharisov.entities;
 
-import lombok.*;
-
 import java.time.LocalDate;
 
 /**

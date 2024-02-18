@@ -5,7 +5,7 @@ import org.kharisov.configs.ConnectionPool;
 import org.kharisov.entities.*;
 import org.kharisov.enums.Role;
 import org.kharisov.exceptions.MyDatabaseException;
-import org.kharisov.repos.interfaces.*;
+import org.kharisov.repos.interfaces.AuthRepo;
 
 import java.sql.*;
 import java.util.*;

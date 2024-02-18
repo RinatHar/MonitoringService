@@ -3,7 +3,7 @@ package org.kharisov.utils;
 import org.kharisov.entities.UserRecord;
 
 import java.security.*;
-import java.util.*;
+import java.util.Base64;
 
 /**
  * Класс AuthUtils предоставляет утилиты для аутентификации и авторизации пользователей.

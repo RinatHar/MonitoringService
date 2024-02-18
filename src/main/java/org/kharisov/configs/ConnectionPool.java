@@ -1,7 +1,5 @@
 package org.kharisov.configs;
 
-import lombok.RequiredArgsConstructor;
-
 import java.sql.*;
 import java.util.*;
 

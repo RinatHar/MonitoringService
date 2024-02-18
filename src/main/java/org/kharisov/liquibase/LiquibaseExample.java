@@ -25,12 +25,6 @@ public class LiquibaseExample {
     /**
      * Выполняет миграцию базы данных.
      *
-     * @param dbUrl       URL базы данных.
-     * @param dbUsername  имя пользователя базы данных.
-     * @param dbPassword  пароль пользователя базы данных.
-     * @param lbSchema    схема Liquibase.
-     * @param dbSchema    схема базы данных.
-     * @param lbChangeLog файл журнала изменений Liquibase.
      * @throws SQLException              если возникает ошибка при работе с базой данных.
      * @throws DatabaseException         если возникает ошибка при работе с Liquibase.
      * @throws CommandExecutionException если возникает ошибка при выполнении команды Liquibase.

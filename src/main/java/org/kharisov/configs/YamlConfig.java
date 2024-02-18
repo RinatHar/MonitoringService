@@ -1,6 +1,5 @@
 package org.kharisov.configs;
 
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
