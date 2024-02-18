@@ -3,10 +3,10 @@ package repoTests.database;
 import liquibase.exception.*;
 import org.junit.jupiter.api.*;
 import org.kharisov.configs.*;
-import org.kharisov.entities.*;
+import org.kharisov.entities.ReadingTypeRecord;
 import org.kharisov.exceptions.MyDatabaseException;
 import org.kharisov.liquibase.LiquibaseExample;
-import org.kharisov.repos.databaseImpls.*;
+import org.kharisov.repos.databaseImpls.ReadingTypeDbRepo;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.*;
 
@@ -16,7 +16,7 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
-public class AuditDbRepoTest {
+public class ReadingTypeRecordDbRepoTest {
 
     private static final YamlTestConfig config = new YamlTestConfig("application.yml");
 
@@ -29,8 +29,7 @@ public class AuditDbRepoTest {
     private static final String LB_CHANGE_LOG = config.getProperty("liquibase.test.change_log");
 
     private static ConnectionPool connectionPool;
-    private static AuditDbRepo auditDbRepo;
-    private static AuthDbRepo authDbRepo;
+    private static ReadingTypeDbRepo readingTypeDbRepo;
     private static LiquibaseExample liquibaseExample;
 
     @Container
@@ -60,68 +59,50 @@ public class AuditDbRepoTest {
                 postgres.getPassword(),
                 1);
 
-        auditDbRepo = new AuditDbRepo(connectionPool);
-        authDbRepo = new AuthDbRepo(connectionPool);
+        readingTypeDbRepo = new ReadingTypeDbRepo(connectionPool);
     }
 
-    @DisplayName("Тестирование добавления записи")
+    @DisplayName("Тестирование добавления типа показаний")
     @Test
-    public void testAdd() throws MyDatabaseException {
-        AuditRecord record = new AuditRecord(
+    public void testAddReadingType() throws MyDatabaseException {
+        ReadingTypeRecord readingTypeRecord = new ReadingTypeRecord(
                 null,
-                "action",
-                1L
+                "test1"
         );
 
-        Optional<AuditRecord> result = auditDbRepo.add(record);
+        Optional<ReadingTypeRecord> result = readingTypeDbRepo.add(readingTypeRecord);
 
         assertThat(result).isPresent();
-        assertThat(result.get().action()).isEqualTo(record.action());
-        assertThat(result.get().userId()).isEqualTo(record.userId());
+        assertThat(result.get().name()).isEqualTo(readingTypeRecord.name());
     }
 
-    @DisplayName("Тестирование получения записей по номеру счета")
+    @DisplayName("Тестирование получения типа показания по названию")
     @Test
-    public void testGetEntriesByAccountNum() throws MyDatabaseException {
+    public void testGetReadingTypeByName() throws MyDatabaseException {
+        String testName = "test2";
 
-        UserRecord user = new UserRecord(
-                2L,
-                "testAccountNum",
-                "password",
-                1L
-        );
-
-        authDbRepo.addUser(user);
-
-        AuditDbRepo auditDbRepo = new AuditDbRepo(connectionPool);
-
-        AuditRecord record = new AuditRecord(
+        ReadingTypeRecord readingTypeRecord = new ReadingTypeRecord(
                 null,
-                "action",
-                user.id()
+                testName
         );
+        readingTypeDbRepo.add(readingTypeRecord);
 
-        auditDbRepo.add(record);
+        Optional<ReadingTypeRecord> result = readingTypeDbRepo.getByName(testName);
 
-        List<UserAuditRecord> result = auditDbRepo.getAuditRecordsByAccountNum(user.accountNum());
-
-        assertThat(result).isNotEmpty();
-        assertThat(result.get(0).accountNum()).isEqualTo(user.accountNum());
+        assertThat(result).isPresent();
+        assertThat(result.get().name()).isEqualTo(testName);
     }
 
-    @DisplayName("Тестирование получения всех записей")
+    @DisplayName("Тестирование получения всех типов показаний")
     @Test
-    public void testGetAll() throws MyDatabaseException {
-
-        AuditRecord record = new AuditRecord(
+    public void testGetAllReadingTypes() throws MyDatabaseException {
+        ReadingTypeRecord readingTypeRecord = new ReadingTypeRecord(
                 null,
-                "action",
-                1L
+                "test3"
         );
+        readingTypeDbRepo.add(readingTypeRecord);
 
-        auditDbRepo.add(record);
-
-        List<UserAuditRecord> result = auditDbRepo.getAll();
+        List<ReadingTypeRecord> result = readingTypeDbRepo.getAll();
 
         assertThat(result).isNotEmpty();
     }
