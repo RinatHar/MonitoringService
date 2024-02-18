@@ -22,6 +22,7 @@ import java.util.*;
 @ComponentScan(basePackages = {"org.kharisov"})
 @EnableWebMvc
 @EnableMethodSecurity
+@EnableAspectJAutoProxy
 @PropertySource("classpath:application.yml")
 @DependsOn("yamlConfig")
 public class AppConfig implements WebMvcConfigurer {

@@ -103,7 +103,7 @@ public class AuthDbService implements AuthService {
 
                 Optional<UserRecord> userRecordOptional = authRepo.addUser(user);
                 if (userRecordOptional.isPresent()) {
-                    return Optional.of(user);
+                    return userRecordOptional;
                 }
             }
         }
