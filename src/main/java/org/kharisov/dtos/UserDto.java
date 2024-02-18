@@ -1,7 +1,8 @@
-package org.kharisov.dtos.in;
+package org.kharisov.dtos;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.kharisov.validators.PasswordValidationGroup;
 
 /**
  * DTO User представляет собой пользователя в системе.
@@ -9,7 +10,7 @@ import lombok.*;
  */
 @Getter
 @Setter
-public class UserDtoIn {
+public class UserDto {
     /**
      * Номер счета пользователя. Он должен быть ровно 16 символов в длину.
      */
@@ -20,7 +21,7 @@ public class UserDtoIn {
     /**
      * Пароль пользователя. Он должен быть от 8 до 128 символов в длину.
      */
-    @NotNull
+    @NotNull(groups = PasswordValidationGroup.class)
     @Size(min = 8, max = 128, message = "Password must be between 8 and 128 characters")
     private String password;
 

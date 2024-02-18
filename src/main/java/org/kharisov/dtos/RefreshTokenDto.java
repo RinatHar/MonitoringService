@@ -1,4 +1,4 @@
-package org.kharisov.dtos.in;
+package org.kharisov.dtos;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -9,7 +9,7 @@ import lombok.*;
  */
 @Getter
 @Setter
-public class RefreshTokenDtoIn {
+public class RefreshTokenDto {
     /**
      * Обновленный токен. Это поле не может быть null и должно содержать от 100 до 200 символов.
      */

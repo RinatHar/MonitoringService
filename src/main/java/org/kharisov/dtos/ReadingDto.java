@@ -1,4 +1,4 @@
-package org.kharisov.dtos.in;
+package org.kharisov.dtos;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -10,13 +10,12 @@ import org.kharisov.annotations.*;
  */
 @Getter
 @Setter
-public class ReadingDtoIn {
+public class ReadingDto {
     /**
      * Тип показания.
      * Он должен быть не пустым и существующим типом показания.
      */
     @NotNull
-    @ReadingTypeExists
     private String type;
 
     /**

@@ -1,9 +1,10 @@
 package org.kharisov.services.databaseImpls;
 
+import lombok.RequiredArgsConstructor;
 import org.kharisov.annotations.Audit;
-import org.kharisov.domains.ReadingType;
-import org.kharisov.dtos.db.ReadingTypeDto;
-import org.kharisov.repos.databaseImpls.ReadingTypeDbRepo;
+import org.kharisov.entities.ReadingTypeRecord;
+import org.kharisov.exceptions.*;
+import org.kharisov.repos.interfaces.ReadingTypeRepo;
 import org.kharisov.services.interfaces.ReadingTypeService;
 
 import java.util.*;
@@ -13,54 +14,42 @@ import java.util.stream.Collectors;
  * Класс ReadingTypeDbService представляет собой службу для работы с типами показаний в базе данных.
  * Он реализует интерфейс ReadingTypeService и использует репозиторий ReadingTypeDbRepo для выполнения операций с базой данных.
  */
+@RequiredArgsConstructor
 public class ReadingTypeDbService implements ReadingTypeService {
     /**
      * Репозиторий для работы с типами показаний.
      */
-    private final ReadingTypeDbRepo readingTypeDbRepo;
-
-    /**
-     * Конструктор класса ReadingTypeDbService.
-     *
-     * @param readingTypeDbRepo Репозиторий для работы с типами показаний.
-     */
-    public ReadingTypeDbService(ReadingTypeDbRepo readingTypeDbRepo) {
-        this.readingTypeDbRepo = readingTypeDbRepo;
-    }
+    private final ReadingTypeRepo readingTypeRepo;
 
     /**
      * Добавляет новый тип показания.
      *
-     * @param name Имя нового типа показания.
-     * @return Объект типа показания или пустой Optional, если тип показания не добавлен.
+     * @param readingTypeRecord Новый тип показания.
+     * @throws MyDatabaseException Если произошла ошибка при взаимодействии с базой данных.
+     * @throws ConflictException Если тип показания с указанным именем уже существует.
      */
     @Override
     @Audit(action = "addReadingType")
-    public boolean addReadingType(String name) {
-        Optional<ReadingType> optionalReadingType = getReadingType(name);
-        if (optionalReadingType.isEmpty()) {
-            ReadingTypeDto readingTypeDto = new ReadingTypeDto();
-            readingTypeDto.setName(name);
-            readingTypeDbRepo.add(readingTypeDto);
-            return true;
-        }
-        return false;
+    public void addReadingType(ReadingTypeRecord readingTypeRecord) throws MyDatabaseException, ConflictException {
+        if (readingTypeRepo.getByName(readingTypeRecord.name()).isPresent())
+            throw new ConflictException("Тип показания уже существует");
+        readingTypeRepo.add(readingTypeRecord);
     }
 
     /**
      * Возвращает тип показания по его имени.
      *
      * @param name Имя типа показания.
-     * @return Объект типа показания или пустой Optional, если тип показания не найден.
+     * @return Объект типа показания.
+     * @throws MyDatabaseException Если произошла ошибка при взаимодействии с базой данных.
+     * @throws EntityNotFoundException Если тип показания с указанным именем не найден.
      */
     @Override
-    public Optional<ReadingType> getReadingType(String name) {
-        Optional<ReadingTypeDto> readingTypeDtoOptional = readingTypeDbRepo.getByName(name);
-        if (readingTypeDtoOptional.isPresent()) {
-            ReadingTypeDto readingTypeDto = readingTypeDtoOptional.get();
-            return Optional.of(ReadingType.Create(readingTypeDto.getName()));
-        }
-        return Optional.empty();
+    public ReadingTypeRecord getByName(String name) throws MyDatabaseException, EntityNotFoundException {
+        Optional<ReadingTypeRecord> readingTypeRecordOptional = readingTypeRepo.getByName(name);
+        if (readingTypeRecordOptional.isEmpty())
+            throw new EntityNotFoundException("Тип показания не найден");
+        return readingTypeRecordOptional.get();
     }
 
     /**
@@ -69,8 +58,8 @@ public class ReadingTypeDbService implements ReadingTypeService {
      * @return Набор имен всех типов показаний.
      */
     @Override
-    public Set<String> getReadingNames() {
-        List<ReadingTypeDto> readingTypes = readingTypeDbRepo.getAll();
-        return readingTypes.stream().map(ReadingTypeDto::getName).collect(Collectors.toSet());
+    public Set<String> getReadingNames() throws MyDatabaseException {
+        List<ReadingTypeRecord> records = readingTypeRepo.getAll();
+        return records.stream().map(ReadingTypeRecord::name).collect(Collectors.toSet());
     }
 }

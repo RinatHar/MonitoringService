@@ -1,4 +1,4 @@
-package org.kharisov.dtos.in;
+package org.kharisov.dtos;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -9,7 +9,7 @@ import lombok.*;
  */
 @Getter
 @Setter
-public class AdminDtoIn {
+public class AdminDto {
     /**
      * Номер счета администратора.
      * Он должен быть ровно 16 символов в длину.

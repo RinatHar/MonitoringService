@@ -1,6 +1,7 @@
 package org.kharisov.services.interfaces;
 
-import org.kharisov.domains.*;
+import org.kharisov.entities.*;
+import org.kharisov.exceptions.*;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -9,20 +10,23 @@ public interface ReadingService {
     /**
      * Добавляет показание для указанного пользователя, если оно еще не существует.
      * @param user Пользователь, для которого добавляется показание.
-     * @param reading Тип показания.
+     * @param readingTypeRecord Тип показания.
      * @param value Значение показания.
-     * @return true, если успешно добавлено, иначе false.
+     * @throws MyDatabaseException Если произошла ошибка при взаимодействии с базой данных.
+     * @throws ConflictException Если показание за текущий месяц уже существует.
+     * @throws EntityNotFoundException Если текущий пользователь или тип показания не найден.
      */
-    boolean addReading(User user, ReadingType reading, int value);
+    void addReading(UserRecord user, ReadingTypeRecord readingTypeRecord, int value)
+            throws MyDatabaseException, EntityNotFoundException, ConflictException;
 
     /**
      * Проверяет, существует ли указанное показание для пользователя на текущую дату.
      * @param user Пользователь, для которого проверяется показание.
-     * @param reading Тип показания.
+     * @param readingTypeRecord Тип показания.
      * @param now Текущая дата.
      * @return true, если показание существует, иначе false.
      */
-    boolean readingExists(User user, ReadingType reading, LocalDate now);
+    boolean readingExists(UserRecord user, ReadingTypeRecord readingTypeRecord, LocalDate now) throws MyDatabaseException;
 
     /**
      * Получает показания указанного пользователя за указанный месяц и год.
@@ -31,26 +35,26 @@ public interface ReadingService {
      * @param year Год, за который получаются показания.
      * @return Список показаний чтения.
      */
-    List<ReadingRecord> getReadingsByMonth(User user, int month, int year);
+    List<UserReadingRecord> getReadingsByMonth(UserRecord user, int month, int year) throws MyDatabaseException;
 
     /**
      * Получает текущее показание чтения указанного типа для пользователя.
      * @param user Пользователь, для которого получается показание.
-     * @param type Тип показания.
-     * @return Optional<ReadingRecord>, содержащий текущее показание, если оно существует, иначе Optional.empty().
+     * @param readingTypeRecord Тип показания.
+     * @return ReadingRecord, содержащий текущее показание.
      */
-    Optional<ReadingRecord> getCurrentReading(User user, ReadingType type);
+    UserReadingRecord getCurrentReading(UserRecord user, ReadingTypeRecord readingTypeRecord) throws MyDatabaseException;
 
     /**
      * Получает историю показаний для указанного пользователя.
      * @param user Пользователь, для которого получается история показаний.
      * @return Список показаний.
      */
-    List<ReadingRecord> getHistory(User user);
+    List<UserReadingRecord> getHistory(UserRecord user) throws MyDatabaseException;
 
     /**
      * Получает все показания всех пользователей.
      * @return Map, где ключом является номер счета пользователя, а значением - список показаний.
      */
-    Map<String, List<ReadingRecord>> getAllReadings();
+    Map<String, List<UserReadingRecord>> getAllReadings() throws MyDatabaseException;
 }

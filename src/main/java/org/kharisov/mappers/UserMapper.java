@@ -1,7 +1,7 @@
 package org.kharisov.mappers;
 
-import org.kharisov.domains.User;
-import org.kharisov.dtos.in.UserDtoIn;
+import org.kharisov.dtos.UserDto;
+import org.kharisov.entities.UserRecord;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -25,5 +25,15 @@ public interface UserMapper {
      * @param userDTO DTO пользователя для преобразования
      * @return Сущность User, соответствующая переданному DTO
      */
-    User toEntity(UserDtoIn userDTO);
+    UserRecord toEntity(UserDto userDTO);
+
+    default UserRecord toEntityWithRole(UserDto userDTO, Long roleId) {
+        UserRecord user = toEntity(userDTO);
+        return new UserRecord(
+                null,
+                user.accountNum(),
+                user.password(),
+                roleId
+        );
+    }
 }

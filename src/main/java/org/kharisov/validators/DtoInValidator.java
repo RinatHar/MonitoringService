@@ -1,6 +1,7 @@
 package org.kharisov.validators;
 
 import jakarta.validation.*;
+import org.kharisov.exceptions.InvalidDtoException;
 
 import java.util.Set;
 
@@ -13,18 +14,14 @@ import java.util.Set;
  * </ul>
  */
 public class DtoInValidator {
-    /**
-     * Проверяет, является ли DTO действительным.
-     *
-     * @param dto DTO для проверки
-     * @return Набор нарушений ограничений. Если DTO действителен, набор будет пустым.
-     */
-    public static <T> Set<ConstraintViolation<T>> isValid(T dto) {
-        // Создание валидатора
+    public static <T> void validate(T dto, Class<?>... groups) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
-        // Валидация dto
-        return validator.validate(dto);
+        Set<ConstraintViolation<T>> violations = validator.validate(dto, groups);
+
+        if (!violations.isEmpty()) {
+            throw new InvalidDtoException("Некорректно введены данные");
+        }
     }
 }

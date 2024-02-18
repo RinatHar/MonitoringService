@@ -1,7 +1,7 @@
 package org.kharisov.mappers;
 
-import org.kharisov.domains.ReadingType;
-import org.kharisov.dtos.in.ReadingTypeDtoIn;
+import org.kharisov.dtos.ReadingTypeDto;
+import org.kharisov.entities.ReadingTypeRecord;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -27,5 +27,5 @@ public interface ReadingTypeMapper {
      * @return Сущность ReadingType, соответствующая переданному DTO
      */
     @Mapping(target = "name", source = "name")
-    ReadingType toEntity(ReadingTypeDtoIn dto);
+    ReadingTypeRecord toEntity(ReadingTypeDto dto);
 }
