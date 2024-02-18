@@ -1,5 +1,6 @@
 package org.kharisov.configs;
 
+import org.kharisov.aspects.*;
 import org.kharisov.in.controllers.*;
 import org.kharisov.in.filters.JwtFilter;
 import org.kharisov.liquibase.LiquibaseExample;
@@ -55,6 +56,7 @@ public class AppConfig implements WebMvcConfigurer {
         return jwtUtils;
     }
     @Bean
+    @Scope("prototype")
     public ConnectionPool connectionPool(YamlPropertiesFactoryBean yaml) {
         try {
             Class.forName("org.postgresql.Driver");
@@ -134,6 +136,11 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    public LoggingAspect loggingAspect() {
+        return new LoggingAspect();
+    }
+
+    @Bean
     public AuthController authController(AuthService authService, JwtUtils jwtUtils) {
         return new AuthController(authService, jwtUtils);
     }
@@ -149,5 +156,10 @@ public class AppConfig implements WebMvcConfigurer {
     @Bean
     public ReadingController readingController(ReadingService readingService, ReadingTypeService readingTypeService) {
         return new ReadingController(readingService, readingTypeService);
+    }
+
+    @Bean
+    public AuditAspect auditAspect(AuditService auditService) {
+        return new AuditAspect(auditService);
     }
 }

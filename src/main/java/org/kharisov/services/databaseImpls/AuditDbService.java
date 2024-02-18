@@ -31,18 +31,12 @@ public class AuditDbService implements AuditService {
      */
     @Override
     public void addAuditRecord(UserRecord user, String action) throws MyDatabaseException {
-        Optional<UserRecord> userRecordOptional = authRepo.getUserByAccountNum(user.accountNum());
-        if (userRecordOptional.isPresent()) {
-            user = userRecordOptional.get();
-
-            AuditRecord record = new AuditRecord(
-                    null,
-                    action,
-                    user.id()
-            );
-
-            auditRepo.add(record);
-        }
+        AuditRecord record = new AuditRecord(
+                null,
+                action,
+                user.id()
+        );
+        auditRepo.add(record);
     }
 
     /**
