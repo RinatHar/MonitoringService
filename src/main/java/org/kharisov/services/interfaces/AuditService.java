@@ -1,7 +1,6 @@
 package org.kharisov.services.interfaces;
 
 import org.kharisov.entities.UserRecord;
-import org.kharisov.exceptions.MyDatabaseException;
 
 import java.util.*;
 

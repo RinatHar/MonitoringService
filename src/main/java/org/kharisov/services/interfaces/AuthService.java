@@ -2,7 +2,6 @@ package org.kharisov.services.interfaces;
 
 import org.kharisov.entities.*;
 import org.kharisov.enums.Role;
-import org.kharisov.exceptions.MyDatabaseException;
 
 import java.util.Optional;
 

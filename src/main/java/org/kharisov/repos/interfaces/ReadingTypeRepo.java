@@ -1,7 +1,6 @@
 package org.kharisov.repos.interfaces;
 
 import org.kharisov.entities.ReadingTypeRecord;
-import org.kharisov.exceptions.MyDatabaseException;
 
 import java.util.*;
 

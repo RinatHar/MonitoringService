@@ -2,10 +2,10 @@ package org.kharisov.utils;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import javax.servlet.http.HttpServletRequest;
 import org.kharisov.entities.UserRecord;
 
 import javax.crypto.SecretKey;
+import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Function;

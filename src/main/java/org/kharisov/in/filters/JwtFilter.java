@@ -1,7 +1,5 @@
 package org.kharisov.in.filters;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import lombok.RequiredArgsConstructor;
 import org.kharisov.entities.UserRecord;
 import org.kharisov.exceptions.MyDatabaseException;
@@ -13,6 +11,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
+import javax.servlet.*;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.*;
 

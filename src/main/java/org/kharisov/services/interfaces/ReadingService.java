@@ -1,7 +1,6 @@
 package org.kharisov.services.interfaces;
 
 import org.kharisov.entities.*;
-import org.kharisov.exceptions.*;
 
 import java.time.LocalDate;
 import java.util.*;

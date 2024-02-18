@@ -1,6 +1,5 @@
 package org.kharisov.in.controllers;
 
-import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.kharisov.dtos.ReadingDto;
 import org.kharisov.entities.*;
