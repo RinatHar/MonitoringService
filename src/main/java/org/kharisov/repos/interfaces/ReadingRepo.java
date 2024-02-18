@@ -16,7 +16,7 @@ public interface ReadingRepo {
      * @param record Объект сущности показания для добавления.
      * @return Объект сущности добавленного показания или пустой Optional, если добавление не удалось.
      */
-    Optional<ReadingRecord> add(ReadingRecord record) throws MyDatabaseException;
+    Optional<ReadingRecord> add(ReadingRecord record);
 
     /**
      * Возвращает все показания для указанного номера счета.
@@ -24,12 +24,12 @@ public interface ReadingRepo {
      * @param accountNum Номер счета, для которого требуется получить показания.
      * @return Список объектов сущности показаний для указанного номера счета.
      */
-    List<UserReadingRecord> getAllByAccountNum(String accountNum) throws MyDatabaseException;
+    List<UserReadingRecord> getAllByAccountNum(String accountNum);
 
     /**
      * Возвращает все показания.
      *
      * @return Список всех объектов сущности показаний.
      */
-    List<UserReadingRecord> getAll() throws MyDatabaseException;
+    List<UserReadingRecord> getAll();
 }

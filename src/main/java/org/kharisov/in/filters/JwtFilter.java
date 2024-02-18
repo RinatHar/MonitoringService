@@ -1,7 +1,7 @@
 package org.kharisov.in.filters;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import lombok.RequiredArgsConstructor;
 import org.kharisov.entities.UserRecord;
 import org.kharisov.exceptions.MyDatabaseException;
@@ -55,7 +55,7 @@ public class JwtFilter implements Filter {
             return;
         }
 
-        if (jwtUtils.isTokenValid(jwt)) {
+        if (!jwtUtils.isTokenValid(jwt)) {
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token.");
             return;
         }

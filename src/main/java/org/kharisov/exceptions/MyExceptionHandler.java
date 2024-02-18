@@ -11,7 +11,7 @@ public class MyExceptionHandler {
         System.out.println("[ERROR] " + e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Произошла ошибка при обработке вашего запроса. Пожалуйста, попробуйте еще раз позже.");
+                .body("An error occurred while processing your request. Please try again later.");
     }
 
     @ExceptionHandler(InvalidDtoException.class)
@@ -38,7 +38,7 @@ public class MyExceptionHandler {
     public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException e) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body("Недостаточно прав пользователя");
+                .body("Insufficient user rights");
     }
 
     @ExceptionHandler(ConflictException.class)

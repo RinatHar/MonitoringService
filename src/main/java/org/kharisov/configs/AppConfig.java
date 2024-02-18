@@ -12,7 +12,8 @@ import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.*;
-import org.springframework.security.config.annotation.method.configuration.*;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.config.annotation.*;
 
 import java.util.*;
@@ -24,6 +25,15 @@ import java.util.*;
 @PropertySource("classpath:application.yml")
 @DependsOn("yamlConfig")
 public class AppConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

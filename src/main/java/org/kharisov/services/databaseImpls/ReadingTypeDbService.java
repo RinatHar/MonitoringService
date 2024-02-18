@@ -25,15 +25,16 @@ public class ReadingTypeDbService implements ReadingTypeService {
      * Добавляет новый тип показания.
      *
      * @param readingTypeRecord Новый тип показания.
+     * @return ReadingTypeRecord Добавленный тип показания
      * @throws MyDatabaseException Если произошла ошибка при взаимодействии с базой данных.
-     * @throws ConflictException Если тип показания с указанным именем уже существует.
+     * @throws ConflictException   Если тип показания с указанным именем уже существует.
      */
     @Override
     @Audit(action = "addReadingType")
-    public void addReadingType(ReadingTypeRecord readingTypeRecord) throws MyDatabaseException, ConflictException {
+    public ReadingTypeRecord addReadingType(ReadingTypeRecord readingTypeRecord) throws MyDatabaseException, ConflictException {
         if (readingTypeRepo.getByName(readingTypeRecord.name()).isPresent())
-            throw new ConflictException("Тип показания уже существует");
-        readingTypeRepo.add(readingTypeRecord);
+            throw new ConflictException("The type of reading already exists");
+        return readingTypeRepo.add(readingTypeRecord).get();
     }
 
     /**
@@ -48,7 +49,7 @@ public class ReadingTypeDbService implements ReadingTypeService {
     public ReadingTypeRecord getByName(String name) throws MyDatabaseException, EntityNotFoundException {
         Optional<ReadingTypeRecord> readingTypeRecordOptional = readingTypeRepo.getByName(name);
         if (readingTypeRecordOptional.isEmpty())
-            throw new EntityNotFoundException("Тип показания не найден");
+            throw new EntityNotFoundException("The type of reading was not found");
         return readingTypeRecordOptional.get();
     }
 

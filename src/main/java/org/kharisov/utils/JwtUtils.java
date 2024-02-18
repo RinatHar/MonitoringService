@@ -2,7 +2,7 @@ package org.kharisov.utils;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import org.kharisov.entities.UserRecord;
 
 import javax.crypto.SecretKey;
@@ -74,9 +74,9 @@ public class JwtUtils {
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token);
-            return claims.getBody().getExpiration().before(new Date());
+            return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException e) {
-            return true;
+            return false;
         }
     }
 
@@ -114,6 +114,6 @@ public class JwtUtils {
 
     public Boolean validateToken(String token, Long userId) {
         final Long id = extractUserId(token);
-        return (id.equals(userId) && !isTokenValid(token));
+        return (id.equals(userId) && isTokenValid(token));
     }
 }

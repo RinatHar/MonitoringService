@@ -7,7 +7,7 @@ import org.kharisov.enums.Role;
 import org.kharisov.mappers.*;
 import org.kharisov.services.interfaces.*;
 import org.kharisov.validators.DtoInValidator;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/admin")
-@PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class AdminController {
 
@@ -25,30 +25,30 @@ public class AdminController {
     private final ReadingService readingService;
 
     @GetMapping("/audit")
-    public ResponseEntity<?> getAllAuditRecords() {
+    public ResponseEntity<Map<String, List<String>>> getAllAuditRecords() {
         Map<String, List<String>> allAudits = auditService.getAllAuditRecords();
         return ResponseEntity.ok(allAudits);
     }
 
     @GetMapping("/readings")
-    public ResponseEntity<?> getAllReadings() {
+    public ResponseEntity<Map<String, List<UserReadingRecord>>> getAllReadings() {
         Map<String, List<UserReadingRecord>> allReadings = readingService.getAllReadings();
         return ResponseEntity.ok(allReadings);
     }
 
     @PostMapping("/makeAdmin")
-    public ResponseEntity<?> makeAdmin(@RequestBody UserDto user) {
+    public ResponseEntity<String> makeAdmin(@RequestBody UserDto user) {
         DtoInValidator.validate(user);
         UserRecord newAdmin = UserMapper.INSTANCE.toEntity(user);
         authService.changeUserRole(newAdmin, Role.ADMIN);
-        return ResponseEntity.ok("Пользователь успешно стал администратором");
+        return ResponseEntity.ok("The user has successfully become an administrator");
     }
 
     @PostMapping("/addReadingType")
-    public ResponseEntity<?> addReadingType(@RequestBody ReadingTypeDto readingTypeDto) {
+    public ResponseEntity<String> addReadingType(@RequestBody ReadingTypeDto readingTypeDto) {
         DtoInValidator.validate(readingTypeDto);
         ReadingTypeRecord readingTypeRecord = ReadingTypeMapper.INSTANCE.toEntity(readingTypeDto);
         readingTypeService.addReadingType(readingTypeRecord);
-        return ResponseEntity.ok("Тип показания успешно добавлен");
+        return ResponseEntity.status(HttpStatus.CREATED).body("The type of reading has been added successfully");
     }
 }

@@ -9,7 +9,7 @@ import org.kharisov.mappers.UserMapper;
 import org.kharisov.services.interfaces.AuthService;
 import org.kharisov.utils.JwtUtils;
 import org.kharisov.validators.*;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -23,7 +23,7 @@ public class AuthController {
     private final JwtUtils jwtUtils;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserDto userDto) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody UserDto userDto) {
         DtoInValidator.validate(userDto, PasswordValidationGroup.class);
 
         Long roleId = authService.getRoleIdByName(Role.USER);
@@ -35,7 +35,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserDto userDto) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody UserDto userDto) {
         DtoInValidator.validate(userDto, PasswordValidationGroup.class);
 
         Long roleId = authService.getRoleIdByName(Role.USER);
@@ -44,16 +44,17 @@ public class AuthController {
         Optional<UserRecord> userRecordOptional = authService.addUser(user);
         if (userRecordOptional.isPresent()) {
             Map<String, String> tokens = jwtUtils.generateTokens(userRecordOptional.get());
-            return ResponseEntity.ok(tokens);
+            return ResponseEntity.status(HttpStatus.CREATED).body(tokens);
         } else {
-            throw new ConflictException("Пользователь уже существует");
+            throw new ConflictException("The user already exists");
         }
     }
 
+
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
+    public ResponseEntity<Map<String, String>> refreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
         if (refreshTokenDto == null || refreshTokenDto.getRefreshToken().isEmpty()) {
-            throw new InvalidDtoException("Некорректно введен токен");
+            throw new InvalidDtoException("The refresh token was entered incorrectly");
         }
 
         String refreshToken = refreshTokenDto.getRefreshToken();
@@ -61,7 +62,7 @@ public class AuthController {
         Optional<UserRecord> optionalUser = authService.getUserById(id);
 
         if (optionalUser.isEmpty()) {
-            throw new UnauthorizedException("Некорректный токен");
+            throw new UnauthorizedException("Invalid token");
         }
 
         Map<String, String> tokens = jwtUtils.generateTokens(optionalUser.get());

@@ -1,5 +1,6 @@
 package org.kharisov.in.controllers;
 
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.kharisov.dtos.ReadingDto;
 import org.kharisov.entities.*;
@@ -7,7 +8,7 @@ import org.kharisov.exceptions.InvalidRequestParamException;
 import org.kharisov.mappers.ReadingMapper;
 import org.kharisov.services.interfaces.*;
 import org.kharisov.validators.DtoInValidator;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/readings")
-@PreAuthorize("isAuthenticated() and (hasRole('USER') or hasRole('ADMIN'))")
+@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class ReadingController {
 
@@ -25,7 +26,7 @@ public class ReadingController {
     private final ReadingTypeService readingTypeService;
 
     @GetMapping("/current")
-    public ResponseEntity<?> getCurrentReading(@RequestParam("type") String type) {
+    public ResponseEntity<UserReadingRecord> getCurrentReading(@RequestParam("type") String type) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserRecord user = (UserRecord) auth.getPrincipal();
         UserReadingRecord reading = readingService.getCurrentReading(user, new ReadingTypeRecord(null, type));
@@ -33,7 +34,7 @@ public class ReadingController {
     }
 
     @GetMapping("/month")
-    public ResponseEntity<?> getReadingsByMonth(@RequestParam("year") String year,
+    public ResponseEntity<List<UserReadingRecord>> getReadingsByMonth(@RequestParam("year") String year,
                                                 @RequestParam("month") String month) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserRecord user = (UserRecord) auth.getPrincipal();
@@ -42,14 +43,14 @@ public class ReadingController {
             yearInt = Integer.parseInt(year);
             monthInt = Integer.parseInt(month);
         } catch (NumberFormatException e) {
-            throw new InvalidRequestParamException("Некорректный год или месяц. Они должны быть числами.");
+            throw new InvalidRequestParamException("Incorrect year or month. They should be numbers.");
         }
         List<UserReadingRecord> readings = readingService.getReadingsByMonth(user, monthInt, yearInt);
         return ResponseEntity.ok(readings);
     }
 
     @GetMapping("/history")
-    public ResponseEntity<?> getHistory() {
+    public ResponseEntity<List<UserReadingRecord>> getHistory() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserRecord user = (UserRecord) auth.getPrincipal();
         List<UserReadingRecord> readings = readingService.getHistory(user);
@@ -57,7 +58,7 @@ public class ReadingController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addReading(@RequestBody ReadingDto readingDto) {
+    public ResponseEntity<String> addReading(@RequestBody ReadingDto readingDto) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserRecord user = (UserRecord) auth.getPrincipal();
 
@@ -66,6 +67,6 @@ public class ReadingController {
         ReadingTypeRecord readingTypeRecord = readingTypeService.getByName(readingDto.getType());
         ReadingRecord readingRecord = ReadingMapper.INSTANCE.toEntity(readingDto);
         readingService.addReading(user, readingTypeRecord, readingRecord.value());
-        return ResponseEntity.ok("Показание успешно отправлено");
+        return ResponseEntity.status(HttpStatus.CREATED).body("The reading has been sent successfully");
     }
 }

@@ -16,7 +16,7 @@ public interface AuditRepo {
      * @param record Объект сущности записи аудита для добавления.
      * @return Объект сущности добавленной записи аудита или пустой Optional, если добавление не удалось.
      */
-    Optional<AuditRecord> add(AuditRecord record) throws MyDatabaseException;
+    Optional<AuditRecord> add(AuditRecord record);
 
     /**
      * Возвращает все записи аудита для указанного номера счета.
@@ -24,12 +24,12 @@ public interface AuditRepo {
      * @param accountNum Номер счета, для которого требуется получить записи аудита.
      * @return Список объектов сущностей записей аудита с указанным номером счета.
      */
-    List<UserAuditRecord> getAuditRecordsByAccountNum(String accountNum) throws MyDatabaseException;
+    List<UserAuditRecord> getAuditRecordsByAccountNum(String accountNum);
 
     /**
      * Возвращает все записи аудита.
      *
      * @return Список всех объектов сущностей записей аудита.
      */
-    List<UserAuditRecord> getAll() throws MyDatabaseException;
+    List<UserAuditRecord> getAll();
 }

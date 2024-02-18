@@ -1,7 +1,7 @@
 package org.kharisov.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.util.stream.Collectors;

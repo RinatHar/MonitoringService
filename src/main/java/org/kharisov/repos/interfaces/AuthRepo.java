@@ -17,7 +17,7 @@ public interface AuthRepo {
      * @param record Объект сущности пользователя для добавления.
      * @return Объект сущности добавленного пользователя или пустой Optional, если добавление не удалось.
      */
-    Optional<UserRecord> addUser(UserRecord record) throws MyDatabaseException;
+    Optional<UserRecord> addUser(UserRecord record);
 
     /**
      * Возвращает пользователя по его номеру счета.
@@ -25,7 +25,7 @@ public interface AuthRepo {
      * @param accountNum Номер счета пользователя, которого требуется получить.
      * @return Объект сущности пользователя с указанным номером счета или пустой Optional, если такого пользователя не существует.
      */
-    Optional<UserRecord> getUserByAccountNum(String accountNum) throws MyDatabaseException;
+    Optional<UserRecord> getUserByAccountNum(String accountNum);
 
     /**
      * Возвращает пользователя по его идентификатору.
@@ -34,14 +34,14 @@ public interface AuthRepo {
      * @return Объект сущности пользователя с указанным идентификатором или пустой Optional,
      * если такого пользователя не существует.
      */
-    Optional<UserRecord> getUserById(Long id) throws MyDatabaseException;
+    Optional<UserRecord> getUserById(Long id);
 
     /**
      * Возвращает всех пользователей.
      *
      * @return Список всех объектов сущности пользователей.
      */
-    List<UserRecord> getAllUsers() throws MyDatabaseException;
+    List<UserRecord> getAllUsers();
 
     /**
      * Добавляет роль и возвращает ее.
@@ -49,7 +49,7 @@ public interface AuthRepo {
      * @param record Объект сущности роли для добавления.
      * @return Объект сущности добавленной роли или пустой Optional, если добавление не удалось.
      */
-    Optional<RoleRecord> addRole(RoleRecord record) throws MyDatabaseException;
+    Optional<RoleRecord> addRole(RoleRecord record);
 
     /**
      * Возвращает роль по ее идентификатору.
@@ -57,7 +57,7 @@ public interface AuthRepo {
      * @param id Идентификатор роли, которую требуется получить.
      * @return Объект сущности роли с указанным идентификатором или пустой Optional, если такой роли не существует.
      */
-    Optional<RoleRecord> getRoleById(Long id) throws MyDatabaseException;
+    Optional<RoleRecord> getRoleById(Long id);
 
     /**
      * Возвращает роль по ее имени.
@@ -65,7 +65,7 @@ public interface AuthRepo {
      * @param role Роль, которую требуется получить.
      * @return Объект сущности роли с указанным именем или пустой Optional, если такой роли не существует.
      */
-    Optional<RoleRecord> getRoleByName(Role role) throws MyDatabaseException;
+    Optional<RoleRecord> getRoleByName(Role role);
 
     /**
      * Изменяет роль пользователя по номеру счета.
@@ -74,12 +74,12 @@ public interface AuthRepo {
      * @param record Объект сущности роли, представляет новую роль, которую нужно установить.
      * @return Объект сущности обновленной роли или пустой Optional, если обновление не удалось.
      */
-    Optional<RoleRecord> changeRoleByAccountNum(String accountNum, RoleRecord record) throws MyDatabaseException;
+    Optional<RoleRecord> changeRoleByAccountNum(String accountNum, RoleRecord record);
 
     /**
      * Возвращает все роли пользователей.
      *
      * @return Список всех объектов сущности ролей.
      */
-    List<RoleRecord> getAllRoles() throws MyDatabaseException;
+    List<RoleRecord> getAllRoles();
 }

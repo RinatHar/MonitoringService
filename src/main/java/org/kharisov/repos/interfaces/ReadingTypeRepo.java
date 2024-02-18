@@ -16,7 +16,7 @@ public interface ReadingTypeRepo {
      * @param record Объект сущности типа показания для добавления.
      * @return Объект сущности добавленного типа показания или пустой Optional, если добавление не удалось.
      */
-    Optional<ReadingTypeRecord> add(ReadingTypeRecord record) throws MyDatabaseException;
+    Optional<ReadingTypeRecord> add(ReadingTypeRecord record);
 
     /**
      * Возвращает тип показания по его имени.
@@ -24,12 +24,12 @@ public interface ReadingTypeRepo {
      * @param name Имя типа показания, который требуется получить.
      * @return Объект сущности типа показания с указанным именем или пустой Optional, если такого типа показания не существует.
      */
-    Optional<ReadingTypeRecord> getByName(String name) throws MyDatabaseException;
+    Optional<ReadingTypeRecord> getByName(String name);
 
     /**
      * Возвращает все типы показаний.
      *
      * @return Список всех объектов сущности типов показаний.
      */
-    List<ReadingTypeRecord> getAll() throws MyDatabaseException;
+    List<ReadingTypeRecord> getAll();
 }

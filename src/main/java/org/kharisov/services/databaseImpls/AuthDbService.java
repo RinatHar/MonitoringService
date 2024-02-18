@@ -123,11 +123,11 @@ public class AuthDbService implements AuthService {
         if (userRecordOptional.isPresent()) {
             UserRecord existingUser = userRecordOptional.get();
             if (!AuthUtils.checkPassword(user.password(), existingUser.password())) {
-                throw new UnauthorizedException("Неверный пароль");
+                throw new UnauthorizedException("Invalid password");
             }
             return existingUser;
         } else {
-            throw new UnauthorizedException("Пользователь не найден");
+            throw new UnauthorizedException("The user was not found");
         }
     }
 
@@ -168,7 +168,7 @@ public class AuthDbService implements AuthService {
                 user.accountNum(),
                 roleRecord);
         if (roleDtoOptional.isEmpty())
-            throw new EntityNotFoundException("Пользователь не найден");
+            throw new EntityNotFoundException("The user was not found");
     }
 
     /**
@@ -181,7 +181,7 @@ public class AuthDbService implements AuthService {
     public Role getRoleById(Long id) throws MyDatabaseException {
         Optional<RoleRecord> role = authRepo.getRoleById(id);
         if (role.isEmpty())
-            throw new EntityNotFoundException("Роль не найдена");
+            throw new EntityNotFoundException("The role was not found");
         return Role.valueOf(role.get().name());
     }
 
@@ -200,7 +200,7 @@ public class AuthDbService implements AuthService {
         if (record.isPresent()) {
             roleId = record.get().id();
         } else {
-            throw new EntityNotFoundException("Роль не найдена");
+            throw new EntityNotFoundException("The role was not found");
         }
         return roleId;
     }

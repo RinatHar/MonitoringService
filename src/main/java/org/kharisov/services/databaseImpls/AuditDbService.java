@@ -58,7 +58,7 @@ public class AuditDbService implements AuditService {
             List<UserAuditRecord> records = auditRepo.getAuditRecordsByAccountNum(user.accountNum());
             return records.stream().map(UserAuditRecord::action).collect(Collectors.toList());
         } else {
-            throw new RuntimeException("User not found");
+            throw new RuntimeException("The user was not found");
         }
     }
 

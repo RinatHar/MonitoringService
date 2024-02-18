@@ -48,7 +48,7 @@ public class ReadingDbService implements ReadingService {
         Optional<ReadingTypeRecord> readingTypeRecordOptional = readingTypeRepo.getByName(readingTypeRecord.name());
         if (userRecordOptional.isEmpty() ||
                 readingTypeRecordOptional.isEmpty()) {
-            throw new EntityNotFoundException("Текущий пользователь или тип показания не найден");
+            throw new EntityNotFoundException("The current user or the type of reading was not found");
         }
         readingTypeRecord = readingTypeRecordOptional.get();
         ReadingRecord record = new ReadingRecord(
@@ -60,7 +60,7 @@ public class ReadingDbService implements ReadingService {
         );
 
         if (readingExists(user, readingTypeRecord, LocalDate.now())) {
-            throw new ConflictException("Показание за текущий месяц уже отправлено");
+            throw new ConflictException("The report for the current month has already been sent");
         }
         readingRepo.add(record);
     }
@@ -113,7 +113,7 @@ public class ReadingDbService implements ReadingService {
                 .filter(r -> r.type().equals(readingTypeRecord.name()))
                 .max(Comparator.comparing(UserReadingRecord::date));
         if (currentReading.isEmpty())
-            throw new EntityNotFoundException("Показания не найдены");
+            throw new EntityNotFoundException("No readings found");
         return currentReading.get();
     }
 
