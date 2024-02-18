@@ -1,9 +1,8 @@
 package org.kharisov.services.interfaces;
 
-import org.kharisov.entities.ReadingType;
+import org.kharisov.domains.ReadingType;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public interface ReadingTypeService {
 
@@ -11,7 +10,7 @@ public interface ReadingTypeService {
      * Добавляет новый тип показания.
      * @param name Имя нового типа показания.
      */
-    void addReadingType(String name);
+    boolean addReadingType(String name);
 
     /**
      * Получает тип показания по имени.

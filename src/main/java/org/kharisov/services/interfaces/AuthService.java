@@ -1,6 +1,7 @@
 package org.kharisov.services.interfaces;
 
-import org.kharisov.entities.User;
+import org.kharisov.domains.User;
+import org.kharisov.enums.Role;
 
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ public interface AuthService {
      * @param accountNum Номер счета пользователя.
      * @return Объект User, если пользователь существует, иначе null.
      */
-    User getUserByAccountNum(String accountNum);
+    Optional<User> getUserByAccountNum(String accountNum);
 
     /**
      * Добавляет нового пользователя, если выполнены условия валидации.
@@ -39,24 +40,17 @@ public interface AuthService {
     boolean logIn(String accountNum, String password);
 
     /**
-     * Метод для хеширования пароля с использованием соли.
-     * @param password Пароль, который нужно захешировать.
-     * @return Хеш пароля, сгенерированный с использованием соли. Если произошла ошибка, возвращает исходный пароль.
-     */
-    String hashPassword(String password);
-
-    /**
-     * Метод для проверки пароля пользователя.
-     * @param password Введенный пароль.
-     * @param storedPasswordHash Хеш сохраненного пароля.
-     * @return true, если введенный пароль соответствует сохраненному хешу пароля, иначе false.
-     */
-    boolean checkPassword(String password, String storedPasswordHash);
-
-    /**
      * Проверяет, является ли пользователь с указанным номером счета администратором.
      * @param accountNum Номер счета пользователя.
      * @return true, если пользователь является администратором, иначе false.
      */
     boolean isAdminByAccountNum(String accountNum);
+
+    /**
+     * Изменяет роль пользователя.
+     * @param user Объект User, представляющий пользователя.
+     * @param role Объект Role, представляющий новую роль для пользователя.
+     * @return true, если роль успешно изменена, иначе false.
+     */
+    boolean changeUserRole(User user, Role role);
 }

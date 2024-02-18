@@ -1,9 +1,8 @@
 package org.kharisov.services.interfaces;
 
-import org.kharisov.entities.User;
+import org.kharisov.domains.User;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Интерфейс AuditService представляет контракт для сервиса аудита.
