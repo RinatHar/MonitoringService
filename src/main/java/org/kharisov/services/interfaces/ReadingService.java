@@ -1,5 +1,6 @@
 package org.kharisov.services.interfaces;
 
+import org.kharisov.dtos.*;
 import org.kharisov.entities.*;
 
 import java.time.LocalDate;
@@ -30,7 +31,7 @@ public interface ReadingService {
      * @param year Год, за который получаются показания.
      * @return Список показаний чтения.
      */
-    List<UserReadingRecord> getReadingsByMonth(UserRecord user, int month, int year);
+    List<ReadingDto> getReadingsByMonth(UserRecord user, int month, int year);
 
     /**
      * Получает текущее показание чтения указанного типа для пользователя.
@@ -38,18 +39,18 @@ public interface ReadingService {
      * @param readingTypeRecord Тип показания.
      * @return ReadingRecord, содержащий текущее показание.
      */
-    UserReadingRecord getCurrentReading(UserRecord user, ReadingTypeRecord readingTypeRecord);
+    ReadingDto getCurrentReading(UserRecord user, ReadingTypeRecord readingTypeRecord);
 
     /**
      * Получает историю показаний для указанного пользователя.
      * @param user Пользователь, для которого получается история показаний.
      * @return Список показаний.
      */
-    List<UserReadingRecord> getHistory(UserRecord user);
+    List<ReadingDto> getHistory(UserRecord user);
 
     /**
      * Получает все показания всех пользователей.
      * @return Map, где ключом является номер счета пользователя, а значением - список показаний.
      */
-    Map<String, List<UserReadingRecord>> getAllReadings();
+    Map<String, List<ReadingDto>> getAllReadings();
 }

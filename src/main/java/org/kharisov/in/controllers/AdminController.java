@@ -31,8 +31,8 @@ public class AdminController {
     }
 
     @GetMapping("/readings")
-    public ResponseEntity<Map<String, List<UserReadingRecord>>> getAllReadings() {
-        Map<String, List<UserReadingRecord>> allReadings = readingService.getAllReadings();
+    public ResponseEntity<Map<String, List<ReadingDto>>> getAllReadings() {
+        Map<String, List<ReadingDto>> allReadings = readingService.getAllReadings();
         return ResponseEntity.ok(allReadings);
     }
 

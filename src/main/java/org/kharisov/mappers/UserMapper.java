@@ -2,7 +2,7 @@ package org.kharisov.mappers;
 
 import org.kharisov.dtos.UserDto;
 import org.kharisov.entities.UserRecord;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -25,6 +25,8 @@ public interface UserMapper {
      * @param userDTO DTO пользователя для преобразования
      * @return Сущность User, соответствующая переданному DTO
      */
+    @Mapping(target = "accountNum", source = "accountNum")
+    @Mapping(target = "password", source = "password")
     UserRecord toEntity(UserDto userDTO);
 
     default UserRecord toEntityWithRole(UserDto userDTO, Long roleId) {

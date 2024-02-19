@@ -2,8 +2,10 @@ package org.kharisov.services.databaseImpls;
 
 import lombok.RequiredArgsConstructor;
 import org.kharisov.annotations.*;
+import org.kharisov.dtos.*;
 import org.kharisov.entities.*;
 import org.kharisov.exceptions.*;
+import org.kharisov.mappers.*;
 import org.kharisov.repos.interfaces.*;
 import org.kharisov.services.interfaces.ReadingService;
 
@@ -91,10 +93,11 @@ public class ReadingDbService implements ReadingService {
      */
     @Override
     @Audit(action = "getReadingsByMonth")
-    public List<UserReadingRecord> getReadingsByMonth(UserRecord user, int month, int year) throws MyDatabaseException {
+    public List<ReadingDto> getReadingsByMonth(UserRecord user, int month, int year) throws MyDatabaseException {
         List<UserReadingRecord> records = readingRepo.getAllByAccountNum(user.accountNum());
         return records.stream()
                 .filter(r -> r.date().getMonthValue() == month && r.date().getYear() == year)
+                .map(ReadingMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -107,14 +110,14 @@ public class ReadingDbService implements ReadingService {
      */
     @Override
     @Audit(action = "getCurrentReading")
-    public UserReadingRecord getCurrentReading(UserRecord user, ReadingTypeRecord readingTypeRecord) throws MyDatabaseException {
+    public ReadingDto getCurrentReading(UserRecord user, ReadingTypeRecord readingTypeRecord) throws MyDatabaseException {
         List<UserReadingRecord> records = readingRepo.getAllByAccountNum(user.accountNum());
         Optional<UserReadingRecord> currentReading = records.stream()
                 .filter(r -> r.type().equals(readingTypeRecord.name()))
                 .max(Comparator.comparing(UserReadingRecord::date));
         if (currentReading.isEmpty())
             throw new EntityNotFoundException("No readings found");
-        return currentReading.get();
+        return ReadingMapper.INSTANCE.toDto(currentReading.get());
     }
 
     /**
@@ -125,8 +128,11 @@ public class ReadingDbService implements ReadingService {
      */
     @Override
     @Audit(action = "getHistory")
-    public List<UserReadingRecord> getHistory(UserRecord user) throws MyDatabaseException {
-        return readingRepo.getAllByAccountNum(user.accountNum());
+    public List<ReadingDto> getHistory(UserRecord user) throws MyDatabaseException {
+        List<UserReadingRecord> records = readingRepo.getAllByAccountNum(user.accountNum());
+        return records.stream()
+                .map(ReadingMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -137,9 +143,12 @@ public class ReadingDbService implements ReadingService {
     @Override
     @Audit(action = "getAllReadings")
     @Loggable
-    public Map<String, List<UserReadingRecord>> getAllReadings() throws MyDatabaseException {
+    public Map<String, List<ReadingDto>> getAllReadings() throws MyDatabaseException {
         List<UserReadingRecord> readings = readingRepo.getAll();
         return readings.stream()
-                .collect(Collectors.groupingBy(UserReadingRecord::accountNum));
+                .collect(Collectors.groupingBy(
+                        UserReadingRecord::accountNum,
+                        Collectors.mapping(ReadingMapper.INSTANCE::toDto, Collectors.toList())
+                ));
     }
 }

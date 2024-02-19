@@ -1,7 +1,7 @@
 package org.kharisov.in.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.kharisov.dtos.ReadingDto;
+import org.kharisov.dtos.*;
 import org.kharisov.entities.*;
 import org.kharisov.exceptions.InvalidRequestParamException;
 import org.kharisov.mappers.ReadingMapper;
@@ -25,16 +25,16 @@ public class ReadingController {
     private final ReadingTypeService readingTypeService;
 
     @GetMapping("/current")
-    public ResponseEntity<UserReadingRecord> getCurrentReading(@RequestParam("type") String type) {
+    public ResponseEntity<ReadingDto> getCurrentReading(@RequestParam("type") String type) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserRecord user = (UserRecord) auth.getPrincipal();
-        UserReadingRecord reading = readingService.getCurrentReading(user, new ReadingTypeRecord(null, type));
+        ReadingDto reading = readingService.getCurrentReading(user, new ReadingTypeRecord(null, type));
         return ResponseEntity.ok(reading);
     }
 
     @GetMapping("/month")
-    public ResponseEntity<List<UserReadingRecord>> getReadingsByMonth(@RequestParam("year") String year,
-                                                @RequestParam("month") String month) {
+    public ResponseEntity<List<ReadingDto>> getReadingsByMonth(@RequestParam("year") String year,
+                                                            @RequestParam("month") String month) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserRecord user = (UserRecord) auth.getPrincipal();
         int yearInt, monthInt;
@@ -44,15 +44,15 @@ public class ReadingController {
         } catch (NumberFormatException e) {
             throw new InvalidRequestParamException("Incorrect year or month. They should be numbers.");
         }
-        List<UserReadingRecord> readings = readingService.getReadingsByMonth(user, monthInt, yearInt);
+        List<ReadingDto> readings = readingService.getReadingsByMonth(user, monthInt, yearInt);
         return ResponseEntity.ok(readings);
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<UserReadingRecord>> getHistory() {
+    public ResponseEntity<List<ReadingDto>> getHistory() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserRecord user = (UserRecord) auth.getPrincipal();
-        List<UserReadingRecord> readings = readingService.getHistory(user);
+        List<ReadingDto> readings = readingService.getHistory(user);
         return ResponseEntity.ok(readings);
     }
 
