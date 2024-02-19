@@ -2,10 +2,10 @@ package org.kharisov.services.databaseImpls;
 
 import lombok.RequiredArgsConstructor;
 import org.kharisov.annotations.*;
-import org.kharisov.dtos.*;
+import org.kharisov.dtos.ReadingDto;
 import org.kharisov.entities.*;
 import org.kharisov.exceptions.*;
-import org.kharisov.mappers.*;
+import org.kharisov.mappers.ReadingMapper;
 import org.kharisov.repos.interfaces.*;
 import org.kharisov.services.interfaces.ReadingService;
 

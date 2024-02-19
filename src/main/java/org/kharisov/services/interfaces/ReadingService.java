@@ -1,6 +1,6 @@
 package org.kharisov.services.interfaces;
 
-import org.kharisov.dtos.*;
+import org.kharisov.dtos.ReadingDto;
 import org.kharisov.entities.*;
 
 import java.time.LocalDate;

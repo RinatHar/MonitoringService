@@ -98,8 +98,6 @@ public class JwtFilter implements Filter {
 
             String role = "ROLE_" + String.valueOf(authService.getRoleById(user.role_id())).toUpperCase();
 
-            System.out.println(role);
-
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(role));
 
