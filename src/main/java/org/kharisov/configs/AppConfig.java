@@ -1,6 +1,6 @@
 package org.kharisov.configs;
 
-import org.kharisov.aspects.*;
+import org.kharisov.aspects.LoggingAspect;
 import org.kharisov.in.controllers.*;
 import org.kharisov.in.filters.JwtFilter;
 import org.kharisov.liquibase.LiquibaseExample;
@@ -14,10 +14,16 @@ import org.springframework.context.annotation.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.*;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.config.annotation.*;
 
 import java.util.*;
 
+/**
+ * Класс AppConfig представляет собой конфигурационный класс Spring, который используется для настройки приложения.
+ * Он содержит методы для создания и настройки различных компонентов приложения,
+ * таких как JwtUtils, ConnectionPool, Liquibase, Repos, Services, Controllers и Aspects.
+ */
 @Configuration
 @ComponentScan(basePackages = {"org.kharisov"})
 @EnableWebMvc
