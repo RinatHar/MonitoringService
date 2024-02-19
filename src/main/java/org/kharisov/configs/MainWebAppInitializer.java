@@ -8,7 +8,18 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.*;
 
+/**
+ * Класс MainWebAppInitializer реализует интерфейс WebApplicationInitializer и используется для настройки контекста веб-приложения и сервлетов при запуске приложения.
+ * Он сканирует указанный пакет для поиска компонентов Spring, добавляет слушателя контекста, настраивает главный сервлет DispatcherServlet и добавляет фильтр JWT.
+ *
+ * @see org.springframework.web.WebApplicationInitializer
+ */
 public class MainWebAppInitializer implements WebApplicationInitializer {
+    /**
+     * Метод, вызываемый при запуске веб-приложения. Он настраивает контекст веб-приложения и сервлеты.
+     *
+     * @param container контекст сервлета для инициализации.
+     */
     @Override
     public void onStartup(ServletContext container) {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();

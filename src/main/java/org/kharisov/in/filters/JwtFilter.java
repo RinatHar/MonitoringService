@@ -72,6 +72,12 @@ public class JwtFilter implements Filter {
         chain.doFilter(request, response);
     }
 
+    /**
+     * Получить пользователя по его идентификатору без вызова ошибки.
+     *
+     * @param userId Идентификатор пользователя.
+     * @return Optional, содержащий UserRecord, если пользователь найден, иначе - пустой Optional.
+     */
     private Optional<UserRecord> getUser(Long userId) {
         try {
             return authService.getUserById(userId);
@@ -80,10 +86,19 @@ public class JwtFilter implements Filter {
         }
     }
 
+    /**
+     * Аутентифицировать пользователя.
+     *
+     * @param request HttpServletRequest.
+     * @param jwt JWT токен.
+     * @param user UserRecord пользователя.
+     */
     private void authenticateUser(HttpServletRequest request, String jwt, UserRecord user) {
         if (jwtUtils.validateToken(jwt, user.id())) {
 
             String role = "ROLE_" + String.valueOf(authService.getRoleById(user.role_id())).toUpperCase();
+
+            System.out.println(role);
 
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(role));

@@ -29,6 +29,13 @@ public interface UserMapper {
     @Mapping(target = "password", source = "password")
     UserRecord toEntity(UserDto userDTO);
 
+    /**
+     * Преобразует UserDto в сущность User с заданным идентификатором роли.
+     *
+     * @param userDTO DTO пользователя для преобразования.
+     * @param roleId Идентификатор роли для присвоения пользователю.
+     * @return Сущность User, соответствующая переданному DTO и с заданным идентификатором роли.
+     */
     default UserRecord toEntityWithRole(UserDto userDTO, Long roleId) {
         UserRecord user = toEntity(userDTO);
         return new UserRecord(

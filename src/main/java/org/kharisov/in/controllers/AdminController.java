@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+/**
+ * Контроллер для работы с административными функциями.
+ */
 @RestController
 @RequestMapping("/api/v1/admin")
 @PreAuthorize("hasRole('ADMIN')")
@@ -24,18 +27,34 @@ public class AdminController {
     private final ReadingTypeService readingTypeService;
     private final ReadingService readingService;
 
+    /**
+     * Получить все записи аудита.
+     *
+     * @return Список записей аудита.
+     */
     @GetMapping("/audit")
     public ResponseEntity<Map<String, List<String>>> getAllAuditRecords() {
         Map<String, List<String>> allAudits = auditService.getAllAuditRecords();
         return ResponseEntity.ok(allAudits);
     }
 
+    /**
+     * Получить все показания.
+     *
+     * @return Список всех показаний.
+     */
     @GetMapping("/readings")
     public ResponseEntity<Map<String, List<ReadingDto>>> getAllReadings() {
         Map<String, List<ReadingDto>> allReadings = readingService.getAllReadings();
         return ResponseEntity.ok(allReadings);
     }
 
+    /**
+     * Назначить пользователя администратором.
+     *
+     * @param user DTO пользователя.
+     * @return Статус операции.
+     */
     @PostMapping("/makeAdmin")
     public ResponseEntity<String> makeAdmin(@RequestBody UserDto user) {
         DtoInValidator.validate(user, AccountNumValidationGroup.class);
@@ -44,6 +63,12 @@ public class AdminController {
         return ResponseEntity.ok("The user has successfully become an administrator");
     }
 
+    /**
+     * Добавить новый тип показания.
+     *
+     * @param readingTypeDto DTO типа показания.
+     * @return Статус создания.
+     */
     @PostMapping("/addReadingType")
     public ResponseEntity<String> addReadingType(@RequestBody ReadingTypeDto readingTypeDto) {
         DtoInValidator.validate(readingTypeDto);

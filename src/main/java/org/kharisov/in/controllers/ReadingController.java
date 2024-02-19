@@ -1,7 +1,7 @@
 package org.kharisov.in.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.kharisov.dtos.*;
+import org.kharisov.dtos.ReadingDto;
 import org.kharisov.entities.*;
 import org.kharisov.exceptions.InvalidRequestParamException;
 import org.kharisov.mappers.ReadingMapper;
@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Контроллер для работы с показаниями.
+ */
 @RestController
 @RequestMapping("/api/v1/readings")
 @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
@@ -24,6 +27,12 @@ public class ReadingController {
     private final ReadingService readingService;
     private final ReadingTypeService readingTypeService;
 
+    /**
+     * Получить текущее показание для заданного типа.
+     *
+     * @param type Тип показания.
+     * @return Текущее показание.
+     */
     @GetMapping("/current")
     public ResponseEntity<ReadingDto> getCurrentReading(@RequestParam("type") String type) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -32,6 +41,13 @@ public class ReadingController {
         return ResponseEntity.ok(reading);
     }
 
+    /**
+     * Получить показания за заданный месяц и год.
+     *
+     * @param year Год.
+     * @param month Месяц.
+     * @return Список показаний.
+     */
     @GetMapping("/month")
     public ResponseEntity<List<ReadingDto>> getReadingsByMonth(@RequestParam("year") String year,
                                                             @RequestParam("month") String month) {
@@ -48,6 +64,11 @@ public class ReadingController {
         return ResponseEntity.ok(readings);
     }
 
+    /**
+     * Получить историю показаний.
+     *
+     * @return Список показаний.
+     */
     @GetMapping("/history")
     public ResponseEntity<List<ReadingDto>> getHistory() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -56,6 +77,12 @@ public class ReadingController {
         return ResponseEntity.ok(readings);
     }
 
+    /**
+     * Добавить новое показание.
+     *
+     * @param readingDto DTO показания.
+     * @return Статус создания.
+     */
     @PostMapping
     public ResponseEntity<String> addReading(@RequestBody ReadingDto readingDto) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

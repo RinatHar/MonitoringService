@@ -9,11 +9,21 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 import java.sql.SQLException;
 
+/**
+ * Класс, который слушает события запуска приложения.
+ * Этот класс автоматически вызывает миграцию базы данных при запуске приложения.
+ */
 @RequiredArgsConstructor
 public class StartupApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
 
     private final LiquibaseExample liquibaseExample;
 
+    /**
+     * Обрабатывает событие после инициализации контекста приложения.
+     * Запускает миграцию базы данных.
+     *
+     * @param event событие обновления контекста.
+     */
     @Override
     public void onApplicationEvent(@NotNull ContextRefreshedEvent event) {
         try {
