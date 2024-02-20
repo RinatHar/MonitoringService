@@ -10,6 +10,8 @@ import org.kharisov.validators.AccountNumValidationGroup;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
     /**
      * Номер счета пользователя. Он должен быть ровно 16 символов в длину.

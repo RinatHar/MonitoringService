@@ -10,6 +10,8 @@ import org.kharisov.annotations.IsInteger;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReadingDto {
     /**
      * Тип показания.

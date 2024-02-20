@@ -73,9 +73,7 @@ public class AuthController {
      */
     @PostMapping("/refresh-token")
     public ResponseEntity<Map<String, String>> refreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
-        if (refreshTokenDto == null || refreshTokenDto.getRefreshToken().isEmpty()) {
-            throw new InvalidDtoException("The refresh token was entered incorrectly");
-        }
+        DtoInValidator.validate(refreshTokenDto);
 
         String refreshToken = refreshTokenDto.getRefreshToken();
         Long id = jwtUtils.extractUserId(refreshToken);

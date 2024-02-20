@@ -9,6 +9,8 @@ import lombok.*;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RefreshTokenDto {
     /**
      * Обновленный токен. Это поле не может быть null и должно содержать от 100 до 200 символов.

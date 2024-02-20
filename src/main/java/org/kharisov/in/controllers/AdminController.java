@@ -32,6 +32,7 @@ public class AdminController {
      *
      * @return Список записей аудита.
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/audit")
     public ResponseEntity<Map<String, List<String>>> getAllAuditRecords() {
         Map<String, List<String>> allAudits = auditService.getAllAuditRecords();
