@@ -1,8 +1,8 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kharisov.configs.AppConfig;
 import org.kharisov.dtos.*;
 import org.kharisov.entities.UserRecord;
@@ -13,7 +13,7 @@ import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {AppConfig.class})
 @WebAppConfiguration
 public class AuthControllerTest {
@@ -47,12 +47,13 @@ public class AuthControllerTest {
     @InjectMocks
     private AuthController authController;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
+    @DisplayName("Тест успешного входа в систему")
     public void loginTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(authController)
                 .build();
@@ -71,6 +72,7 @@ public class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("Тест входа в систему с недействительными данными")
     public void loginTestInvalidDto() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .build();
@@ -85,6 +87,7 @@ public class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("Тест успешной регистрации")
     public void registerTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(authController)
                 .build();
@@ -103,6 +106,7 @@ public class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("Тест регистрации с недействительными данными")
     public void registerTestInvalidDto() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .build();
@@ -117,6 +121,7 @@ public class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("Тест обновления токена")
     public void refreshTokenTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(authController)
                 .build();
@@ -136,6 +141,7 @@ public class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("Тест обновления токена с недействительным токеном обновления")
     public void refreshTokenTestInvalidParam() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .build();

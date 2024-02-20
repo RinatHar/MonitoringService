@@ -1,8 +1,8 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kharisov.configs.AppConfig;
 import org.kharisov.dtos.*;
 import org.kharisov.entities.*;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {AppConfig.class})
 @WebAppConfiguration
 public class AdminControllerTest {
@@ -55,12 +55,13 @@ public class AdminControllerTest {
     @InjectMocks
     private AdminController adminController;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
+    @DisplayName("Получить все записи аудита как администратор")
     @WithMockUser(roles = "ADMIN")
     public void getAllAuditRecordsTestAsAdmin() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -71,6 +72,7 @@ public class AdminControllerTest {
     }
 
     @Test
+    @DisplayName("Получить все записи аудита как пользователь (недостаточно прав)")
     @WithMockUser(roles = "USER")
     public void getAllAuditRecordsTestAsUser() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -82,6 +84,7 @@ public class AdminControllerTest {
     }
 
     @Test
+    @DisplayName("Получить все записи аудита без ролей (недостаточно прав)")
     @WithMockUser
     public void getAllAuditRecordsTestWithoutRoles() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -93,6 +96,7 @@ public class AdminControllerTest {
     }
 
     @Test
+    @DisplayName("Получить все записи аудита")
     public void getAllAuditRecordsTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(adminController)
                 .build();
@@ -112,6 +116,7 @@ public class AdminControllerTest {
     }
 
     @Test
+    @DisplayName("Получить все показания")
     public void getAllReadingsTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(adminController)
                 .build();
@@ -138,6 +143,7 @@ public class AdminControllerTest {
     }
 
     @Test
+    @DisplayName("Успешное изменение пользователя в администратора")
     public void makeAdminTestSuccess() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(adminController)
                 .build();
@@ -154,6 +160,7 @@ public class AdminControllerTest {
     }
 
     @Test
+    @DisplayName("Создание администратора с недействительными данными")
     @WithMockUser(roles = "ADMIN")
     public void makeAdminTestInvalidDto() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -169,7 +176,8 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void addReadingTypeTest() throws Exception {
+    @DisplayName("Добавление нового типа показания")
+    public void addReadingTypeTestSuccess() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(adminController)
                 .build();
 
@@ -182,6 +190,22 @@ public class AdminControllerTest {
                         .content(new ObjectMapper().writeValueAsString(readingTypeDto)))
                 .andExpect(status().isCreated())
                 .andExpect(content().string("The type of reading has been added successfully"));
+    }
+
+    @Test
+    @DisplayName("Добавление существующего типа показания")
+    @WithMockUser(roles = "ADMIN")
+    public void addReadingTypeTestFail() throws Exception {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .build();
+
+        ReadingTypeDto readingTypeDto = new ReadingTypeDto("");
+
+        mockMvc.perform(post("/api/v1/admin/addReadingType")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(readingTypeDto)))
+                .andExpect(status().isConflict())
+                .andExpect(content().string("\"The type of reading already exists\""));
     }
 
 }

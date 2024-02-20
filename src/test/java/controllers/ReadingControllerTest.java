@@ -1,8 +1,8 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kharisov.configs.AppConfig;
 import org.kharisov.dtos.ReadingDto;
 import org.kharisov.entities.*;
@@ -16,7 +16,7 @@ import org.springframework.security.core.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -24,8 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.*;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,7 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {AppConfig.class})
 @WebAppConfiguration
 public class ReadingControllerTest {
@@ -52,7 +51,7 @@ public class ReadingControllerTest {
     @InjectMocks
     private ReadingController readingController;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
 
@@ -67,6 +66,7 @@ public class ReadingControllerTest {
     }
 
     @Test
+    @DisplayName("Тест получения текущего показания по типу без ролей")
     public void getCurrentReadingTestWithoutRoles() throws Exception {
         UserRecord user = new UserRecord(null,null, null, null);
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null, null);
@@ -79,6 +79,7 @@ public class ReadingControllerTest {
     }
 
     @Test
+    @DisplayName("Тест получения текущего показания по типу")
     public void getCurrentReadingTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(readingController)
                 .build();
@@ -99,6 +100,7 @@ public class ReadingControllerTest {
     }
 
     @Test
+    @DisplayName("Тест получения текущего показания с недействительным типом")
     public void getCurrentReadingTestInvalidType() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .build();
@@ -108,6 +110,7 @@ public class ReadingControllerTest {
     }
 
     @Test
+    @DisplayName("Тест получения показаний по месяцам")
     public void getReadingsByMonthTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(readingController)
                 .build();
@@ -136,6 +139,7 @@ public class ReadingControllerTest {
     }
 
     @Test
+    @DisplayName("Тест получения показаний по месяцам с недействительным годом")
     public void getReadingsByMonthTestInvalidYear() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .build();
@@ -146,6 +150,7 @@ public class ReadingControllerTest {
     }
 
     @Test
+    @DisplayName("Тест получения показаний по месяцам с недействительным месяцем")
     public void getReadingsByMonthTestInvalidMonth() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .build();
@@ -156,6 +161,7 @@ public class ReadingControllerTest {
     }
 
     @Test
+    @DisplayName("Тест получения истории показаний")
     public void getHistoryTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(readingController)
                 .build();
@@ -184,12 +190,14 @@ public class ReadingControllerTest {
     }
 
     @Test
+    @DisplayName("Тест подачи показания")
     public void addReadingTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(readingController)
                 .build();
 
         ReadingDto readingDto = new ReadingDto("testType", "10");
 
+        when(readingTypeService.getByName(anyString())).thenReturn(new ReadingTypeRecord(null, null));
         doNothing().when(readingService).addReading(any(UserRecord.class), any(ReadingTypeRecord.class), anyInt());
 
         mockMvc.perform(post("/api/v1/readings")
@@ -200,6 +208,7 @@ public class ReadingControllerTest {
     }
 
     @Test
+    @DisplayName("Тест подачи показания с некорректным значением (не числовое)")
     public void addReadingTestInvalidDto() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .build();
