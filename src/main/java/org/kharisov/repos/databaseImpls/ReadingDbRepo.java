@@ -1,55 +1,58 @@
 package org.kharisov.repos.databaseImpls;
 
+import lombok.RequiredArgsConstructor;
 import org.kharisov.configs.ConnectionPool;
-import org.kharisov.domains.ReadingType;
-import org.kharisov.dtos.db.ReadingDto;
-import org.kharisov.repos.base.BaseDbRepo;
+import org.kharisov.entities.*;
+import org.kharisov.exceptions.MyDatabaseException;
+import org.kharisov.repos.interfaces.ReadingRepo;
 
 import java.sql.Date;
 import java.sql.*;
 import java.util.*;
 
 /**
- * Класс ReadingDbRepo представляет собой репозиторий для работы с показаниями в базе данных.
- * Он наследуется от базового класса репозитория BaseDbRepo и реализует его абстрактные методы.
+ * Класс ReadingDbRepo представляет собой реализацию интерфейса ReadingRepo.
+ * Он предоставляет методы для работы с показаниями в базе данных.
  */
-public class ReadingDbRepo extends BaseDbRepo<Long, ReadingDto> {
+@RequiredArgsConstructor
+public class ReadingDbRepo implements ReadingRepo {
 
     /**
-     * Конструктор класса ReadingDbRepo.
-     *
-     * @param connectionPool Пул соединений с базой данных.
+     * Пул соединений с базой данных, используемый в репозитории.
      */
-    public ReadingDbRepo(ConnectionPool connectionPool) {
-        super(connectionPool);
-    }
+    private final ConnectionPool connectionPool;
 
     /**
      * Добавляет показание в базу данных и возвращает его.
      *
-     * @param dto Объект DTO показания для добавления в базу данных.
-     * @return Объект DTO показания, добавленного в базу данных, или пустой Optional, если добавление не удалось.
+     * @param record Объект сущности показания для добавления в базу данных.
+     * @return Объект сущности показания, добавленного в базу данных, или пустой Optional, если добавление не удалось.
      */
-    @Override
-    public Optional<ReadingDto> add(ReadingDto dto) {
+    public Optional<ReadingRecord> add(ReadingRecord record) throws MyDatabaseException {
         Connection connection = connectionPool.getConnectionFromPool();
         String sql = "INSERT INTO readings (type_id, user_id, value, date) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setLong(1, dto.getTypeId());
-            statement.setLong(2, dto.getUserId());
-            statement.setInt(3, dto.getValue());
-            statement.setDate(4, Date.valueOf(dto.getDate()));
+            statement.setLong(1, record.typeId());
+            statement.setLong(2, record.userId());
+            statement.setInt(3, record.value());
+            statement.setDate(4, Date.valueOf(record.date()));
             statement.executeUpdate();
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    dto.setId(generatedKeys.getLong(1));
-                    return Optional.of(dto);
+                    record = new ReadingRecord(
+                            generatedKeys.getLong(1),
+                            record.userId(),
+                            record.typeId(),
+                            record.value(),
+                            record.date()
+                    );
+                    return Optional.of(record);
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Cannot add reading", e);
+            throw new MyDatabaseException("Не получилось добавить новое показание " + record, e);
         } finally {
             connectionPool.returnConnectionToPool(connection);
         }
@@ -60,72 +63,71 @@ public class ReadingDbRepo extends BaseDbRepo<Long, ReadingDto> {
      * Возвращает все показания для указанного номера счета.
      *
      * @param accountNum Номер счета, для которого требуется получить показания.
-     * @return Список объектов DTO показаний для указанного номера счета.
+     * @return Список объектов сущности показаний для указанного номера счета.
      */
-    public List<ReadingDto> getAllByAccountNum(String accountNum) {
+    public List<UserReadingRecord> getAllByAccountNum(String accountNum) throws MyDatabaseException {
         Connection connection = connectionPool.getConnectionFromPool();
-        List<ReadingDto> readings = new ArrayList<>();
-        String sql = "SELECT readings.id, type_id, t.name, user_id, account_num, value, date FROM readings\n" +
-                "    left join users u on u.id = readings.user_id " +
-                "    left join reading_types t on t.id = readings.type_id where u.account_num = ?";
+        List<UserReadingRecord> records = new ArrayList<>();
+        String sql = "SELECT readings.id, rt.name, u.account_num, value, date FROM readings " +
+                "join users u on u.id = readings.user_id " +
+                "join reading_types rt on rt.id = readings.type_id " +
+                "where u.account_num = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, accountNum);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    ReadingDto reading = new ReadingDto();
-                    reading.setId(resultSet.getLong("id"));
-                    reading.setUserId(resultSet.getLong("user_id"));
-                    reading.setAccountNum(resultSet.getString("account_num"));
-                    reading.setTypeId(resultSet.getLong("type_id"));
-                    reading.setType(ReadingType.Create(resultSet.getString("name")));
-                    reading.setValue(resultSet.getInt("value"));
-                    reading.setDate(resultSet.getDate("date").toLocalDate());
-                    readings.add(reading);
+                    UserReadingRecord record = new UserReadingRecord(
+                            resultSet.getLong("id"),
+                            resultSet.getString("account_num"),
+                            resultSet.getString("name"),
+                            resultSet.getInt("value"),
+                            resultSet.getDate("date").toLocalDate()
+                    );
+                    records.add(record);
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Cannot get readings by accountNum", e);
+            throw new MyDatabaseException("Не получилось достать все показания по номеру счета " + accountNum, e);
         } finally {
             connectionPool.returnConnectionToPool(connection);
         }
 
-        return readings;
+        return records;
     }
 
     /**
      * Возвращает все показания из базы данных.
      *
-     * @return Список всех объектов DTO показаний из базы данных.
+     * @return Список всех объектов сущности показаний из базы данных.
      */
-    @Override
-    public List<ReadingDto> getAll() {
+    public List<UserReadingRecord> getAll() throws MyDatabaseException {
         Connection connection = connectionPool.getConnectionFromPool();
-        List<ReadingDto> readings = new ArrayList<>();
-        String sql = "SELECT readings.id, type_id, u.account_num, name, value, date FROM readings " +
-                "left join reading_types t on t.id = readings.type_id " +
-                "left join users u on u.id = readings.user_id";
+        List<UserReadingRecord> records = new ArrayList<>();
+        String sql = "SELECT readings.id, rt.name, u.account_num, value, date FROM readings " +
+                "join users u on u.id = readings.user_id " +
+                "join reading_types rt on rt.id = readings.type_id ";
 
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                ReadingDto reading = new ReadingDto();
-                reading.setId(resultSet.getLong("id"));
-                reading.setTypeId(resultSet.getLong("type_id"));
-                reading.setType(ReadingType.Create(resultSet.getString("name")));
-                reading.setAccountNum(resultSet.getString("account_num"));
-                reading.setValue(resultSet.getInt("value"));
-                reading.setDate(resultSet.getDate("date").toLocalDate());
-                readings.add(reading);
+                UserReadingRecord record = new UserReadingRecord(
+                        resultSet.getLong("id"),
+                        resultSet.getString("account_num"),
+                        resultSet.getString("name"),
+                        resultSet.getInt("value"),
+                        resultSet.getDate("date").toLocalDate()
+                );
+                records.add(record);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Cannot get all readings", e);
+            throw new MyDatabaseException("Не получилось достать все показания", e);
         } finally {
             connectionPool.returnConnectionToPool(connection);
         }
 
-        return readings;
+        return records;
     }
 }

@@ -1,6 +1,7 @@
 package org.kharisov.services.interfaces;
 
-import org.kharisov.domains.*;
+import org.kharisov.dtos.ReadingDto;
+import org.kharisov.entities.*;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -9,20 +10,19 @@ public interface ReadingService {
     /**
      * Добавляет показание для указанного пользователя, если оно еще не существует.
      * @param user Пользователь, для которого добавляется показание.
-     * @param reading Тип показания.
+     * @param readingTypeRecord Тип показания.
      * @param value Значение показания.
-     * @return true, если успешно добавлено, иначе false.
      */
-    boolean addReading(User user, ReadingType reading, int value);
+    void addReading(UserRecord user, ReadingTypeRecord readingTypeRecord, int value);
 
     /**
      * Проверяет, существует ли указанное показание для пользователя на текущую дату.
      * @param user Пользователь, для которого проверяется показание.
-     * @param reading Тип показания.
+     * @param readingTypeRecord Тип показания.
      * @param now Текущая дата.
      * @return true, если показание существует, иначе false.
      */
-    boolean readingExists(User user, ReadingType reading, LocalDate now);
+    boolean readingExists(UserRecord user, ReadingTypeRecord readingTypeRecord, LocalDate now);
 
     /**
      * Получает показания указанного пользователя за указанный месяц и год.
@@ -31,26 +31,26 @@ public interface ReadingService {
      * @param year Год, за который получаются показания.
      * @return Список показаний чтения.
      */
-    List<ReadingRecord> getReadingsByMonth(User user, int month, int year);
+    List<ReadingDto> getReadingsByMonth(UserRecord user, int month, int year);
 
     /**
      * Получает текущее показание чтения указанного типа для пользователя.
      * @param user Пользователь, для которого получается показание.
-     * @param type Тип показания.
-     * @return Optional<ReadingRecord>, содержащий текущее показание, если оно существует, иначе Optional.empty().
+     * @param readingTypeRecord Тип показания.
+     * @return ReadingRecord, содержащий текущее показание.
      */
-    Optional<ReadingRecord> getCurrentReading(User user, ReadingType type);
+    ReadingDto getCurrentReading(UserRecord user, ReadingTypeRecord readingTypeRecord);
 
     /**
      * Получает историю показаний для указанного пользователя.
      * @param user Пользователь, для которого получается история показаний.
      * @return Список показаний.
      */
-    List<ReadingRecord> getHistory(User user);
+    List<ReadingDto> getHistory(UserRecord user);
 
     /**
      * Получает все показания всех пользователей.
      * @return Map, где ключом является номер счета пользователя, а значением - список показаний.
      */
-    Map<String, List<ReadingRecord>> getAllReadings();
+    Map<String, List<ReadingDto>> getAllReadings();
 }

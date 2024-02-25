@@ -3,11 +3,10 @@ package repoTests.database;
 import liquibase.exception.*;
 import org.junit.jupiter.api.*;
 import org.kharisov.configs.*;
-import org.kharisov.dtos.db.EntryDto;
-import org.kharisov.dtos.db.UserDto;
+import org.kharisov.entities.*;
+import org.kharisov.exceptions.MyDatabaseException;
 import org.kharisov.liquibase.LiquibaseExample;
 import org.kharisov.repos.databaseImpls.*;
-
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.*;
 
@@ -19,17 +18,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Testcontainers
 public class AuditDbRepoTest {
 
-    private static final String DB_VERSION = Config.get("database.test.version");
-    private static final String DB_USERNAME = Config.get("database.test.username");
-    private static final String DB_PASSWORD = Config.get("database.test.password");
-    private static final String DB_NAME = Config.get("database.test.name");
-    private static final String LB_SCHEMA = Config.get("liquibase.test.schema");
-    private static final String DB_SCHEMA = Config.get("database.test.schema");
-    private static final String LB_CHANGE_LOG = Config.get("liquibase.test.change_log");
+    private static final YamlTestConfig config = new YamlTestConfig("application.yml");
+
+    private static final String DB_VERSION = config.getProperty("database.test.version");
+    private static final String DB_USERNAME = config.getProperty("database.test.username");
+    private static final String DB_PASSWORD = config.getProperty("database.test.password");
+    private static final String DB_NAME = config.getProperty("database.test.name");
+    private static final String LB_SCHEMA = config.getProperty("liquibase.test.schema");
+    private static final String DB_SCHEMA = config.getProperty("database.test.schema");
+    private static final String LB_CHANGE_LOG = config.getProperty("liquibase.test.change_log");
 
     private static ConnectionPool connectionPool;
     private static AuditDbRepo auditDbRepo;
-    private static UserDbRepo userDbRepo;
+    private static AuthDbRepo authDbRepo;
+    private static LiquibaseExample liquibaseExample;
 
     @Container
     public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:" + DB_VERSION)
@@ -39,72 +41,87 @@ public class AuditDbRepoTest {
 
     @BeforeAll
     public static void setupDatabase() {
+        liquibaseExample = new LiquibaseExample(
+                postgres.getJdbcUrl(),
+                postgres.getUsername(),
+                postgres.getPassword(),
+                LB_SCHEMA,
+                DB_SCHEMA,
+                LB_CHANGE_LOG);
         try {
-            LiquibaseExample.runMigration(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword(), LB_SCHEMA, DB_SCHEMA, LB_CHANGE_LOG);
+            liquibaseExample.runMigration();
         } catch (SQLException | DatabaseException | CommandExecutionException e) {
             System.out.println("SQL Exception in migration " + e.getMessage());
         }
 
-        ConnectionPoolConfig config = new ConnectionPoolConfig();
-        config.setUrl(postgres.getJdbcUrl());
-        config.setUser(postgres.getUsername());
-        config.setPassword(postgres.getPassword());
-        connectionPool = new ConnectionPool(config);
+        connectionPool = new ConnectionPool(
+                postgres.getJdbcUrl(),
+                postgres.getUsername(),
+                postgres.getPassword(),
+                1);
 
         auditDbRepo = new AuditDbRepo(connectionPool);
-        userDbRepo = new UserDbRepo(connectionPool);
+        authDbRepo = new AuthDbRepo(connectionPool);
     }
 
     @DisplayName("Тестирование добавления записи")
     @Test
-    public void testAdd() {
-        EntryDto entryDto = new EntryDto();
-        entryDto.setAction("action");
-        entryDto.setUserId(1L);
+    public void testAdd() throws MyDatabaseException {
+        AuditRecord record = new AuditRecord(
+                null,
+                "action",
+                1L
+        );
 
-        Optional<EntryDto> result = auditDbRepo.add(entryDto);
+        Optional<AuditRecord> result = auditDbRepo.add(record);
 
         assertThat(result).isPresent();
-        assertThat(result.get().getAction()).isEqualTo(entryDto.getAction());
-        assertThat(result.get().getUserId()).isEqualTo(entryDto.getUserId());
+        assertThat(result.get().action()).isEqualTo(record.action());
+        assertThat(result.get().userId()).isEqualTo(record.userId());
     }
 
     @DisplayName("Тестирование получения записей по номеру счета")
     @Test
-    public void testGetEntriesByAccountNum() {
+    public void testGetEntriesByAccountNum() throws MyDatabaseException {
 
-        UserDto userDto = new UserDto();
-        userDto.setAccountNum("testAccountNum");
-        userDto.setPassword("password");
-        userDto.setRoleId(1L);
+        UserRecord user = new UserRecord(
+                2L,
+                "testAccountNum",
+                "password",
+                1L
+        );
 
-        userDbRepo.add(userDto);
+        authDbRepo.addUser(user);
 
         AuditDbRepo auditDbRepo = new AuditDbRepo(connectionPool);
 
-        EntryDto entryDto = new EntryDto();
-        entryDto.setAction("action");
-        entryDto.setUserId(userDto.getId());
+        AuditRecord record = new AuditRecord(
+                null,
+                "action",
+                user.id()
+        );
 
-        auditDbRepo.add(entryDto);
+        auditDbRepo.add(record);
 
-        List<EntryDto> result = auditDbRepo.getEntriesByAccountNum(userDto.getAccountNum());
+        List<UserAuditRecord> result = auditDbRepo.getAuditRecordsByAccountNum(user.accountNum());
 
         assertThat(result).isNotEmpty();
-        assertThat(result.get(0).getAccountNum()).isEqualTo(userDto.getAccountNum());
+        assertThat(result.get(0).accountNum()).isEqualTo(user.accountNum());
     }
 
     @DisplayName("Тестирование получения всех записей")
     @Test
-    public void testGetAll() {
+    public void testGetAll() throws MyDatabaseException {
 
-        EntryDto entryDto = new EntryDto();
-        entryDto.setAction("action");
-        entryDto.setUserId(1L);
+        AuditRecord record = new AuditRecord(
+                null,
+                "action",
+                1L
+        );
 
-        auditDbRepo.add(entryDto);
+        auditDbRepo.add(record);
 
-        List<EntryDto> result = auditDbRepo.getAll();
+        List<UserAuditRecord> result = auditDbRepo.getAll();
 
         assertThat(result).isNotEmpty();
     }

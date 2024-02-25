@@ -1,23 +1,25 @@
 package org.kharisov.services.interfaces;
 
-import org.kharisov.domains.ReadingType;
+import org.kharisov.entities.ReadingTypeRecord;
 
-import java.util.*;
+import java.util.Set;
 
 public interface ReadingTypeService {
 
     /**
      * Добавляет новый тип показания.
-     * @param name Имя нового типа показания.
+     *
+     * @param readingTypeRecord Новый тип показания.
+     * @return ReadingTypeRecord Добавленный тип показания
      */
-    boolean addReadingType(String name);
+    ReadingTypeRecord addReadingType(ReadingTypeRecord readingTypeRecord);
 
     /**
      * Получает тип показания по имени.
      * @param name Имя типа показания.
      * @return Optional<ReadingType>, содержащий тип показания, если он существует, иначе Optional.empty().
      */
-    Optional<ReadingType> getReadingType(String name);
+    ReadingTypeRecord getByName(String name);
 
     /**
      * Получает все имена типов показаний.

@@ -1,8 +1,9 @@
 package org.kharisov.services.databaseImpls;
 
-import org.kharisov.domains.User;
-import org.kharisov.dtos.db.*;
-import org.kharisov.repos.databaseImpls.*;
+import lombok.RequiredArgsConstructor;
+import org.kharisov.entities.*;
+import org.kharisov.exceptions.MyDatabaseException;
+import org.kharisov.repos.interfaces.*;
 import org.kharisov.services.interfaces.AuditService;
 
 import java.util.*;
@@ -11,26 +12,16 @@ import java.util.stream.Collectors;
 /**
  * Класс AuditDbService представляет собой сервис для работы с аудитом в базе данных.
  */
+@RequiredArgsConstructor
 public class AuditDbService implements AuditService {
     /**
      * Репозиторий для работы с пользователями.
      */
-    private final UserDbRepo userDbRepo;
+    private final AuthRepo authRepo;
     /**
      * Репозиторий для работы с аудитом.
      */
-    private final AuditDbRepo auditDbRepo;
-
-    /**
-     * Конструктор класса AuditDbService.
-     *
-     * @param userDbRepo  Репозиторий для работы с пользователями.
-     * @param auditDbRepo Репозиторий для работы с аудитом.
-     */
-    public AuditDbService(UserDbRepo userDbRepo, AuditDbRepo auditDbRepo) {
-        this.userDbRepo = userDbRepo;
-        this.auditDbRepo = auditDbRepo;
-    }
+    private final AuditRepo auditRepo;
 
     /**
      * Добавляет запись аудита для указанного пользователя и действия.
@@ -39,18 +30,13 @@ public class AuditDbService implements AuditService {
      * @param action Действие, которое должно быть записано в аудите.
      */
     @Override
-    public void addEntry(User user, String action) {
-        Optional<UserDto> userDtoOptional = userDbRepo.getByAccountNum(user.getAccountNum());
-        if (userDtoOptional.isPresent()) {
-            UserDto userDto = userDtoOptional.get();
-            Long userId = userDto.getId();
-
-            EntryDto entryDto = new EntryDto();
-            entryDto.setUserId(userId);
-            entryDto.setAction(action);
-
-            auditDbRepo.add(entryDto);
-        }
+    public void addAuditRecord(UserRecord user, String action) throws MyDatabaseException {
+        AuditRecord record = new AuditRecord(
+                null,
+                action,
+                user.id()
+        );
+        auditRepo.add(record);
     }
 
     /**
@@ -60,14 +46,13 @@ public class AuditDbService implements AuditService {
      * @return Список действий из записей аудита для указанного пользователя.
      */
     @Override
-    public List<String> getEntries(User user) {
-        Optional<UserDto> userDtoOptional = userDbRepo.getByAccountNum(user.getAccountNum());
-        if (userDtoOptional.isPresent()) {
-            UserDto userDto = userDtoOptional.get();
-            List<EntryDto> entries = auditDbRepo.getEntriesByAccountNum(userDto.getAccountNum());
-            return entries.stream().map(EntryDto::getAction).collect(Collectors.toList());
+    public List<String> getAuditRecords(UserRecord user) throws MyDatabaseException {
+        Optional<UserRecord> userRecordOptional = authRepo.getUserByAccountNum(user.accountNum());
+        if (userRecordOptional.isPresent()) {
+            List<UserAuditRecord> records = auditRepo.getAuditRecordsByAccountNum(user.accountNum());
+            return records.stream().map(UserAuditRecord::action).collect(Collectors.toList());
         } else {
-            throw new RuntimeException("User not found");
+            throw new RuntimeException("The user was not found");
         }
     }
 
@@ -77,8 +62,8 @@ public class AuditDbService implements AuditService {
      * @return Map, где ключ - это номер счета, а значение - это список действий из записей аудита.
      */
     @Override
-    public Map<String, List<String>> getAllEntries() {
-        List<EntryDto> entries = auditDbRepo.getAll();
-        return entries.stream().collect(Collectors.groupingBy(EntryDto::getAccountNum, Collectors.mapping(EntryDto::getAction, Collectors.toList())));
+    public Map<String, List<String>> getAllAuditRecords() throws MyDatabaseException {
+        List<UserAuditRecord> records = auditRepo.getAll();
+        return records.stream().collect(Collectors.groupingBy(UserAuditRecord::accountNum, Collectors.mapping(UserAuditRecord::action, Collectors.toList())));
     }
 }

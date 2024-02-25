@@ -1,9 +1,12 @@
 package org.kharisov.services.databaseImpls;
 
+import lombok.RequiredArgsConstructor;
 import org.kharisov.annotations.*;
-import org.kharisov.domains.*;
-import org.kharisov.dtos.db.*;
-import org.kharisov.repos.databaseImpls.*;
+import org.kharisov.dtos.ReadingDto;
+import org.kharisov.entities.*;
+import org.kharisov.exceptions.*;
+import org.kharisov.mappers.ReadingMapper;
+import org.kharisov.repos.interfaces.*;
 import org.kharisov.services.interfaces.ReadingService;
 
 import java.time.LocalDate;
@@ -14,78 +17,70 @@ import java.util.stream.Collectors;
  * Класс ReadingDbService представляет собой службу для работы с чтениями в базе данных.
  * Он реализует интерфейс ReadingService и использует репозитории ReadingDbRepo, UserDbRepo и ReadingTypeDbRepo для выполнения операций с базой данных.
  */
+@RequiredArgsConstructor
 public class ReadingDbService implements ReadingService {
     /**
      * Репозиторий для работы с показаниями.
      */
-    private final ReadingDbRepo readingDbRepo;
+    private final ReadingRepo readingRepo;
     /**
      * Репозиторий для работы с пользователями.
      */
-    private final UserDbRepo userDbRepo;
+    private final AuthRepo authRepo;
     /**
      * Репозиторий для работы с типами показаний.
      */
-    private final ReadingTypeDbRepo readingTypeDbRepo;
-
-    /**
-     * Конструктор класса ReadingDbService.
-     *
-     * @param readingDbRepo Репозиторий для работы с показаниями.
-     * @param userDbRepo Репозиторий для работы с пользователями.
-     * @param readingTypeDbRepo Репозиторий для работы с типами показаний.
-     */
-    public ReadingDbService(ReadingDbRepo readingDbRepo,
-                            UserDbRepo userDbRepo,
-                            ReadingTypeDbRepo readingTypeDbRepo) {
-        this.readingDbRepo = readingDbRepo;
-        this.userDbRepo = userDbRepo;
-        this.readingTypeDbRepo = readingTypeDbRepo;
-    }
+    private final ReadingTypeRepo readingTypeRepo;
 
     /**
      * Добавляет новое чтение для указанного пользователя.
      *
      * @param user Пользователь, для которого добавляется показание.
-     * @param reading Тип показания.
+     * @param readingTypeRecord Тип показания.
      * @param value Значение показания.
-     * @return true, если успешно добавлено, иначе false.
+     * @throws MyDatabaseException Если произошла ошибка при взаимодействии с базой данных.
+     * @throws ConflictException Если показание за текущий месяц уже существует.
+     * @throws EntityNotFoundException Если текущий пользователь или тип показания не найден.
      */
     @Override
     @Audit(action = "addReading")
-    public boolean addReading(User user, ReadingType reading, int value) {
-        ReadingDto readingDto = new ReadingDto();
-        Optional<UserDto> optionalUserDto = userDbRepo.getByAccountNum(user.getAccountNum());
-        Optional<ReadingTypeDto> optionalReadingTypeDto = readingTypeDbRepo.getByName(reading.getValue());
-        if (optionalUserDto.isPresent() &&
-                optionalReadingTypeDto.isPresent()) {
-            UserDto userDto = optionalUserDto.get();
-            ReadingTypeDto readingTypeDto = optionalReadingTypeDto.get();
-
-            readingDto.setUserId(userDto.getId());
-            readingDto.setTypeId(readingTypeDto.getId());
-            readingDto.setValue(value);
-            readingDto.setDate(LocalDate.now());
-
-            return readingDbRepo.add(readingDto).isPresent();
+    public void addReading(UserRecord user, ReadingTypeRecord readingTypeRecord, int value)
+            throws MyDatabaseException, EntityNotFoundException, ConflictException {
+        Optional<UserRecord> userRecordOptional = authRepo.getUserByAccountNum(user.accountNum());
+        Optional<ReadingTypeRecord> readingTypeRecordOptional = readingTypeRepo.getByName(readingTypeRecord.name());
+        if (userRecordOptional.isEmpty() ||
+                readingTypeRecordOptional.isEmpty()) {
+            throw new EntityNotFoundException("The current user or the type of reading was not found");
         }
-        return false;
+        readingTypeRecord = readingTypeRecordOptional.get();
+        ReadingRecord record = new ReadingRecord(
+                null,
+                user.id(),
+                readingTypeRecord.id(),
+                value,
+                LocalDate.now()
+        );
+
+        if (readingExists(user, readingTypeRecord, LocalDate.now())) {
+            throw new ConflictException("The report for the current month has already been sent");
+        }
+        readingRepo.add(record);
     }
 
     /**
      * Проверяет, существует ли показание для указанного пользователя, типа показания и даты.
      *
      * @param user Пользователь, для которого проверяется показание.
-     * @param reading Тип показания.
+     * @param readingTypeRecord Тип показания.
      * @param now Дата показания.
      * @return true, если чтение существует, иначе false.
      */
     @Override
-    public boolean readingExists(User user, ReadingType reading, LocalDate now) {
-        List<ReadingDto> readings = readingDbRepo.getAllByAccountNum(user.getAccountNum());
-        return readings.stream().anyMatch(r -> r.getType().equals(reading) &&
-                r.getDate().getYear() == now.getYear() &&
-                r.getDate().getMonth() == now.getMonth());
+    public boolean readingExists(UserRecord user, ReadingTypeRecord readingTypeRecord, LocalDate now) throws MyDatabaseException {
+        List<UserReadingRecord> records = readingRepo.getAllByAccountNum(user.accountNum());
+        return records.stream().anyMatch(r -> r.type().equals(readingTypeRecord.name()) &&
+                r.date().getYear() == now.getYear() &&
+                r.date().getMonth() == now.getMonth());
     }
 
     /**
@@ -98,16 +93,11 @@ public class ReadingDbService implements ReadingService {
      */
     @Override
     @Audit(action = "getReadingsByMonth")
-    public List<ReadingRecord> getReadingsByMonth(User user, int month, int year) {
-        List<ReadingDto> readings = readingDbRepo.getAllByAccountNum(user.getAccountNum());
-        return readings.stream()
-                .filter(r -> r.getDate().getMonthValue() == month && r.getDate().getYear() == year)
-                .map(r -> ReadingRecord.builder()
-                        .accountNum(r.getAccountNum())
-                        .type(r.getType())
-                        .value(r.getValue())
-                        .date(r.getDate())
-                        .build())
+    public List<ReadingDto> getReadingsByMonth(UserRecord user, int month, int year) throws MyDatabaseException {
+        List<UserReadingRecord> records = readingRepo.getAllByAccountNum(user.accountNum());
+        return records.stream()
+                .filter(r -> r.date().getMonthValue() == month && r.date().getYear() == year)
+                .map(ReadingMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -115,22 +105,19 @@ public class ReadingDbService implements ReadingService {
      * Возвращает текущее показание для указанного пользователя и типа показания.
      *
      * @param user Пользователь, для которого требуется получить показание.
-     * @param type Тип показания.
+     * @param readingTypeRecord Тип показания.
      * @return Запись текущего показания или пустой Optional, если показание не найдено.
      */
     @Override
     @Audit(action = "getCurrentReading")
-    public Optional<ReadingRecord> getCurrentReading(User user, ReadingType type) {
-        List<ReadingDto> readings = readingDbRepo.getAllByAccountNum(user.getAccountNum());
-        return readings.stream()
-                .filter(r -> r.getType().equals(type))
-                .max(Comparator.comparing(ReadingDto::getDate))
-                .map(r -> ReadingRecord.builder()
-                        .accountNum(r.getAccountNum())
-                        .type(r.getType())
-                        .value(r.getValue())
-                        .date(r.getDate())
-                        .build());
+    public ReadingDto getCurrentReading(UserRecord user, ReadingTypeRecord readingTypeRecord) throws MyDatabaseException {
+        List<UserReadingRecord> records = readingRepo.getAllByAccountNum(user.accountNum());
+        Optional<UserReadingRecord> currentReading = records.stream()
+                .filter(r -> r.type().equals(readingTypeRecord.name()))
+                .max(Comparator.comparing(UserReadingRecord::date));
+        if (currentReading.isEmpty())
+            throw new EntityNotFoundException("No readings found");
+        return ReadingMapper.INSTANCE.toDto(currentReading.get());
     }
 
     /**
@@ -141,15 +128,10 @@ public class ReadingDbService implements ReadingService {
      */
     @Override
     @Audit(action = "getHistory")
-    public List<ReadingRecord> getHistory(User user) {
-        List<ReadingDto> readings = readingDbRepo.getAllByAccountNum(user.getAccountNum());
-        return readings.stream()
-                .map(r -> ReadingRecord.builder()
-                        .accountNum(r.getAccountNum())
-                        .type(r.getType())
-                        .value(r.getValue())
-                        .date(r.getDate())
-                        .build())
+    public List<ReadingDto> getHistory(UserRecord user) throws MyDatabaseException {
+        List<UserReadingRecord> records = readingRepo.getAllByAccountNum(user.accountNum());
+        return records.stream()
+                .map(ReadingMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -161,15 +143,12 @@ public class ReadingDbService implements ReadingService {
     @Override
     @Audit(action = "getAllReadings")
     @Loggable
-    public Map<String, List<ReadingRecord>> getAllReadings() {
-        List<ReadingDto> readings = readingDbRepo.getAll();
+    public Map<String, List<ReadingDto>> getAllReadings() throws MyDatabaseException {
+        List<UserReadingRecord> readings = readingRepo.getAll();
         return readings.stream()
-                .map(r -> ReadingRecord.builder()
-                        .accountNum(r.getAccountNum())
-                        .type(r.getType())
-                        .value(r.getValue())
-                        .date(r.getDate())
-                        .build())
-                .collect(Collectors.groupingBy(ReadingRecord::getAccountNum));
+                .collect(Collectors.groupingBy(
+                        UserReadingRecord::accountNum,
+                        Collectors.mapping(ReadingMapper.INSTANCE::toDto, Collectors.toList())
+                ));
     }
 }

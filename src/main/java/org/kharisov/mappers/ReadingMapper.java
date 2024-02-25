@@ -1,7 +1,7 @@
 package org.kharisov.mappers;
 
-import org.kharisov.domains.*;
-import org.kharisov.dtos.in.ReadingDtoIn;
+import org.kharisov.dtos.ReadingDto;
+import org.kharisov.entities.*;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -20,25 +20,23 @@ public interface ReadingMapper {
     ReadingMapper INSTANCE = Mappers.getMapper(ReadingMapper.class);
 
     /**
+     * Преобразует UserReadingRecord в ReadingDto.
+     *
+     * @param record Сущность показания для преобразования
+     * @return ReadingDto, соответствующая переданной сущности
+     */
+    @Mapping(target = "type", source = "type")
+    @Mapping(target = "value", source = "value")
+    ReadingDto toDto(UserReadingRecord record);
+
+    /**
      * Преобразует ReadingDtoIn в сущность ReadingRecord.
-     * Использует именованное преобразование "stringToReadingType" для преобразования строки в ReadingType.
      *
      * @param dto DTO показания для преобразования
      * @return Сущность ReadingRecord, соответствующая переданному DTO
      */
-    @Mapping(source = "type", target = "type", qualifiedByName = "stringToReadingType")
-    ReadingRecord toEntity(ReadingDtoIn dto);
+    @Mapping(target = "value", source = "value")
+    ReadingRecord toEntity(ReadingDto dto);
 
-    /**
-     * Преобразует строку в ReadingType.
-     * Используется для преобразования поля "type" в ReadingDtoIn.
-     *
-     * @param typeString строка для преобразования
-     * @return ReadingType, соответствующий переданной строке
-     */
-    @Named("stringToReadingType")
-    default ReadingType stringToReadingType(String typeString) {
-        return ReadingType.Create(typeString);
-    }
 }
 

@@ -1,13 +1,11 @@
 package org.kharisov.aspects;
 
+import lombok.*;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.kharisov.annotations.Audit;
-import org.kharisov.configs.UserContextHolder;
-import org.kharisov.domains.User;
 import org.kharisov.services.interfaces.AuditService;
-import org.kharisov.services.singletons.AuditServiceSingleton;
 
 import java.lang.reflect.Method;
 
@@ -16,24 +14,36 @@ import java.lang.reflect.Method;
  * Он использует сервис AuditService для добавления записей аудита.
  */
 @Aspect
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuditAspect {
 
-    private final AuditService auditService;
+    private AuditService auditService;
 
-    public AuditAspect() {
-        auditService = AuditServiceSingleton.getInstance();
-    }
-
+    /**
+     * Определение точки среза для методов, аннотированных @Audit.
+     */
     @Pointcut("@annotation(org.kharisov.annotations.Audit)")
     public void annotatedByAudit() {}
 
+    /**
+     * Метод, выполняемый после возврата из методов, аннотированных @Audit.
+     * Добавляет запись аудита для выполненного действия.
+     *
+     * @param joinPoint информация о выполненном методе.
+     * @param result результат выполнения метода.
+     */
     @AfterReturning(pointcut = "annotatedByAudit()", returning = "result")
     public void audit(JoinPoint joinPoint, Object result) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         Audit auditAnnotation = method.getAnnotation(Audit.class);
         String action = auditAnnotation.action();
-        User user = UserContextHolder.getUser();
-        auditService.addEntry(user, action);
+
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+//            UserRecord user = (UserRecord) authentication.getPrincipal();
+//            auditService.addAuditRecord(user, action);
+//        }
     }
 }

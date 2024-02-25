@@ -1,50 +1,51 @@
 package org.kharisov.repos.databaseImpls;
 
+import lombok.RequiredArgsConstructor;
 import org.kharisov.configs.ConnectionPool;
-import org.kharisov.dtos.db.ReadingTypeDto;
-import org.kharisov.repos.base.BaseDbRepo;
+import org.kharisov.entities.ReadingTypeRecord;
+import org.kharisov.exceptions.MyDatabaseException;
+import org.kharisov.repos.interfaces.ReadingTypeRepo;
 
 import java.sql.*;
 import java.util.*;
 
 /**
- * Класс ReadingTypeDbRepo представляет собой репозиторий для работы с типами показаний в базе данных.
- * Он наследуется от базового класса репозитория BaseDbRepo и реализует его абстрактные методы.
+ * Класс ReadingTypeRepo представляет собой реализацию интерфейса ReadingTypeRepo.
+ * Он предоставляет методы для работы с типами показаний в базе данных.
  */
-public class ReadingTypeDbRepo extends BaseDbRepo<Long, ReadingTypeDto> {
+@RequiredArgsConstructor
+public class ReadingTypeDbRepo implements ReadingTypeRepo {
 
     /**
-     * Конструктор класса ReadingTypeDbRepo.
-     *
-     * @param connectionPool Пул соединений с базой данных.
+     * Пул соединений с базой данных, используемый в репозитории.
      */
-    public ReadingTypeDbRepo(ConnectionPool connectionPool) {
-        super(connectionPool);
-    }
+    private final ConnectionPool connectionPool;
 
     /**
      * Добавляет тип чтения в базу данных и возвращает его.
      *
-     * @param dto Объект DTO типа показания для добавления в базу данных.
-     * @return Объект DTO типа показания, добавленного в базу данных, или пустой Optional, если добавление не удалось.
+     * @param record Объект сущности типа показания для добавления в базу данных.
+     * @return Объект сущности типа показания, добавленного в базу данных, или пустой Optional, если добавление не удалось.
      */
-    @Override
-    public Optional<ReadingTypeDto> add(ReadingTypeDto dto) {
+    public Optional<ReadingTypeRecord> add(ReadingTypeRecord record) throws MyDatabaseException {
         Connection connection = connectionPool.getConnectionFromPool();
         String sql = "INSERT INTO reading_types (name) VALUES (?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, dto.getName());
+            statement.setString(1, record.name());
             statement.executeUpdate();
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    dto.setId(generatedKeys.getLong(1));
-                    return Optional.of(dto);
+                    record = new ReadingTypeRecord(
+                            generatedKeys.getLong(1),
+                            record.name()
+                    );
+                    return Optional.of(record);
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Cannot add type", e);
+            throw new MyDatabaseException("Не получилось добавить новый тип показания " + record, e);
         } finally {
             connectionPool.returnConnectionToPool(connection);
         }
@@ -55,9 +56,9 @@ public class ReadingTypeDbRepo extends BaseDbRepo<Long, ReadingTypeDto> {
      * Возвращает тип показания по его имени.
      *
      * @param name Имя типа показания, который требуется получить.
-     * @return Объект DTO типа показания с указанным именем или пустой Optional, если такого типа показания не существует.
+     * @return Объект сущности типа показания с указанным именем или пустой Optional, если такого типа показания не существует.
      */
-    public Optional<ReadingTypeDto> getByName(String name) {
+    public Optional<ReadingTypeRecord> getByName(String name) throws MyDatabaseException {
         Connection connection = connectionPool.getConnectionFromPool();
         String sql = "SELECT * FROM reading_types where name = ?";
 
@@ -66,15 +67,16 @@ public class ReadingTypeDbRepo extends BaseDbRepo<Long, ReadingTypeDto> {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    ReadingTypeDto type = new ReadingTypeDto();
-                    type.setId(resultSet.getLong("id"));
-                    type.setName(resultSet.getString("name"));
-                    return Optional.of(type);
+                    ReadingTypeRecord record = new ReadingTypeRecord(
+                            resultSet.getLong("id"),
+                            resultSet.getString("name")
+                    );
+                    return Optional.of(record);
                 }
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Cannot get type", e);
+            throw new MyDatabaseException("Не получилось достать тип показания по названию " + name, e);
         } finally {
             connectionPool.returnConnectionToPool(connection);
         }
@@ -84,29 +86,29 @@ public class ReadingTypeDbRepo extends BaseDbRepo<Long, ReadingTypeDto> {
     /**
      * Возвращает все типы показаний из базы данных.
      *
-     * @return Список всех объектов DTO типов показаний из базы данных.
+     * @return Список всех объектов сущности типов показаний из базы данных.
      */
-    @Override
-    public List<ReadingTypeDto> getAll() {
+    public List<ReadingTypeRecord> getAll() throws MyDatabaseException {
         Connection connection = connectionPool.getConnectionFromPool();
-        List<ReadingTypeDto> types = new ArrayList<>();
+        List<ReadingTypeRecord> records = new ArrayList<>();
         String sql = "SELECT * FROM reading_types";
 
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                ReadingTypeDto type = new ReadingTypeDto();
-                type.setId(resultSet.getLong("id"));
-                type.setName(resultSet.getString("name"));
-                types.add(type);
+                ReadingTypeRecord record = new ReadingTypeRecord(
+                        resultSet.getLong("id"),
+                        resultSet.getString("name")
+                );
+                records.add(record);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Cannot get all types", e);
+            throw new MyDatabaseException("Не получилось достать все типы показаний", e);
         } finally {
             connectionPool.returnConnectionToPool(connection);
         }
 
-        return types;
+        return records;
     }
 }
