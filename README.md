@@ -4,59 +4,8 @@
 
 Ссылки на домашние работы.
 
-- Установленный Docker и Docker Compose
-- Установленный Git
-- Установленный Apache Tomcat
-- Установленный Maven
-
-## Установка и запуск проекта
-
-Следуйте этим шагам, чтобы запустить проект:
-
-1. **Клонирование репозитория**
-
-   Сначала склонируйте репозиторий с помощью Git. Откройте терминал и введите следующую команду:
-
-    ```bash
-    git clone https://github.com/RinatHar/MonitoringService.git
-    ```
-
-2. **Запуск Docker Compose**
-
-   Перейдите в директорию проекта и запустите Docker Compose:
-
-    ```bash
-    cd MonitoringService
-    docker-compose up
-    ```
-
-3. **Сборка проекта с помощью Maven**
-
-   Вместо запуска главного файла проекта, соберите проект с помощью Maven. Вы можете сделать это двумя способами:
-
-   - **Используя командную строку**:
-
-     Откройте терминал в корневой директории проекта и введите следующую команду:
-
-     ```bash
-     mvn clean package
-     ```
-
-   - **Используя средства IntelliJ IDEA**:
-
-      - Откройте проект в IntelliJ IDEA.
-      - Перейдите во вкладку `Maven` на правой панели.
-      - Разверните дерево `Lifecycle`.
-      - Дважды кликните по `clean`, затем по `package`.
-
-   В результате выполнения этих команд, проект будет собран, и в папке `target` появится папка `monitoring-service`.
-
-4. **Перемещение собранного проекта в Tomcat**
-
-   После сборки проекта, найдите папку `monitoring-service` в папке `target` и переместите её в папку `webapps` вашего локально установленного Tomcat.
-
-5. **Запуск Tomcat**
-
-   Запустите Tomcat 9 версии с помощью файла `startup.bat`.
-
-Поздравляем, проект теперь запущен и готов к использованию!
+- [_ДЗ №1_](https://github.com/RinatHar/MonitoringService/tree/check-branch)
+- [_ДЗ №2_](https://github.com/RinatHar/MonitoringService/tree/hw2)
+- [_ДЗ №3_](https://github.com/RinatHar/MonitoringService/tree/hw3)
+- [_ДЗ №4_](https://github.com/RinatHar/MonitoringService/tree/hw4)
+- [_ДЗ №5_](https://github.com/RinatHar/MonitoringService/pull/6)
